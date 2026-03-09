@@ -706,6 +706,42 @@ function HomeScreen({ onNavigate, completedSessions, completedFreeCount, unlocke
           );
         })}
 
+        {/* Mid-Stay Nudge — shows after 2/3 free sessions if premium not unlocked */}
+        {completedFreeCount >= 2 && !sessions.filter(s => !s.free).every(s => unlockedSessions.includes(s.id)) && (
+          <div style={{
+            marginTop: 24, marginBottom: -8,
+            background: `linear-gradient(135deg, ${HOTEL_CONFIG.accent}08, ${HOTEL_CONFIG.accent}03)`,
+            border: `1px solid ${HOTEL_CONFIG.accent}20`,
+            borderRadius: 14, padding: "18px 16px",
+          }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: 12,
+                background: `${HOTEL_CONFIG.accent}12`, display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <span style={{ fontSize: 20 }}>✦</span>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 16, margin: "0 0 4px", fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>
+                  Ready to go further?
+                </p>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: "0 0 12px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+                  You've crushed {completedFreeCount} sessions. Unlock {sessions.filter(s => !s.free).length} premium workouts — from high-intensity circuits to machine cardio — for just $29.
+                </p>
+                <button onClick={() => onNavigate("unlock")} style={{
+                  padding: "10px 20px", border: "none",
+                  background: HOTEL_CONFIG.accent, color: "#fff",
+                  borderRadius: 8, fontSize: 12, fontWeight: 700, letterSpacing: 1,
+                  cursor: "pointer", fontFamily: "'Lato', sans-serif",
+                }}>
+                  SEE WHAT'S INSIDE
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Locked Premium Sessions */}
         <div style={{ marginTop: 28 }}>
           {(() => {
@@ -730,7 +766,7 @@ function HomeScreen({ onNavigate, completedSessions, completedFreeCount, unlocke
                   return (
                     <button
                       key={s.id}
-                      onClick={() => isUnlocked ? onNavigate("session", s) : onNavigate("unlock", s)}
+                      onClick={() => isUnlocked ? onNavigate("session", s) : onNavigate("preview", s)}
                       style={{
                         display: "flex", alignItems: "center", width: "100%",
                         background: isUnlocked ? HOTEL_CONFIG.cardBg : `linear-gradient(135deg, ${HOTEL_CONFIG.cardBg}, ${HOTEL_CONFIG.dark})`,
@@ -1298,7 +1334,7 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
               </div>
               {/* Session card */}
               <button
-                onClick={() => isLocked ? onNavigate("unlock", nextSession) : onNavigate("session", nextSession)}
+                onClick={() => isLocked ? onNavigate("preview", nextSession) : onNavigate("session", nextSession)}
                 style={{
                   display: "flex", alignItems: "center", width: "100%",
                   padding: "16px", cursor: "pointer",
@@ -1773,6 +1809,152 @@ function PremiumScreen({ onBack }) {
 
       <div style={{ textAlign: "center", padding: "16px 20px 32px" }}>
         <p style={{ fontSize: 10, letterSpacing: 2, color: `${HOTEL_CONFIG.textSecondary}60`, fontFamily: "'Lato', sans-serif" }}>Powered by StrongHold Fitness</p>
+      </div>
+    </div>
+  );
+}
+
+function PreviewScreen({ session, onBack, onNavigate }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
+
+  if (!session) return null;
+
+  const firstCircuit = session.circuits ? session.circuits[0] : null;
+  const previewExercises = firstCircuit ? firstCircuit.exercises.slice(0, 3) : session.exercises ? session.exercises.slice(0, 3) : [];
+  const totalExercises = session.circuits
+    ? session.circuits.reduce((sum, c) => sum + c.exercises.length, 0)
+    : (session.exercises ? session.exercises.length : 0);
+  const remainingCount = totalExercises - previewExercises.length;
+
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
+      <div style={{ padding: "16px 20px 0", display: "flex", alignItems: "center" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: HOTEL_CONFIG.textSecondary, fontSize: 24, cursor: "pointer", padding: "4px 8px 4px 0" }}>‹</button>
+        <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: 0, fontFamily: "'Lato', sans-serif" }}>PREVIEW</p>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "32px 24px 16px" }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: "50%", margin: "0 auto 20px",
+          background: `${session.color}15`, display: "flex", alignItems: "center", justifyContent: "center",
+          border: `2px solid ${session.color}40`,
+        }}>
+          <span style={{ fontSize: 32 }}>{session.icon}</span>
+        </div>
+        <h2 style={{ fontSize: 26, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>
+          {session.title}
+        </h2>
+        <div style={{ display: "flex", justifyContent: "center", gap: 16, margin: "12px 0 0" }}>
+          <span style={{ fontSize: 12, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>⏱ {session.duration}</span>
+          <span style={{ fontSize: 12, color: session.color, fontFamily: "'Lato', sans-serif" }}>◈ {session.intensity}</span>
+        </div>
+        <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 14, lineHeight: 1.7, maxWidth: 340, margin: "16px auto 0", fontFamily: "'Lato', sans-serif" }}>
+          {session.description}
+        </p>
+      </div>
+
+      {session.format && (
+        <div style={{ padding: "0 20px", marginBottom: 16 }}>
+          <div style={{
+            background: `${session.color}08`, border: `1px solid ${session.color}20`,
+            borderRadius: 10, padding: "10px 14px", textAlign: "center",
+          }}>
+            <span style={{ fontSize: 12, color: session.color, fontWeight: 600, letterSpacing: 1, fontFamily: "'Lato', sans-serif" }}>
+              {session.format}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div style={{ padding: "0 20px 12px" }}>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 14, padding: "18px 16px", position: "relative", overflow: "hidden",
+        }}>
+          <p style={{ fontSize: 11, letterSpacing: 2, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>
+            {firstCircuit ? firstCircuit.name : "EXERCISE PREVIEW"}
+          </p>
+          {previewExercises.map((ex, i) => (
+            <div key={i} style={{
+              display: "flex", alignItems: "flex-start", gap: 12, padding: "10px 0",
+              borderBottom: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+              opacity: i === 2 ? 0.4 : i === 1 ? 0.7 : 1,
+            }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+                background: `${session.color}12`, flexShrink: 0, marginTop: 2,
+              }}>
+                <span style={{ fontSize: 12, color: session.color, fontWeight: 700, fontFamily: "'Lato', sans-serif" }}>{i + 1}</span>
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 14, margin: 0, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>
+                  {ex.name}
+                </p>
+                <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>
+                  {ex.reps}
+                </span>
+              </div>
+            </div>
+          ))}
+          <div style={{
+            position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
+            background: `linear-gradient(transparent, ${HOTEL_CONFIG.cardBg})`,
+            pointerEvents: "none",
+          }} />
+          <div style={{ textAlign: "center", paddingTop: 8, position: "relative", zIndex: 1 }}>
+            <p style={{ fontSize: 12, color: HOTEL_CONFIG.textSecondary, margin: 0, fontFamily: "'Lato', sans-serif" }}>
+              + {remainingCount} more exercises inside
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: "4px 20px 12px" }}>
+        <div style={{
+          background: `${HOTEL_CONFIG.accent}06`, border: `1px solid ${HOTEL_CONFIG.accent}15`,
+          borderRadius: 12, padding: "14px 16px",
+          display: "flex", alignItems: "flex-start", gap: 10,
+        }}>
+          <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>💡</span>
+          <div>
+            <p style={{ fontSize: 11, letterSpacing: 1.5, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
+              TRAINER'S NOTE
+            </p>
+            <p style={{ fontSize: 13, color: HOTEL_CONFIG.textSecondary, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+              This session is designed by a certified personal trainer with over a decade of experience. Every rep, rest period, and cue is intentional.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: "12px 20px 8px" }}>
+        <button onClick={() => onNavigate("unlock")} style={{
+          width: "100%", padding: "16px", border: "none",
+          background: `linear-gradient(135deg, ${HOTEL_CONFIG.accent}, ${HOTEL_CONFIG.accentLight || HOTEL_CONFIG.accent}dd)`,
+          color: "#fff", borderRadius: 12,
+          fontSize: 14, fontWeight: 700, letterSpacing: 1.5,
+          cursor: "pointer", fontFamily: "'Lato', sans-serif",
+          transition: "all 0.2s", boxShadow: `0 4px 20px ${HOTEL_CONFIG.accent}30`,
+        }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
+        >
+          UNLOCK ALL PREMIUM — $29
+        </button>
+        <p style={{
+          textAlign: "center", fontSize: 12, color: HOTEL_CONFIG.textSecondary, margin: "12px 0 0",
+          fontFamily: "'Lato', sans-serif",
+        }}>
+          One purchase unlocks all {sessions.filter(s => !s.free).length} premium sessions
+        </p>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "24px 20px 32px" }}>
+        <div style={{ width: 40, height: 1, background: HOTEL_CONFIG.cardBorder, margin: "0 auto 16px" }} />
+        <p style={{ fontSize: 10, letterSpacing: 2, color: `${HOTEL_CONFIG.textSecondary}60`, fontFamily: "'Lato', sans-serif" }}>
+          Powered by StrongHold Fitness
+        </p>
       </div>
     </div>
   );
@@ -2636,6 +2818,9 @@ function HotelWellnessPortal() {
     if (target === "session") {
       setSelectedSession(data);
       setScreen("session");
+    } else if (target === "preview") {
+      setSelectedSession(data);
+      setScreen("preview");
     } else if (target === "unlock") {
       setSelectedSession(data || null);
       setScreen("unlock");
@@ -2674,6 +2859,7 @@ function HotelWellnessPortal() {
         {screen === "home" && <HomeScreen onNavigate={navigate} completedSessions={completedSessions} completedFreeCount={completedFreeCount} unlockedSessions={unlockedSessions} capturedEmail={capturedEmail} onLogin={loginGuest} />}
         {screen === "session" && selectedSession && <SessionScreen session={selectedSession} onBack={goHome} onNavigate={navigate} onComplete={completeSession} isCompleted={completedSessions.includes(selectedSession.id)} />}
         {screen === "celebration" && selectedSession && <CelebrationScreen session={selectedSession} onNavigate={navigate} onHome={goHome} completedFreeCount={completedFreeCount} capturedEmail={capturedEmail} onSaveEmail={saveEmail} unlockedSessions={unlockedSessions} onUnlockSession={unlockSession} />}
+        {screen === "preview" && selectedSession && <PreviewScreen session={selectedSession} onBack={goHome} onNavigate={navigate} />}
         {screen === "unlock" && <UnlockScreen session={selectedSession} onBack={goHome} onNavigate={navigate} onUnlockAll={unlockAllSessions} capturedEmail={capturedEmail} />}
         {screen === "purchase-success" && <PurchaseSuccessScreen onNavigate={navigate} onHome={goHome} />}
         {screen === "equipment" && <EquipmentScreen onBack={goHome} />}
