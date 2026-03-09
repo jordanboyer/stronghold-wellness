@@ -1,0 +1,5 @@
+# Ensure trailing slashes work
+/spectator        /spectator/index.html        200
+/fqi              /fqi/index.html              200
+/storefront       /storefront/index.html       200
+/payment-success  /payment-success/index.html  200

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful — StrongHold Wellness</title>
+  <style>
+    body {
+      margin: 0; padding: 0;
+      background: #0a0a0a; color: #e8e0d4;
+      font-family: 'Helvetica Neue', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; text-align: center;
+    }
+    .container { padding: 40px 24px; }
+    .check { font-size: 48px; margin-bottom: 16px; }
+    h1 { font-size: 22px; font-weight: 300; margin: 0 0 8px; }
+    p { font-size: 14px; color: #999; margin: 0; }
+  </style>
+  <script>
+    (function() {
+      var returnPath = localStorage.getItem("sh_return_path") || "/spectator";
+      localStorage.removeItem("sh_return_path");
+      window.location.replace(returnPath + "?payment=success");
+    })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="check">✦</div>
+    <h1>Payment Successful</h1>
+    <p>Redirecting you back...</p>
+  </div>
+</body>
+</html>
