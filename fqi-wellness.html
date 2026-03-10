@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#faf6f0" />
+  <title>French Quarter Inn — Wellness Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body, #root { height: 100%; width: 100%; background: #faf6f0; overflow-x: hidden; }
+    body { font-family: 'Lato', sans-serif; -webkit-font-smoothing: antialiased; }
+    input { -webkit-appearance: none; appearance: none; }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.9/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+
+const STRIPE_LINKS = {
+  premiumUnlock: "https://buy.stripe.com/14AaEZ419bLabgYdqk2cg00?client_reference_id=fqi",
+  strongholdMethod: "https://buy.stripe.com/9B6dRb69h4iIcl2fys2cg07",
+  swingReset: "https://buy.stripe.com/8x2aEZ1T13eEbgYdqk2cg06",
+  coreForge: "https://buy.stripe.com/4gM7sNdBJ8yYdp68602cg05",
+  longGame: "https://buy.stripe.com/14AaEZ9lt8yYbgY2LG2cg04",
+  ironRange: "https://buy.stripe.com/6oU14p55d02setaae82cg03",
+  completeArsenal: "https://buy.stripe.com/5kQcN77dl4iI5WEae82cg02",
+  grandSlam: "https://buy.stripe.com/aFaeVfapx9D23Owbic2cg01",
+};
+
+const HOTEL_CONFIG = {
+  name: "FRENCH QUARTER INN",
+  subtitle: "WELLNESS EXPERIENCE",
+  location: "Charleston, SC",
+  accent: "#7b2d3e",
+  accentLight: "#a3495c",
+  dark: "#faf6f0",
+  cardBg: "#ffffff",
+  cardBorder: "rgba(123,45,62,0.12)",
+  textPrimary: "#2c2420",
+  textSecondary: "#7a706a",
+};
+
+const equipment = [
+  { name: "Manduka™ Pro Yoga Mat", icon: "🧘" },
+  { name: "Theragun™ Elite Massage Gun", icon: "💆" },
+  { name: "Hypersphere™ Vibrating Roller", icon: "⚙️" },
+  { name: "Set of Resistance Bands", icon: "🔗" },
+  { name: "Meditation Bolster", icon: "🪷" },
+];
+
+const sessions = [
+  {
+    id: "morning",
+    free: true,
+    title: "Morning Mobility",
+    duration: "15 MIN",
+    intensity: "GENTLE",
+    icon: "☀️",
+    color: "#f5c842",
+    description: "Shake off the sleep and loosen up before you hit King Street. Guided joint mobility and dynamic stretches built for travel-weary bodies and Lowcountry mornings.",
+    pairWith: { id: "foundation", reason: "Warmed up and ready for more? Build on this mobility with a full-body session." },
+    exercises: [
+      { name: "Neck Circles", duration: "60s", reps: "8 each direction", cue: "Slow, controlled circles. Drop the shoulders away from your ears — let go of yesterday's travel tension." },
+      { name: "Cat-Cow Stretch", duration: "90s", reps: "10 reps", cue: "Inhale as you arch, exhale as you round. Move with your breath. Your spine will thank you after that hotel pillow." },
+      { name: "World's Greatest Stretch", duration: "90s", reps: "5 each side", cue: "Lunge forward, rotate toward your front knee, reach to the ceiling. This one earns its name." },
+      { name: "Hip 90/90 Switches", duration: "60s", reps: "8 each side", cue: "Sit tall on the floor. Rotate your hips smoothly side to side — perfect for undoing hours in a plane seat." },
+      { name: "Thoracic Spine Windmills", duration: "90s", reps: "8 each side", cue: "Lie on your side, open your top arm across your body. Follow it with your eyes. Let the upper back unwind." },
+      { name: "Ankle Circles & Calf Raises", duration: "60s", reps: "10 circles + 15 raises", cue: "Wake up those ankles before a day on the cobblestones. You'll log more steps than you think on King Street." },
+      { name: "Standing Quad Stretch to Reach", duration: "60s", reps: "30s each side", cue: "Pull heel to glute, then reach overhead. Find your balance — steady as a palmetto in the breeze." },
+      { name: "Deep Breathing Reset", duration: "90s", reps: "6 breath cycles", cue: "4 counts in through the nose, hold 4, out through the mouth for 6. Set the tone for your Charleston day." },
+    ],
+  },
+  {
+    id: "foundation",
+    free: true,
+    title: "The Foundation",
+    duration: "30 MIN",
+    intensity: "BEGINNER",
+    icon: "🧱",
+    color: "#5b9f5b",
+    description: "Named after the historic foundations that hold up the Holy City. A full-body bodyweight workout — no equipment, no excuses, just you and your suite.",
+    pairWith: { id: "bedtime", reason: "Great work. Wind down tonight with Bedtime Recovery to let those muscles rebuild." },
+    format: "3 Circuits — 2 Rounds Each",
+    circuits: [
+      {
+        name: "Circuit A — Prime",
+        rounds: 2,
+        rest: "60s between rounds",
+        exercises: [
+          { name: "Bodyweight Squat", reps: "12 reps", cue: "Chest up, weight in heels. Pause at the bottom like you're settling into a rocking chair on a Charleston porch." },
+          { name: "Incline Push-Up", reps: "10 reps", cue: "Hands on the desk or luggage bench — shoulder-width, elbows at 45°. Full range of motion." },
+          { name: "Glute Bridge", reps: "15 reps", cue: "Squeeze at the top for 2 seconds. Drive through your heels. Counteract all that sitting from travel." },
+        ],
+      },
+      {
+        name: "Circuit B — Build",
+        rounds: 2,
+        rest: "60s between rounds",
+        exercises: [
+          { name: "Reverse Lunge", reps: "10 each leg", cue: "Step back, drop the knee. Keep your torso tall and proud — like the steeples on Meeting Street." },
+          { name: "Plank Hold", reps: "30 seconds", cue: "Elbows under shoulders. Squeeze everything. Breathe. Solid as a seawall." },
+          { name: "Superman Hold", reps: "10 reps, 3s hold", cue: "Lift arms and legs together. Squeeze your back. Great for undoing the desk-and-flight hunch." },
+        ],
+      },
+      {
+        name: "Circuit C — Finish",
+        rounds: 2,
+        rest: "45s between rounds",
+        exercises: [
+          { name: "Wall Sit", reps: "30 seconds", cue: "Thighs parallel to the floor. Press your back flat into the wall. Earn that she-crab soup tonight." },
+          { name: "Dead Bug", reps: "8 each side", cue: "Low back stays glued to the floor. Slow and controlled — this one builds real core stability." },
+          { name: "Standing Calf Raise", reps: "20 reps", cue: "Full range, pause at the top. Your calves will thank you on the walk to Waterfront Park." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "ironwork",
+    title: "The Ironwork",
+    duration: "30 MIN",
+    intensity: "INTERMEDIATE",
+    icon: "🔥",
+    color: "#e07035",
+    description: "Inspired by the ornate ironwork that lines the streets of the French Quarter. A push-pull-legs session with dumbbells — structured, balanced, and built to challenge.",
+    pairWith: { id: "morning", reason: "Feeling the work tomorrow? Start your next day with Morning Mobility to stay loose." },
+    format: "3 Supersets + 1 Finisher — 3 Rounds Each",
+    circuits: [
+      {
+        name: "Superset A — Upper Push/Pull",
+        rounds: 3,
+        rest: "45s between rounds",
+        exercises: [
+          { name: "Dumbbell Floor Press", reps: "12 reps", cue: "Lie on the floor, feet flat. Control the descent, press explosively. The floor limits your range — that's the point." },
+          { name: "Bent-Over Dumbbell Row", reps: "12 each arm", cue: "Pull to your hip. Squeeze the shoulder blade hard at the top. Think about pulling the ironwork gates open." },
+        ],
+      },
+      {
+        name: "Superset B — Lower Body",
+        rounds: 3,
+        rest: "45s between rounds",
+        exercises: [
+          { name: "Goblet Squat", reps: "12 reps", cue: "Hold the dumbbell at your chest. Sit deep — elbows inside your knees at the bottom." },
+          { name: "Romanian Deadlift (DBs)", reps: "12 reps", cue: "Hinge at the hips, push them back. Feel the hamstrings load and stretch. Control the entire movement." },
+        ],
+      },
+      {
+        name: "Superset C — Core & Stability",
+        rounds: 3,
+        rest: "30s between rounds",
+        exercises: [
+          { name: "Renegade Row", reps: "8 each side", cue: "Plank position, row one dumbbell at a time. Minimize hip rotation — your core does the real work here." },
+          { name: "Bulgarian Split Squat", reps: "10 each leg", cue: "Back foot up on the bed or chair. Drop straight down. This one burns — embrace it." },
+        ],
+      },
+      {
+        name: "Finisher — Burnout",
+        rounds: 1,
+        rest: "None",
+        exercises: [
+          { name: "Push-Up to Plank Shoulder Tap", reps: "AMRAP 60s", cue: "Push up, tap each shoulder at the top. Keep moving for the full 60 seconds. Leave it all in the room." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "forged",
+    title: "Forged",
+    duration: "30 MIN",
+    intensity: "ADVANCED",
+    icon: "⚡",
+    color: "#c44040",
+    description: "Like the cannons forged at the Charleston Arsenal — this session is heavy, explosive, and unforgiving. Complex work, tempo training, and zero wasted seconds.",
+    pairWith: { id: "bedtime", reason: "You pushed hard. Give your nervous system the reset it needs with Bedtime Recovery tonight." },
+    format: "4 Blocks — Tempo & Complex Work",
+    circuits: [
+      {
+        name: "Block A — Dumbbell Complex (no rest between moves)",
+        rounds: 4,
+        rest: "90s between rounds",
+        exercises: [
+          { name: "Hang Clean to Press", reps: "6 reps", cue: "Explosive hip drive straight into an overhead press. One fluid movement — power from the ground up." },
+          { name: "Front Squat", reps: "6 reps", cue: "DBs on shoulders, elbows high. Full depth. Don't rush — control earns results." },
+          { name: "Bent-Over Row", reps: "6 reps", cue: "Hinge, pull hard, lower with control. Finish the complex strong." },
+        ],
+      },
+      {
+        name: "Block B — Tempo Lower",
+        rounds: 3,
+        rest: "60s between rounds",
+        exercises: [
+          { name: "Tempo Goblet Squat (3-1-1-1)", reps: "8 reps", cue: "3 seconds down, 1 second pause at the bottom, 1 second up, 1 second squeeze. Time under tension is the game." },
+          { name: "Single-Leg RDL", reps: "8 each leg", cue: "Slow and controlled. Own the balance. If you wobble, narrow your focus — eyes on one spot on the floor." },
+        ],
+      },
+      {
+        name: "Block C — Upper Grind",
+        rounds: 3,
+        rest: "45s between rounds",
+        exercises: [
+          { name: "Push-Up w/ 3s Eccentric", reps: "10 reps", cue: "3 seconds on the way down. Explode up. Your chest should be screaming by round 3." },
+          { name: "Plank Row to Rotation", reps: "8 each side", cue: "Row, rotate, press to the ceiling. Full body tension. The rotation is what makes this special." },
+        ],
+      },
+      {
+        name: "Block D — Finisher",
+        rounds: 3,
+        rest: "30s between rounds",
+        exercises: [
+          { name: "Burpee to DB Snatch", reps: "5 each arm", cue: "Chest to floor, explode up, snatch overhead. No pacing — this is your last stand. Finish like you mean it." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cardio",
+    title: "The Charleston Burn",
+    duration: "30 MIN",
+    intensity: "ALL LEVELS",
+    icon: "❤️‍🔥",
+    color: "#d45d8e",
+    description: "Named after the Lowcountry heat that hits you the second you step outside. A bodyweight cardio circuit that scales to any fitness level — every exercise has a beginner option.",
+    pairWith: { id: "bedtime", reason: "Heart rate still up? Bedtime Recovery will bring you back to earth before you sleep." },
+    format: "5 Stations — 40s Work / 20s Rest — 3 Rounds",
+    circuits: [
+      {
+        name: "Round 1-3 — The Loop",
+        rounds: 3,
+        rest: "90s rest between full rounds",
+        exercises: [
+          { name: "High Knees", reps: "40s on / 20s off", cue: "Drive knees to hip height. Pump your arms like you're chasing down the last carriage tour of the night. Beginner: march in place." },
+          { name: "Squat Jump (or Squat)", reps: "40s on / 20s off", cue: "Explode up, land soft as if you're on those original hardwood floors. Beginner: bodyweight squat, no jump." },
+          { name: "Mountain Climbers", reps: "40s on / 20s off", cue: "Hands under shoulders, drive knees fast. Imagine you're scrambling up to the top of the Ravenel Bridge. Beginner: slow step-ins." },
+          { name: "Lateral Shuffle to Touch", reps: "40s on / 20s off", cue: "Stay low, shuffle 3 steps, touch the floor. Quick feet — stay light and athletic." },
+          { name: "Burpees (or Step-Down Burpees)", reps: "40s on / 20s off", cue: "Full send. Chest hits the floor, explode up. Beginner: step back, step up, skip the jump. No shame in scaling." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "machine-cardio",
+    title: "The Steady State",
+    duration: "30 MIN",
+    intensity: "ALL LEVELS",
+    icon: "🏃",
+    color: "#3dabc2",
+    description: "A structured interval session for the FQI fitness center. Treadmill, bike, or elliptical — pick your machine and let the pyramid do the programming. Adjust intensity to your level.",
+    machineNote: "Works on any cardio machine. Choose your weapon: treadmill, stationary bike, or elliptical.",
+    pairWith: { id: "morning", reason: "Great cardio session. Tomorrow morning, start with Morning Mobility to keep everything loose and moving." },
+    format: "Warm-Up → Pyramid Intervals → Cooldown",
+    circuits: [
+      {
+        name: "Phase 1 — Warm-Up (5 min)",
+        rounds: 1,
+        rest: "Move directly into Phase 2",
+        exercises: [
+          { name: "Easy Pace", reps: "3 min", cue: "RPE 3-4. Easy conversation pace — like a stroll through the Battery. On a bike, keep resistance light. Treadmill: flat, easy walk or jog." },
+          { name: "Gradual Build", reps: "2 min", cue: "RPE 5. Increase speed or resistance slightly every 30 seconds. You should feel warm but not winded." },
+        ],
+      },
+      {
+        name: "Phase 2 — Climbing Pyramid (10 min)",
+        rounds: 1,
+        rest: "No rest between intervals — recovery IS the easy portion",
+        exercises: [
+          { name: "Moderate Push", reps: "2 min", cue: "RPE 6. Increase speed or resistance. Breathing is heavier but controlled. This is your baseline work pace." },
+          { name: "Recovery", reps: "1 min", cue: "RPE 4. Back off the pace. Active recovery — keep moving but let your heart rate settle." },
+          { name: "Hard Push", reps: "2 min", cue: "RPE 7-8. Crank the resistance or speed up. You can talk in short phrases only. Commit to it." },
+          { name: "Recovery", reps: "1 min", cue: "RPE 4. Ease off. Breathe. You earned it." },
+          { name: "Peak Effort", reps: "2 min", cue: "RPE 8-9. The summit. Go after it — high resistance, fast cadence, steep incline. Whatever your machine allows." },
+          { name: "Extended Recovery", reps: "2 min", cue: "RPE 4. Slow it down. Catch your breath fully before the descending ladder." },
+        ],
+      },
+      {
+        name: "Phase 3 — Descending Ladder (10 min)",
+        rounds: 1,
+        rest: "No rest between intervals",
+        exercises: [
+          { name: "Strong Effort", reps: "90s", cue: "RPE 7-8. Right back into it. Match or beat your Phase 2 hard push. The ladder only gets easier from here." },
+          { name: "Recovery", reps: "60s", cue: "RPE 4. Easy pace. Control your breathing." },
+          { name: "Moderate Effort", reps: "90s", cue: "RPE 6-7. Still working but it should feel more sustainable. Your engine is warm and humming." },
+          { name: "Recovery", reps: "60s", cue: "RPE 4. Almost there. Let your heart rate come down." },
+          { name: "Final Push", reps: "90s", cue: "RPE 8-9. Last real effort. Empty the tank — you're cooling down after this. Make it count." },
+          { name: "Transition to Cooldown", reps: "90s", cue: "RPE 4-5. Gradually reduce speed and resistance. Let your body begin to settle." },
+        ],
+      },
+      {
+        name: "Phase 4 — Cooldown (5 min)",
+        rounds: 1,
+        rest: "Transition off the machine into optional stretches",
+        exercises: [
+          { name: "Gradual Decrease", reps: "3 min", cue: "RPE 3. Slow and easy. Drop speed and resistance every 60 seconds. Let your heart rate come under 120 bpm." },
+          { name: "Final Easy Pace", reps: "2 min", cue: "RPE 2. Barely moving. Active recovery. Breathe deeply through your nose. You've earned whatever's next — a shower, a bourbon, or both." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "bedtime",
+    free: true,
+    title: "Bedtime Recovery",
+    duration: "10 MIN",
+    intensity: "RELAXING",
+    icon: "🌙",
+    color: "#6b7db3",
+    description: "The Lowcountry wind-down. Gentle stretches and guided breathing to prepare your body and mind for the kind of deep sleep you came to Charleston for.",
+    pairWith: { id: "morning", reason: "Sleep well. When you wake up, Morning Mobility is waiting to start your day right." },
+    exercises: [
+      { name: "Seated Forward Fold", duration: "60s", reps: "Hold & breathe", cue: "Sit on the edge of the bed, legs extended. Reach forward gently. Let gravity pull you in — no forcing." },
+      { name: "Supine Spinal Twist", duration: "60s", reps: "30s each side", cue: "Lie back, drop both knees to one side. Arms wide like the branches of a live oak. Breathe into the stretch." },
+      { name: "Figure-4 Hip Stretch", duration: "60s", reps: "30s each side", cue: "Ankle on opposite knee. Gently press the knee away. Release the tension from a day of exploring the Holy City." },
+      { name: "Child's Pose", duration: "60s", reps: "Hold", cue: "Knees wide, arms extended. Sink your hips back. Let your forehead rest — nothing left to do today." },
+      { name: "Legs Up the Headboard", duration: "90s", reps: "Hold & breathe", cue: "Scoot close to the headboard, legs vertical. This reverses circulation from a long day on your feet — pure relief." },
+      { name: "4-7-8 Breathing", duration: "120s", reps: "5 cycles", cue: "Inhale 4 counts. Hold 7 counts. Exhale 8 counts. This pattern activates your parasympathetic nervous system — your body's off switch." },
+      { name: "Body Scan Relaxation", duration: "120s", reps: "1 pass", cue: "Starting at your toes, consciously relax each muscle group moving upward. Let every part of your body melt into that French Quarter Inn bed." },
+    ],
+  },
+];
+
+// Timer component
+function Timer({ duration, onComplete }) {
+  const [timeLeft, setTimeLeft] = useState(duration);
+  const [running, setRunning] = useState(false);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (running && timeLeft > 0) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft((t) => {
+          if (t <= 1) {
+            clearInterval(intervalRef.current);
+            setRunning(false);
+            onComplete?.();
+            return 0;
+          }
+          return t - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(intervalRef.current);
+  }, [running, timeLeft]);
+
+  const reset = () => {
+    clearInterval(intervalRef.current);
+    setTimeLeft(duration);
+    setRunning(false);
+  };
+
+  const mins = Math.floor(timeLeft / 60);
+  const secs = timeLeft % 60;
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 20, color: HOTEL_CONFIG.accent, minWidth: 60 }}>
+        {mins}:{secs.toString().padStart(2, "0")}
+      </span>
+      <button
+        onClick={() => setRunning(!running)}
+        style={{
+          background: running ? "rgba(123,45,62,0.12)" : HOTEL_CONFIG.accent,
+          color: running ? HOTEL_CONFIG.accent : HOTEL_CONFIG.dark,
+          border: "none",
+          borderRadius: 6,
+          padding: "6px 16px",
+          fontSize: 12,
+          fontWeight: 700,
+          letterSpacing: 1,
+          cursor: "pointer",
+          fontFamily: "'Lato', sans-serif",
+        }}
+      >
+        {running ? "PAUSE" : timeLeft < duration ? "RESUME" : "START"}
+      </button>
+      {timeLeft < duration && (
+        <button
+          onClick={reset}
+          style={{
+            background: "transparent",
+            color: HOTEL_CONFIG.textSecondary,
+            border: `1px solid rgba(138,154,176,0.3)`,
+            borderRadius: 6,
+            padding: "6px 12px",
+            fontSize: 11,
+            cursor: "pointer",
+            fontFamily: "'Lato', sans-serif",
+          }}
+        >
+          RESET
+        </button>
+      )}
+    </div>
+  );
+}
+
+function parseDuration(str) {
+  if (!str) return 60;
+  const match = str.match(/(\d+)/);
+  return match ? parseInt(match[1]) : 60;
+}
+
+// Screens
+function HomeScreen({ onNavigate }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 100); }, []);
+
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.6s ease" }}>
+      <div style={{ textAlign: "center", padding: "36px 20px 12px" }}>
+        <h1 style={{ fontSize: 14, letterSpacing: 8, color: HOTEL_CONFIG.textPrimary, fontWeight: 300, margin: 0, fontFamily: "'Playfair Display', serif" }}>
+          {HOTEL_CONFIG.name}
+        </h1>
+        <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: "4px 0 0", fontWeight: 400, fontFamily: "'Lato', sans-serif" }}>
+          {HOTEL_CONFIG.subtitle}
+        </p>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "40px 24px 20px" }}>
+        <div style={{ width: 40, height: 1, background: HOTEL_CONFIG.accent, margin: "0 auto 28px", opacity: 0.6 }} />
+        <h2 style={{ fontSize: 32, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 300, lineHeight: 1.2, fontFamily: "'Playfair Display', serif" }}>
+          Your Recovery
+        </h2>
+        <h2 style={{ fontSize: 34, color: HOTEL_CONFIG.accent, margin: "2px 0 0", fontStyle: "italic", fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>
+          Starts Here
+        </h2>
+        <div style={{ width: 40, height: 2, background: HOTEL_CONFIG.accent, margin: "20px auto 0" }} />
+        <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 14, lineHeight: 1.6, maxWidth: 320, margin: "20px auto 0", fontFamily: "'Lato', sans-serif" }}>
+          Select a guided session below or request professional equipment for the ultimate in-suite recovery.
+        </p>
+      </div>
+
+      {/* Quick Start — time-aware */}
+      {(() => {
+        const hour = new Date().getHours();
+        const isEvening = hour >= 18 || hour < 5;
+        const isMorning = hour >= 5 && hour < 12;
+        const freeSessions = sessions.filter(s => s.free);
+        const quickSession = isEvening
+          ? freeSessions.find(s => s.id === "bedtime")
+          : isMorning
+          ? freeSessions.find(s => s.id === "morning")
+          : freeSessions.find(s => s.id === "foundation");
+        const quickLabel = isEvening ? "Wind Down" : isMorning ? "Start Your Morning" : "Afternoon Burn";
+        const quickSub = isEvening ? "10 min bedtime recovery" : isMorning ? "15 min mobility flow" : "30 min bodyweight workout";
+        const quickEmoji = isEvening ? "🌙" : isMorning ? "☀️" : "🧱";
+        return (
+          <div style={{ padding: "0 20px 8px" }}>
+            <button
+              onClick={() => onNavigate("session", quickSession)}
+              style={{
+                width: "100%",
+                display: "flex", alignItems: "center", gap: 14,
+                padding: "16px 18px",
+                background: `linear-gradient(135deg, ${HOTEL_CONFIG.accent}14, ${HOTEL_CONFIG.accent}06)`,
+                border: `1px solid ${HOTEL_CONFIG.accent}35`,
+                borderRadius: 14,
+                cursor: "pointer",
+                textAlign: "left",
+                transition: "all 0.25s ease",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = HOTEL_CONFIG.accent; e.currentTarget.style.transform = "translateY(-1px)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${HOTEL_CONFIG.accent}35`; e.currentTarget.style.transform = "translateY(0)"; }}
+            >
+              <div style={{
+                width: 52, height: 52, borderRadius: 14,
+                background: `${HOTEL_CONFIG.accent}18`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 24, flexShrink: 0,
+                border: `1px solid ${HOTEL_CONFIG.accent}25`,
+              }}>
+                {quickEmoji}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                  <span style={{ fontSize: 10, letterSpacing: 2, color: HOTEL_CONFIG.accent, fontWeight: 700, fontFamily: "'Lato', sans-serif" }}>
+                    QUICK START
+                  </span>
+                  <div style={{ width: 4, height: 4, borderRadius: 2, background: `${HOTEL_CONFIG.accent}50` }} />
+                  <span style={{ fontSize: 10, color: `${HOTEL_CONFIG.accent}90`, fontFamily: "'Lato', sans-serif" }}>
+                    Just tap & go
+                  </span>
+                </div>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 16, margin: 0, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>
+                  {quickLabel}
+                </p>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: "2px 0 0", fontFamily: "'Lato', sans-serif" }}>
+                  {quickSub}
+                </p>
+              </div>
+              <div style={{
+                width: 36, height: 36, borderRadius: "50%",
+                background: HOTEL_CONFIG.accent, display: "flex",
+                alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <span style={{ fontSize: 16, color: HOTEL_CONFIG.dark, marginLeft: 2 }}>›</span>
+              </div>
+            </button>
+          </div>
+        );
+      })()}
+
+      {/* Guided Sessions */}
+      <div style={{ padding: "0 20px" }}>
+        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, marginBottom: 14, fontFamily: "'Lato', sans-serif" }}>
+          COMPLIMENTARY SESSIONS
+        </p>
+        {sessions.filter(s => s.free).map((s, i) => (
+          <button
+            key={s.id}
+            onClick={() => onNavigate("session", s)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              background: HOTEL_CONFIG.cardBg,
+              border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+              borderRadius: 12,
+              padding: "18px 16px",
+              marginBottom: 10,
+              cursor: "pointer",
+              textAlign: "left",
+              transition: "all 0.2s ease",
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(12px)",
+              transitionDelay: `${i * 80}ms`,
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(123,45,62,0.4)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = HOTEL_CONFIG.cardBorder; e.currentTarget.style.transform = "translateY(0)"; }}
+          >
+            <div style={{
+              width: 48, height: 48, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22,
+              background: `${s.color}18`, marginRight: 14, flexShrink: 0,
+            }}>
+              {s.icon}
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 16, margin: 0, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{s.title}</p>
+              <div style={{ display: "flex", gap: 12, marginTop: 4 }}>
+                <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>⏱ {s.duration}</span>
+                <span style={{ fontSize: 11, color: s.color, fontFamily: "'Lato', sans-serif" }}>◈ {s.intensity}</span>
+              </div>
+            </div>
+            <span style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 18 }}>›</span>
+          </button>
+        ))}
+
+        {/* Locked Premium Sessions */}
+        <div style={{ marginTop: 28 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+            <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: 0, fontFamily: "'Lato', sans-serif" }}>
+              PREMIUM SESSIONS
+            </p>
+            <div style={{ flex: 1, height: 1, background: `${HOTEL_CONFIG.accent}20` }} />
+            <span style={{ fontSize: 11, color: HOTEL_CONFIG.accent, fontFamily: "'Lato', sans-serif" }}>🔒</span>
+          </div>
+          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "-4px 0 14px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+            Unlock all premium sessions with a one-time access code.
+          </p>
+          {sessions.filter(s => !s.free).map((s, i) => (
+            <button
+              key={s.id}
+              onClick={() => onNavigate("unlock", s)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                background: `linear-gradient(135deg, ${HOTEL_CONFIG.cardBg}, ${HOTEL_CONFIG.dark})`,
+                border: `1px solid ${HOTEL_CONFIG.accent}18`,
+                borderRadius: 12,
+                padding: "18px 16px",
+                marginBottom: 10,
+                cursor: "pointer",
+                textAlign: "left",
+                transition: "all 0.2s ease",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(12px)",
+                transitionDelay: `${(i + 3) * 80}ms`,
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${HOTEL_CONFIG.accent}40`; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = `${HOTEL_CONFIG.accent}18`; }}
+            >
+              {/* Subtle lock overlay */}
+              <div style={{
+                position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+                background: "rgba(250,246,240,0.45)",
+                pointerEvents: "none",
+              }} />
+              <div style={{
+                width: 48, height: 48, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22,
+                background: `${s.color}10`, marginRight: 14, flexShrink: 0, position: "relative",
+              }}>
+                {s.icon}
+              </div>
+              <div style={{ flex: 1, position: "relative" }}>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 16, margin: 0, fontWeight: 500, fontFamily: "'Playfair Display', serif", opacity: 0.8 }}>{s.title}</p>
+                <div style={{ display: "flex", gap: 12, marginTop: 4 }}>
+                  <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif", opacity: 0.7 }}>⏱ {s.duration}</span>
+                  <span style={{ fontSize: 11, color: s.color, fontFamily: "'Lato', sans-serif", opacity: 0.7 }}>◈ {s.intensity}</span>
+                </div>
+              </div>
+              <div style={{
+                position: "relative",
+                width: 32, height: 32, borderRadius: 8,
+                background: `${HOTEL_CONFIG.accent}15`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0,
+              }}>
+                <span style={{ fontSize: 14, color: HOTEL_CONFIG.accent }}>🔒</span>
+              </div>
+            </button>
+          ))}
+
+          {/* Access Code Entry */}
+          <div style={{
+            marginTop: 6,
+            padding: "14px 18px",
+            background: `${HOTEL_CONFIG.accent}06`,
+            border: `1px dashed ${HOTEL_CONFIG.accent}25`,
+            borderRadius: 10,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            cursor: "pointer",
+          }}
+            onClick={() => onNavigate("unlock")}
+          >
+            <span style={{ color: HOTEL_CONFIG.accent, fontSize: 14 }}>✦</span>
+            <p style={{ color: HOTEL_CONFIG.accent, fontSize: 13, margin: 0, fontWeight: 500, fontFamily: "'Lato', sans-serif" }}>
+              Enter Access Code
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Links */}
+      <div style={{ padding: "24px 20px 0", display: "flex", gap: 10 }}>
+        <button
+          onClick={() => onNavigate("equipment")}
+          style={{
+            flex: 1, background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+            borderRadius: 12, padding: "18px 14px", cursor: "pointer", textAlign: "center", transition: "border-color 0.2s",
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.borderColor = "rgba(123,45,62,0.4)"}
+          onMouseLeave={(e) => e.currentTarget.style.borderColor = HOTEL_CONFIG.cardBorder}
+        >
+          <span style={{ fontSize: 22, display: "block", marginBottom: 8 }}>📞</span>
+          <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 13, fontWeight: 500, fontFamily: "'Lato', sans-serif" }}>Front Desk Concierge</span>
+          <span style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 11, display: "block", marginTop: 4, fontFamily: "'Lato', sans-serif" }}>Request Equipment</span>
+        </button>
+        <button
+          onClick={() => onNavigate("about")}
+          style={{
+            flex: 1, background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+            borderRadius: 12, padding: "18px 14px", cursor: "pointer", textAlign: "center", transition: "border-color 0.2s",
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.borderColor = "rgba(123,45,62,0.4)"}
+          onMouseLeave={(e) => e.currentTarget.style.borderColor = HOTEL_CONFIG.cardBorder}
+        >
+          <span style={{ fontSize: 22, display: "block", marginBottom: 8 }}>💪</span>
+          <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 13, fontWeight: 500, fontFamily: "'Lato', sans-serif" }}>Your Coach</span>
+          <span style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 11, display: "block", marginTop: 4, fontFamily: "'Lato', sans-serif" }}>Meet Your Guide</span>
+        </button>
+      </div>
+
+      {/* Premium Programs teaser */}
+      <div style={{ padding: "24px 20px" }}>
+        <button
+          onClick={() => onNavigate("premium")}
+          style={{
+            width: "100%",
+            background: `linear-gradient(135deg, rgba(123,45,62,0.1), rgba(123,45,62,0.03))`,
+            border: `1px solid ${HOTEL_CONFIG.accent}40`,
+            borderRadius: 12,
+            padding: "20px 16px",
+            cursor: "pointer",
+            textAlign: "left",
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.borderColor = HOTEL_CONFIG.accent}
+          onMouseLeave={(e) => e.currentTarget.style.borderColor = `${HOTEL_CONFIG.accent}40`}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div>
+              <p style={{ color: HOTEL_CONFIG.accent, fontSize: 11, letterSpacing: 2, margin: "0 0 6px", fontWeight: 600, fontFamily: "'Lato', sans-serif" }}>PREMIUM PROGRAMS</p>
+              <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, margin: 0, fontFamily: "'Playfair Display', serif" }}>Take-Home Training Plans & Golf Mobility</p>
+            </div>
+            <span style={{ color: HOTEL_CONFIG.accent, fontSize: 20 }}>›</span>
+          </div>
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div style={{ textAlign: "center", padding: "12px 20px 32px" }}>
+        <p style={{ fontSize: 10, letterSpacing: 2, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>
+          {HOTEL_CONFIG.name} • {HOTEL_CONFIG.location.toUpperCase()}
+        </p>
+        <p style={{ fontSize: 10, color: `${HOTEL_CONFIG.textSecondary}80`, marginTop: 4, fontFamily: "'Lato', sans-serif" }}>
+          Powered by StrongHold Fitness
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SessionScreen({ session, onBack, onNavigate }) {
+  const [visible, setVisible] = useState(false);
+  const [expandedCircuit, setExpandedCircuit] = useState(0);
+  const [introPlaying, setIntroPlaying] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
+
+  const isStretchFormat = !!session.exercises;
+
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
+      {/* Header */}
+      <div style={{ padding: "16px 20px 0", display: "flex", alignItems: "center" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: HOTEL_CONFIG.textSecondary, fontSize: 24, cursor: "pointer", padding: "4px 8px 4px 0" }}>‹</button>
+        <div>
+          <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: 0, fontFamily: "'Lato', sans-serif" }}>{HOTEL_CONFIG.name}</p>
+        </div>
+      </div>
+
+      {/* Session Hero */}
+      <div style={{ padding: "28px 24px 16px", textAlign: "center" }}>
+        <div style={{ fontSize: 40, marginBottom: 12 }}>{session.icon}</div>
+        <h2 style={{ fontSize: 28, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>{session.title}</h2>
+        <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 10 }}>
+          <span style={{ fontSize: 12, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>⏱ {session.duration}</span>
+          <span style={{ fontSize: 12, color: session.color, fontFamily: "'Lato', sans-serif" }}>◈ {session.intensity}</span>
+        </div>
+        {session.format && (
+          <div style={{
+            display: "inline-block", marginTop: 12, padding: "6px 16px",
+            background: `${session.color}15`, borderRadius: 20,
+            color: session.color, fontSize: 11, fontWeight: 600, letterSpacing: 1, fontFamily: "'Lato', sans-serif",
+          }}>
+            {session.format}
+          </div>
+        )}
+        {session.machineNote && (
+          <div style={{
+            marginTop: 10, padding: "8px 16px",
+            background: `${session.color}08`, border: `1px solid ${session.color}20`,
+            borderRadius: 10, maxWidth: 340, marginLeft: "auto", marginRight: "auto",
+          }}>
+            <p style={{ color: session.color, fontSize: 12, margin: 0, fontFamily: "'Lato', sans-serif", lineHeight: 1.5 }}>
+              🏋️ {session.machineNote}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Intro Video — Tap to play, has audio */}
+      <div style={{ padding: "0 20px", marginBottom: 6 }}>
+        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, marginBottom: 10, fontFamily: "'Lato', sans-serif" }}>
+          COACH OVERVIEW
+        </p>
+        <div
+          onClick={() => setIntroPlaying(!introPlaying)}
+          style={{
+            background: HOTEL_CONFIG.cardBg, borderRadius: 14,
+            border: `1px solid ${introPlaying ? session.color + '50' : HOTEL_CONFIG.cardBorder}`,
+            overflow: "hidden", cursor: "pointer",
+            transition: "border-color 0.3s",
+          }}
+        >
+          {/* Video area — 16:9 landscape for intro explanation */}
+          <div style={{
+            width: "100%", aspectRatio: "16/9",
+            background: `linear-gradient(135deg, ${HOTEL_CONFIG.dark}, ${session.color}08)`,
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            position: "relative",
+          }}>
+            {introPlaying ? (
+              <>
+                {/* Simulated playing state */}
+                <div style={{
+                  position: "absolute", bottom: 12, left: 12, right: 12,
+                  display: "flex", alignItems: "center", gap: 10,
+                }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: "50%",
+                    background: `${session.color}30`, display: "flex",
+                    alignItems: "center", justifyContent: "center",
+                  }}>
+                    <span style={{ fontSize: 10, color: session.color }}>❚❚</span>
+                  </div>
+                  {/* Progress bar */}
+                  <div style={{ flex: 1, height: 3, background: "rgba(123,45,62,0.1)", borderRadius: 2, overflow: "hidden" }}>
+                    <div style={{
+                      width: "35%", height: "100%", background: session.color, borderRadius: 2,
+                      animation: "progress-demo 8s linear infinite",
+                    }} />
+                  </div>
+                  <span style={{ fontSize: 10, color: HOTEL_CONFIG.textSecondary, fontFamily: "'JetBrains Mono', monospace" }}>0:12</span>
+                  {/* Volume icon */}
+                  <span style={{ fontSize: 12, color: HOTEL_CONFIG.textSecondary }}>🔊</span>
+                </div>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, fontFamily: "'Playfair Display', serif", opacity: 0.5 }}>
+                  Video playing...
+                </p>
+              </>
+            ) : (
+              <>
+                <div style={{
+                  width: 56, height: 56, borderRadius: "50%",
+                  background: `${session.color}20`, border: `2px solid ${session.color}50`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  marginBottom: 10, transition: "all 0.2s",
+                }}>
+                  <span style={{ fontSize: 22, marginLeft: 3, color: session.color }}>▶</span>
+                </div>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 14, margin: 0, fontFamily: "'Playfair Display', serif" }}>
+                  Watch Overview
+                </p>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 11, margin: "4px 0 0", fontFamily: "'Lato', sans-serif" }}>
+                  ~30 sec • Tap to play with audio
+                </p>
+              </>
+            )}
+          </div>
+          {/* Description below video */}
+          <div style={{ padding: "12px 14px", borderTop: `1px solid ${HOTEL_CONFIG.cardBorder}` }}>
+            <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: 0, lineHeight: 1.6, fontFamily: "'Lato', sans-serif" }}>
+              {session.description}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Exercises */}
+      <div style={{ padding: "20px 20px 32px" }}>
+        {isStretchFormat ? (
+          <>
+            <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, marginBottom: 14, fontFamily: "'Lato', sans-serif" }}>
+              EXERCISE GUIDE
+            </p>
+            {session.exercises.map((ex, i) => (
+              <div
+                key={i}
+                style={{
+                  background: HOTEL_CONFIG.cardBg,
+                  border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+                  borderRadius: 12,
+                  marginBottom: 10,
+                  overflow: "hidden",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(8px)",
+                  transition: `all 0.4s ease ${i * 60}ms`,
+                }}
+              >
+                {/* Looping video demo — autoplays muted */}
+                <div style={{
+                  width: "100%", aspectRatio: "16/9",
+                  background: `linear-gradient(135deg, ${HOTEL_CONFIG.dark}, ${session.color}06)`,
+                  display: "flex", flexDirection: "column",
+                  alignItems: "center", justifyContent: "center",
+                  position: "relative", borderBottom: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+                }}>
+                  {/* Looping indicator */}
+                  <div style={{
+                    position: "absolute", top: 10, right: 10,
+                    display: "flex", alignItems: "center", gap: 5,
+                    background: "rgba(44,36,32,0.55)", borderRadius: 12,
+                    padding: "4px 10px",
+                  }}>
+                    <span style={{ fontSize: 8, color: "#4ade80" }}>●</span>
+                    <span style={{ fontSize: 9, color: "rgba(44,36,32,0.6)", fontFamily: "'Lato', sans-serif", letterSpacing: 1 }}>LOOPING</span>
+                  </div>
+                  {/* Exercise number overlay */}
+                  <div style={{
+                    position: "absolute", top: 10, left: 10,
+                    width: 28, height: 28, borderRadius: 8,
+                    background: `${session.color}30`, display: "flex",
+                    alignItems: "center", justifyContent: "center",
+                    fontSize: 13, color: session.color, fontWeight: 700, fontFamily: "'Lato', sans-serif",
+                  }}>
+                    {i + 1}
+                  </div>
+                  {/* Muted indicator */}
+                  <div style={{
+                    position: "absolute", bottom: 10, right: 10,
+                    background: "rgba(44,36,32,0.55)", borderRadius: 6,
+                    padding: "3px 8px", display: "flex", alignItems: "center", gap: 4,
+                  }}>
+                    <span style={{ fontSize: 10, color: "rgba(44,36,32,0.4)" }}>🔇</span>
+                  </div>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: "50%",
+                    background: "rgba(123,45,62,0.06)", border: "1px solid rgba(123,45,62,0.15)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <span style={{ fontSize: 20 }}>🏋️</span>
+                  </div>
+                  <p style={{ color: "rgba(44,36,32,0.35)", fontSize: 10, marginTop: 6, fontFamily: "'Lato', sans-serif" }}>Demo video placeholder</p>
+                </div>
+                {/* Exercise info */}
+                <div style={{ padding: "14px 16px" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 6 }}>
+                    <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 16, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{ex.name}</span>
+                    <span style={{
+                      background: `${session.color}18`, color: session.color,
+                      padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+                      whiteSpace: "nowrap", marginLeft: 10, fontFamily: "'Lato', sans-serif",
+                    }}>{ex.reps}</span>
+                  </div>
+                  <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 12px", lineHeight: 1.5, fontStyle: "italic", fontFamily: "'Lato', sans-serif" }}>
+                    {ex.cue}
+                  </p>
+                  <Timer duration={parseDuration(ex.duration)} />
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            {session.circuits.map((circuit, ci) => (
+              <div key={ci} style={{ marginBottom: 16 }}>
+                <button
+                  onClick={() => setExpandedCircuit(expandedCircuit === ci ? -1 : ci)}
+                  style={{
+                    width: "100%", textAlign: "left", cursor: "pointer",
+                    background: expandedCircuit === ci ? `${session.color}10` : HOTEL_CONFIG.cardBg,
+                    border: `1px solid ${expandedCircuit === ci ? `${session.color}40` : HOTEL_CONFIG.cardBorder}`,
+                    borderRadius: expandedCircuit === ci ? "12px 12px 0 0" : 12,
+                    padding: "16px",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div>
+                      <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, margin: 0, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>
+                        {circuit.name}
+                      </p>
+                      <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 11, margin: "4px 0 0", fontFamily: "'Lato', sans-serif" }}>
+                        {circuit.rounds} round{circuit.rounds > 1 ? "s" : ""} • {circuit.rest}
+                      </p>
+                    </div>
+                    <span style={{
+                      color: session.color, fontSize: 16,
+                      transform: expandedCircuit === ci ? "rotate(90deg)" : "rotate(0)",
+                      transition: "transform 0.2s",
+                    }}>›</span>
+                  </div>
+                </button>
+
+                {expandedCircuit === ci && (
+                  <div style={{
+                    background: HOTEL_CONFIG.cardBg,
+                    border: `1px solid ${session.color}40`,
+                    borderTop: "none",
+                    borderRadius: "0 0 12px 12px",
+                    padding: "6px 0 10px",
+                  }}>
+                    {circuit.exercises.map((ex, ei) => (
+                      <div key={ei} style={{
+                        padding: "0 12px",
+                        marginBottom: ei < circuit.exercises.length - 1 ? 6 : 0,
+                      }}>
+                        {/* Looping video demo per exercise */}
+                        <div style={{
+                          width: "100%", aspectRatio: "16/9",
+                          background: `linear-gradient(135deg, ${HOTEL_CONFIG.dark}, ${session.color}06)`,
+                          borderRadius: "10px 10px 0 0",
+                          display: "flex", flexDirection: "column",
+                          alignItems: "center", justifyContent: "center",
+                          position: "relative",
+                          border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+                          borderBottom: "none",
+                        }}>
+                          <div style={{
+                            position: "absolute", top: 8, right: 8,
+                            display: "flex", alignItems: "center", gap: 4,
+                            background: "rgba(44,36,32,0.6)", borderRadius: 10,
+                            padding: "3px 8px",
+                          }}>
+                            <span style={{ fontSize: 7, color: "#4ade80" }}>●</span>
+                            <span style={{ fontSize: 8, color: "rgba(44,36,32,0.55)", fontFamily: "'Lato', sans-serif", letterSpacing: 1 }}>LOOPING</span>
+                          </div>
+                          <div style={{
+                            position: "absolute", bottom: 8, right: 8,
+                            background: "rgba(44,36,32,0.55)", borderRadius: 5,
+                            padding: "2px 6px",
+                          }}>
+                            <span style={{ fontSize: 9, color: "rgba(44,36,32,0.35)" }}>🔇</span>
+                          </div>
+                          <div style={{
+                            width: 36, height: 36, borderRadius: "50%",
+                            background: "rgba(123,45,62,0.05)", border: "1px solid rgba(123,45,62,0.1)",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                          }}>
+                            <span style={{ fontSize: 16 }}>🏋️</span>
+                          </div>
+                          <p style={{ color: "rgba(44,36,32,0.3)", fontSize: 9, marginTop: 4, fontFamily: "'Lato', sans-serif" }}>Demo video</p>
+                        </div>
+                        {/* Exercise details */}
+                        <div style={{
+                          padding: "12px 14px",
+                          background: `${session.color}06`,
+                          border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+                          borderTop: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+                          borderRadius: "0 0 10px 10px",
+                        }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 5 }}>
+                            <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 14, fontWeight: 500, fontFamily: "'Lato', sans-serif" }}>{ex.name}</span>
+                            <span style={{
+                              background: `${session.color}18`, color: session.color,
+                              padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+                              whiteSpace: "nowrap", marginLeft: 10, fontFamily: "'Lato', sans-serif",
+                            }}>{ex.reps}</span>
+                          </div>
+                          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, lineHeight: 1.5, fontStyle: "italic", fontFamily: "'Lato', sans-serif" }}>
+                            {ex.cue}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                    {/* Rest timer */}
+                    <div style={{ margin: "10px 12px 6px", padding: "12px", background: `${session.color}08`, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <span style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, fontFamily: "'Lato', sans-serif" }}>Rest Timer</span>
+                      <Timer duration={parseInt(circuit.rest) || 60} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+
+      {/* Equipment Needed Callout */}
+      {session.id !== "morning" && session.id !== "bedtime" && (
+        <div style={{ padding: "0 20px 20px" }}>
+          <div style={{
+            background: `${HOTEL_CONFIG.accent}06`, border: `1px solid ${HOTEL_CONFIG.accent}18`,
+            borderRadius: 12, padding: "14px 16px",
+            display: "flex", alignItems: "flex-start", gap: 12,
+          }}>
+            <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>🎒</span>
+            <div>
+              <p style={{ color: HOTEL_CONFIG.accent, fontSize: 12, fontWeight: 600, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
+                Equipment Needed
+              </p>
+              <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+                {session.id === "foundation" || session.id === "cardio"
+                  ? "Bodyweight only — no equipment needed."
+                  : session.id === "machine-cardio"
+                  ? "Any cardio machine: treadmill, bike, or elliptical."
+                  : "Dumbbells recommended. Request from Front Desk Concierge by dialing \"0\"."}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Difficulty Quick-Adjust Tip */}
+      <div style={{ padding: "0 20px 20px" }}>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 12, padding: "14px 16px",
+          display: "flex", alignItems: "flex-start", gap: 12,
+        }}>
+          <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>💡</span>
+          <div>
+            <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 12, fontWeight: 600, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
+              Trainer's Tip
+            </p>
+            <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+              {isStretchFormat
+                ? "Hold each stretch to your comfort level. Never push into pain — breathe into the tension and let it release naturally."
+                : "Watch each demo loop once or twice before your first rep. Focus on matching the form, not the speed. Quality reps beat fast reps every time."}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Pair With — What's Next */}
+      {session.pairWith && (() => {
+        const nextSession = sessions.find(s => s.id === session.pairWith.id);
+        if (!nextSession) return null;
+        const isLocked = !nextSession.free;
+        return (
+          <div style={{ padding: "0 20px 24px" }}>
+            <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, marginBottom: 10, fontFamily: "'Lato', sans-serif" }}>
+              UP NEXT
+            </p>
+            <div style={{
+              background: HOTEL_CONFIG.cardBg,
+              border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+              borderRadius: 14,
+              overflow: "hidden",
+            }}>
+              {/* Reason banner */}
+              <div style={{
+                padding: "12px 16px",
+                background: `${nextSession.color}08`,
+                borderBottom: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+              }}>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+                  {session.pairWith.reason}
+                </p>
+              </div>
+              {/* Session card */}
+              <button
+                onClick={() => isLocked ? onNavigate("unlock", nextSession) : onNavigate("session", nextSession)}
+                style={{
+                  display: "flex", alignItems: "center", width: "100%",
+                  padding: "16px", cursor: "pointer",
+                  background: "transparent", border: "none",
+                  textAlign: "left", transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = `${nextSession.color}06`}
+                onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+              >
+                <div style={{
+                  width: 48, height: 48, borderRadius: 12,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 22, background: `${nextSession.color}15`,
+                  marginRight: 14, flexShrink: 0,
+                  position: "relative",
+                }}>
+                  {nextSession.icon}
+                  {isLocked && (
+                    <div style={{
+                      position: "absolute", bottom: -3, right: -3,
+                      width: 18, height: 18, borderRadius: 6,
+                      background: HOTEL_CONFIG.accent, display: "flex",
+                      alignItems: "center", justifyContent: "center",
+                      fontSize: 9, border: `2px solid ${HOTEL_CONFIG.cardBg}`,
+                    }}>🔒</div>
+                  )}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 16, margin: 0, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>
+                    {nextSession.title}
+                  </p>
+                  <div style={{ display: "flex", gap: 12, marginTop: 3 }}>
+                    <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>⏱ {nextSession.duration}</span>
+                    <span style={{ fontSize: 11, color: nextSession.color, fontFamily: "'Lato', sans-serif" }}>◈ {nextSession.intensity}</span>
+                  </div>
+                </div>
+                <div style={{
+                  width: 36, height: 36, borderRadius: "50%",
+                  background: `${nextSession.color}15`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0,
+                }}>
+                  <span style={{ fontSize: 16, color: nextSession.color }}>›</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Footer */}
+      <div style={{ textAlign: "center", padding: "0 20px 32px" }}>
+        <div style={{ width: 40, height: 1, background: HOTEL_CONFIG.cardBorder, margin: "0 auto 16px" }} />
+        <p style={{ fontSize: 10, letterSpacing: 2, color: `${HOTEL_CONFIG.textSecondary}60`, fontFamily: "'Lato', sans-serif" }}>
+          Powered by StrongHold Fitness
+        </p>
+      </div>
+
+      <style>{`
+        @keyframes progress-demo {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function EquipmentScreen({ onBack }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
+
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
+      <div style={{ padding: "16px 20px 0", display: "flex", alignItems: "center" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: HOTEL_CONFIG.textSecondary, fontSize: 24, cursor: "pointer", padding: "4px 8px 4px 0" }}>‹</button>
+        <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: 0, fontFamily: "'Lato', sans-serif" }}>{HOTEL_CONFIG.name}</p>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "40px 24px 12px" }}>
+        <div style={{
+          width: 64, height: 64, borderRadius: "50%", margin: "0 auto 20px",
+          background: `${HOTEL_CONFIG.accent}15`, display: "flex", alignItems: "center", justifyContent: "center",
+          border: `2px solid ${HOTEL_CONFIG.accent}30`,
+        }}>
+          <span style={{ fontSize: 28 }}>📞</span>
+        </div>
+        <h2 style={{ fontSize: 26, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>Front Desk Concierge</h2>
+        <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 14, lineHeight: 1.6, maxWidth: 300, margin: "14px auto 0", fontFamily: "'Lato', sans-serif" }}>
+          To request recovery equipment for your room, please dial <strong style={{ color: HOTEL_CONFIG.accent }}>"0"</strong> from your room phone.
+        </p>
+      </div>
+
+      <div style={{ padding: "24px 20px" }}>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 16, padding: "24px 20px",
+        }}>
+          <div style={{ width: "100%", height: 1, background: HOTEL_CONFIG.cardBorder, margin: "0 0 18px" }} />
+          <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, margin: "0 0 18px", textAlign: "center", fontFamily: "'Lato', sans-serif" }}>
+            AVAILABLE FOR CHECKOUT
+          </p>
+          {equipment.map((item, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex", alignItems: "center", gap: 12, padding: "12px 0",
+                borderBottom: i < equipment.length - 1 ? `1px solid ${HOTEL_CONFIG.cardBorder}` : "none",
+                opacity: visible ? 1 : 0,
+                transition: `opacity 0.4s ease ${i * 80}ms`,
+              }}
+            >
+              <span style={{
+                width: 28, height: 28, borderRadius: "50%",
+                background: `${HOTEL_CONFIG.accent}15`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, color: HOTEL_CONFIG.accent,
+              }}>✓</span>
+              <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, fontFamily: "'Lato', sans-serif" }}>{item.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding: "8px 20px 20px" }}>
+        <div style={{
+          background: `linear-gradient(135deg, ${HOTEL_CONFIG.accent}10, ${HOTEL_CONFIG.accent}05)`,
+          border: `1px solid ${HOTEL_CONFIG.accent}25`,
+          borderRadius: 12, padding: "16px 18px",
+        }}>
+          <p style={{ color: HOTEL_CONFIG.accent, fontSize: 12, fontWeight: 600, margin: "0 0 6px", fontFamily: "'Lato', sans-serif" }}>Love the equipment?</p>
+          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+            Ask our Front Desk about purchasing any of these items to take home with you.
+          </p>
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "20px 20px 32px" }}>
+        <p style={{ fontSize: 10, letterSpacing: 2, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>
+          {HOTEL_CONFIG.name} • {HOTEL_CONFIG.location.toUpperCase()}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function AboutScreen({ onBack }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
+
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
+      <div style={{ padding: "16px 20px 0", display: "flex", alignItems: "center" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: HOTEL_CONFIG.textSecondary, fontSize: 24, cursor: "pointer", padding: "4px 8px 4px 0" }}>‹</button>
+        <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: 0, fontFamily: "'Lato', sans-serif" }}>{HOTEL_CONFIG.name}</p>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "40px 24px 20px" }}>
+        <div style={{
+          width: 100, height: 100, borderRadius: "50%", margin: "0 auto 20px",
+          background: `linear-gradient(135deg, ${HOTEL_CONFIG.accent}30, ${HOTEL_CONFIG.accent}10)`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          border: `2px solid ${HOTEL_CONFIG.accent}40`,
+        }}>
+          <span style={{ fontSize: 40 }}>💪</span>
+        </div>
+        <h2 style={{ fontSize: 26, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>Meet Your Coach</h2>
+        <div style={{ width: 40, height: 2, background: HOTEL_CONFIG.accent, margin: "16px auto" }} />
+      </div>
+
+      <div style={{ padding: "0 24px 20px" }}>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 16, padding: "24px 20px",
+        }}>
+          <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, lineHeight: 1.7, margin: "0 0 16px", fontFamily: "'Lato', sans-serif" }}>
+            Every session in this portal was designed by the founder of <strong style={{ color: HOTEL_CONFIG.accent }}>StrongHold Fitness</strong> — a certified personal trainer with over a decade of experience helping people move better, recover faster, and feel stronger.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+            {["Certified Personal Trainer (10+ Years)", "TPI Golf-Fitness Certified", "StrongHold Fitness, LLC"].map((cred, i) => (
+              <span key={i} style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                background: `${HOTEL_CONFIG.accent}10`, border: `1px solid ${HOTEL_CONFIG.accent}25`,
+                borderRadius: 20, padding: "6px 14px",
+                color: HOTEL_CONFIG.accentLight, fontSize: 12, fontFamily: "'Lato', sans-serif",
+              }}>
+                <span style={{ color: HOTEL_CONFIG.accent }}>◈</span> {cred}
+              </span>
+            ))}
+          </div>
+          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 14, lineHeight: 1.7, margin: 0, fontFamily: "'Lato', sans-serif" }}>
+            Whether you're loosening up after a long flight, squeezing in a workout between meetings, or winding down before bed — these sessions are built for your schedule, your space, and your body.
+          </p>
+        </div>
+      </div>
+
+      {/* Video placeholder */}
+      <div style={{ padding: "0 24px 32px" }}>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 12, height: 140, display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+        }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: "50%", background: `${HOTEL_CONFIG.accent}15`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            border: `1px solid ${HOTEL_CONFIG.accent}40`, marginBottom: 8,
+          }}>
+            <span style={{ fontSize: 18, marginLeft: 2 }}>▶</span>
+          </div>
+          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, fontFamily: "'Lato', sans-serif" }}>Intro Video</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PremiumScreen({ onBack }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
+
+  const scPrograms = [
+    { title: "StrongHold Method", desc: "The complete strength & conditioning system — 8 weeks of progressive training built for real results.", duration: "8 Weeks", price: "$197", icon: "💪", link: STRIPE_LINKS.strongholdMethod },
+    { title: "Core Forge", desc: "Targeted core strength program built for performance, stability, and injury prevention.", duration: "6 Weeks", price: "$147", icon: "🔥", link: STRIPE_LINKS.coreForge },
+    { title: "Iron Range", desc: "Complete strength program for serious athletes who want to train with purpose.", duration: "8 Weeks", price: "$197", icon: "🏋️", link: STRIPE_LINKS.ironRange },
+  ];
+
+  const golfPrograms = [
+    { title: "Swing Reset", desc: "TPI-certified golf mobility program — 4 weeks to unlock your swing potential.", duration: "4 Weeks", price: "$97", icon: "⛳", link: STRIPE_LINKS.swingReset },
+    { title: "Long Game", desc: "Advanced golf fitness — build rotational power and consistency over 6 weeks.", duration: "6 Weeks", price: "$247", icon: "🏌️", link: STRIPE_LINKS.longGame },
+  ];
+
+  const bundleProgram = { title: "Complete Arsenal", desc: "All 6 StrongHold programs — the complete training library. Everything you need, nothing you don't.", price: "$597", icon: "⚡", link: STRIPE_LINKS.completeArsenal };
+
+  const renderCard = (prog, i, delay) => (
+    <div
+      key={i}
+      style={{
+        background: HOTEL_CONFIG.cardBg,
+        border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+        borderRadius: 14,
+        padding: "20px 18px",
+        marginBottom: 12,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(12px)",
+        transition: `all 0.4s ease ${delay}ms`,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div style={{
+        position: "absolute", top: 0, right: 0,
+        background: HOTEL_CONFIG.accent, color: "#fff",
+        padding: "6px 14px", borderRadius: "0 0 0 12px",
+        fontSize: 13, fontWeight: 700, fontFamily: "'Lato', sans-serif",
+      }}>
+        {prog.price}
+      </div>
+      <div style={{ display: "flex", gap: 14 }}>
+        <span style={{ fontSize: 28, marginTop: 2 }}>{prog.icon}</span>
+        <div style={{ flex: 1, paddingRight: 40 }}>
+          <h3 style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 17, margin: "0 0 6px", fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{prog.title}</h3>
+          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 10px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>{prog.desc}</p>
+          {prog.duration && <span style={{
+            fontSize: 11, color: HOTEL_CONFIG.accent, fontWeight: 600,
+            background: `${HOTEL_CONFIG.accent}12`, padding: "4px 12px",
+            borderRadius: 12, fontFamily: "'Lato', sans-serif",
+          }}>{prog.duration}</span>}
+        </div>
+      </div>
+      <button
+        onClick={() => window.open(prog.link, '_blank')}
+        style={{
+          width: "100%", marginTop: 16, padding: "12px",
+          background: "transparent", border: `1px solid ${HOTEL_CONFIG.accent}40`,
+          borderRadius: 8, color: HOTEL_CONFIG.accent,
+          fontSize: 12, fontWeight: 700, letterSpacing: 1,
+          cursor: "pointer", fontFamily: "'Lato', sans-serif",
+          transition: "all 0.2s",
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = `${HOTEL_CONFIG.accent}15`; }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+      >
+        GET PROGRAM
+      </button>
+    </div>
+  );
+
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
+      <div style={{ padding: "16px 20px 0", display: "flex", alignItems: "center" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: HOTEL_CONFIG.textSecondary, fontSize: 24, cursor: "pointer", padding: "4px 8px 4px 0" }}>‹</button>
+        <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: 0, fontFamily: "'Lato', sans-serif" }}>{HOTEL_CONFIG.name}</p>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "40px 24px 12px" }}>
+        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 10px", fontFamily: "'Lato', sans-serif" }}>PREMIUM PROGRAMS</p>
+        <h2 style={{ fontSize: 26, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>Take It Home</h2>
+        <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 14, lineHeight: 1.6, maxWidth: 320, margin: "14px auto 0", fontFamily: "'Lato', sans-serif" }}>
+          Continue your wellness journey beyond your stay with our structured training programs.
+        </p>
+      </div>
+
+      <div style={{ padding: "20px 20px 8px" }}>
+        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>STRENGTH & CONDITIONING</p>
+        {scPrograms.map((prog, i) => renderCard(prog, i, i * 100))}
+      </div>
+
+      <div style={{ padding: "12px 20px 8px" }}>
+        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>TPI CERTIFIED GOLF FITNESS</p>
+        {golfPrograms.map((prog, i) => renderCard(prog, i, (i + 3) * 100))}
+      </div>
+
+      <div style={{ padding: "12px 20px 32px" }}>
+        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>THE COMPLETE PACKAGE</p>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg,
+          border: `2px solid ${HOTEL_CONFIG.accent}40`,
+          borderRadius: 14,
+          padding: "24px 18px",
+          marginBottom: 16,
+          position: "relative",
+          overflow: "hidden",
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(12px)",
+          transition: "all 0.4s ease 500ms",
+        }}>
+          <div style={{
+            position: "absolute", top: 0, right: 0,
+            background: HOTEL_CONFIG.accent, color: "#fff",
+            padding: "8px 16px", borderRadius: "0 0 0 12px",
+            fontSize: 15, fontWeight: 700, fontFamily: "'Lato', sans-serif",
+          }}>
+            {bundleProgram.price}
+          </div>
+          <div style={{ display: "flex", gap: 14 }}>
+            <span style={{ fontSize: 32, marginTop: 2 }}>{bundleProgram.icon}</span>
+            <div style={{ flex: 1, paddingRight: 40 }}>
+              <h3 style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 20, margin: "0 0 6px", fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{bundleProgram.title}</h3>
+              <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 10px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>{bundleProgram.desc}</p>
+              <span style={{
+                fontSize: 11, color: HOTEL_CONFIG.accent, fontWeight: 600,
+                background: `${HOTEL_CONFIG.accent}12`, padding: "4px 12px",
+                borderRadius: 12, fontFamily: "'Lato', sans-serif",
+              }}>ALL 6 PROGRAMS</span>
+            </div>
+          </div>
+          <button
+            onClick={() => window.open(bundleProgram.link, '_blank')}
+            style={{
+              width: "100%", marginTop: 16, padding: "14px",
+              background: HOTEL_CONFIG.accent, color: "#fff",
+              border: "none", borderRadius: 8,
+              fontSize: 13, fontWeight: 700, letterSpacing: 1.5,
+              cursor: "pointer", fontFamily: "'Lato', sans-serif",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accentLight}
+            onMouseLeave={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accent}
+          >
+            GET THE COMPLETE ARSENAL
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function UnlockScreen({ session, onBack, onNavigate }) {
+  const [visible, setVisible] = useState(false);
+  const [code, setCode] = useState("");
+  const [error, setError] = useState(false);
+  useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
+
+  const lockedSessions = sessions.filter(s => !s.free);
+
+  const handleSubmit = () => {
+    // In production, validate against your backend
+    setError(true);
+    setTimeout(() => setError(false), 2000);
+  };
+
+  return (
+    <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
+      <div style={{ padding: "16px 20px 0", display: "flex", alignItems: "center" }}>
+        <button onClick={onBack} style={{ background: "none", border: "none", color: HOTEL_CONFIG.textSecondary, fontSize: 24, cursor: "pointer", padding: "4px 8px 4px 0" }}>‹</button>
+        <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: 0, fontFamily: "'Lato', sans-serif" }}>{HOTEL_CONFIG.name}</p>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "40px 24px 16px" }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: "50%", margin: "0 auto 20px",
+          background: `${HOTEL_CONFIG.accent}12`, display: "flex", alignItems: "center", justifyContent: "center",
+          border: `2px solid ${HOTEL_CONFIG.accent}30`,
+        }}>
+          <span style={{ fontSize: 32 }}>🔓</span>
+        </div>
+        <h2 style={{ fontSize: 26, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>
+          Unlock Premium Sessions
+        </h2>
+        <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 14, lineHeight: 1.6, maxWidth: 320, margin: "14px auto 0", fontFamily: "'Lato', sans-serif" }}>
+          Get access to all {lockedSessions.length} premium training sessions designed by a certified personal trainer with over a decade of experience.
+        </p>
+      </div>
+
+      {/* What's included */}
+      <div style={{ padding: "12px 20px 20px" }}>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 14, padding: "18px 16px", marginBottom: 16,
+        }}>
+          <p style={{ fontSize: 11, letterSpacing: 2, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>
+            INCLUDED IN PREMIUM
+          </p>
+          {lockedSessions.map((s, i) => (
+            <div key={s.id} style={{
+              display: "flex", alignItems: "center", gap: 12, padding: "10px 0",
+              borderBottom: i < lockedSessions.length - 1 ? `1px solid ${HOTEL_CONFIG.cardBorder}` : "none",
+            }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 16, background: `${s.color}12`, flexShrink: 0,
+              }}>
+                {s.icon}
+              </div>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 14, margin: 0, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{s.title}</p>
+                <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>{s.duration} • {s.intensity}</span>
+              </div>
+              <span style={{ color: s.color, fontSize: 12 }}>✓</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Purchase Button */}
+        <button
+          onClick={() => window.open(STRIPE_LINKS.premiumUnlock, '_blank')}
+          style={{
+          width: "100%", padding: "16px",
+          background: HOTEL_CONFIG.accent, color: HOTEL_CONFIG.dark,
+          border: "none", borderRadius: 12,
+          fontSize: 14, fontWeight: 700, letterSpacing: 1.5,
+          cursor: "pointer", fontFamily: "'Lato', sans-serif",
+          marginBottom: 16, transition: "all 0.2s",
+        }}
+          onMouseEnter={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accentLight}
+          onMouseLeave={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accent}
+        >
+          PURCHASE ACCESS — $29
+        </button>
+
+        {/* Divider */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "4px 0 16px" }}>
+          <div style={{ flex: 1, height: 1, background: HOTEL_CONFIG.cardBorder }} />
+          <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>or</span>
+          <div style={{ flex: 1, height: 1, background: HOTEL_CONFIG.cardBorder }} />
+        </div>
+
+        {/* Access Code Entry */}
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${error ? '#c44040' : HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 12, padding: "18px 16px", transition: "border-color 0.3s",
+        }}>
+          <p style={{ fontSize: 11, letterSpacing: 2, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, margin: "0 0 12px", fontFamily: "'Lato', sans-serif" }}>
+            ENTER ACCESS CODE
+          </p>
+          <div style={{ display: "flex", gap: 10 }}>
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder="e.g. FQINN-VIP"
+              maxLength={20}
+              style={{
+                flex: 1, padding: "12px 14px",
+                background: HOTEL_CONFIG.dark, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+                borderRadius: 8, color: HOTEL_CONFIG.textPrimary,
+                fontSize: 14, fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: 2, outline: "none",
+              }}
+              onFocus={(e) => e.currentTarget.style.borderColor = HOTEL_CONFIG.accent}
+              onBlur={(e) => e.currentTarget.style.borderColor = HOTEL_CONFIG.cardBorder}
+            />
+            <button
+              onClick={handleSubmit}
+              style={{
+                padding: "12px 18px",
+                background: `${HOTEL_CONFIG.accent}20`, border: `1px solid ${HOTEL_CONFIG.accent}40`,
+                borderRadius: 8, color: HOTEL_CONFIG.accent,
+                fontSize: 12, fontWeight: 700, letterSpacing: 1,
+                cursor: "pointer", fontFamily: "'Lato', sans-serif",
+                whiteSpace: "nowrap",
+              }}
+            >
+              REDEEM
+            </button>
+          </div>
+          {error && (
+            <p style={{ color: "#c44040", fontSize: 12, margin: "10px 0 0", fontFamily: "'Lato', sans-serif" }}>
+              Invalid code. Please check and try again.
+            </p>
+          )}
+          <p style={{ color: `${HOTEL_CONFIG.textSecondary}80`, fontSize: 11, margin: "12px 0 0", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+            Access codes may be provided by the front desk, purchased at checkout, or included with your VIP booking.
+          </p>
+        </div>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "16px 20px 32px" }}>
+        <p style={{ fontSize: 10, letterSpacing: 2, color: `${HOTEL_CONFIG.textSecondary}60`, fontFamily: "'Lato', sans-serif" }}>
+          Powered by StrongHold Fitness
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function IntroModal({ onClose }) {
+  const [phase, setPhase] = useState("entering"); // entering, visible, exiting
+  
+  useEffect(() => {
+    setTimeout(() => setPhase("visible"), 50);
+  }, []);
+
+  const handleClose = () => {
+    setPhase("exiting");
+    setTimeout(onClose, 500);
+  };
+
+  return (
+    <div
+      onClick={handleClose}
+      style={{
+        position: "fixed",
+        top: 0, left: 0, right: 0, bottom: 0,
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: phase === "exiting" ? "rgba(0,0,0,0)" : "rgba(44,36,32,0.88)",
+        backdropFilter: phase === "exiting" ? "blur(0px)" : "blur(12px)",
+        WebkitBackdropFilter: phase === "exiting" ? "blur(0px)" : "blur(12px)",
+        transition: "all 0.5s ease",
+        padding: 20,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "100%",
+          maxWidth: 390,
+          opacity: phase === "visible" ? 1 : 0,
+          transform: phase === "visible" ? "translateY(0) scale(1)" : phase === "entering" ? "translateY(30px) scale(0.95)" : "translateY(-20px) scale(0.97)",
+          transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: 24 }}>
+          <p style={{
+            fontSize: 11, letterSpacing: 5, color: HOTEL_CONFIG.accent,
+            fontWeight: 600, margin: "0 0 8px", fontFamily: "'Lato', sans-serif",
+          }}>
+            WELCOME TO
+          </p>
+          <h2 style={{
+            fontSize: 22, letterSpacing: 6, color: "#faf6f0",
+            fontWeight: 300, margin: "0 0 4px", fontFamily: "'Playfair Display', serif",
+          }}>
+            {HOTEL_CONFIG.name}
+          </h2>
+          <p style={{
+            fontSize: 10, letterSpacing: 4, color: "rgba(250,246,240,0.6)",
+            margin: 0, fontFamily: "'Lato', sans-serif",
+          }}>
+            {HOTEL_CONFIG.subtitle}
+          </p>
+        </div>
+
+        {/* Video Container */}
+        <div style={{
+          background: HOTEL_CONFIG.cardBg,
+          border: `1px solid ${HOTEL_CONFIG.accent}30`,
+          borderRadius: 16,
+          overflow: "hidden",
+          boxShadow: `0 20px 60px rgba(44,36,32,0.55), 0 0 40px ${HOTEL_CONFIG.accent}08`,
+        }}>
+          {/* Video Area */}
+          <div style={{
+            width: "100%",
+            aspectRatio: "9/12",
+            background: `linear-gradient(180deg, ${HOTEL_CONFIG.dark}, ${HOTEL_CONFIG.cardBg})`,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+          }}>
+            {/* StrongHold branding */}
+            <div style={{
+              position: "absolute", top: 16, left: 16,
+              display: "flex", alignItems: "center", gap: 8,
+            }}>
+              <span style={{ fontSize: 14, color: HOTEL_CONFIG.accent }}>◈</span>
+              <span style={{
+                fontSize: 10, letterSpacing: 2, color: HOTEL_CONFIG.textSecondary,
+                fontWeight: 600, fontFamily: "'Lato', sans-serif",
+              }}>
+                STRONGHOLD FITNESS
+              </span>
+            </div>
+
+            {/* Play Button */}
+            <div style={{
+              width: 80, height: 80, borderRadius: "50%",
+              background: `${HOTEL_CONFIG.accent}20`,
+              border: `2px solid ${HOTEL_CONFIG.accent}50`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer",
+              marginBottom: 16,
+              transition: "all 0.3s ease",
+              animation: "pulse-glow 2s ease-in-out infinite",
+            }}>
+              <span style={{ fontSize: 30, marginLeft: 5, color: HOTEL_CONFIG.accent }}>▶</span>
+            </div>
+            <p style={{
+              color: HOTEL_CONFIG.textPrimary, fontSize: 16, margin: "0 0 4px",
+              fontWeight: 400, fontFamily: "'Playfair Display', serif",
+            }}>
+              A Message From Your Coach
+            </p>
+            <p style={{
+              color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0,
+              fontFamily: "'Lato', sans-serif",
+            }}>
+              Tap to play intro
+            </p>
+          </div>
+
+          {/* Bottom bar */}
+          <div style={{
+            padding: "16px 20px",
+            borderTop: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+            textAlign: "center",
+          }}>
+            <button
+              onClick={handleClose}
+              style={{
+                width: "100%",
+                padding: "14px",
+                background: HOTEL_CONFIG.accent,
+                color: HOTEL_CONFIG.dark,
+                border: "none",
+                borderRadius: 10,
+                fontSize: 13,
+                fontWeight: 700,
+                letterSpacing: 2,
+                cursor: "pointer",
+                fontFamily: "'Lato', sans-serif",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accentLight}
+              onMouseLeave={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accent}
+            >
+              START YOUR RECOVERY
+            </button>
+          </div>
+        </div>
+
+        {/* Skip text */}
+        <p
+          onClick={handleClose}
+          style={{
+            textAlign: "center", marginTop: 16,
+            color: "rgba(250,246,240,0.4)", fontSize: 12,
+            cursor: "pointer", fontFamily: "'Lato', sans-serif",
+            transition: "color 0.2s",
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = "rgba(250,246,240,0.7)"}
+          onMouseLeave={(e) => e.currentTarget.style.color = "rgba(250,246,240,0.4)"}
+        >
+          or tap anywhere to skip
+        </p>
+      </div>
+
+      <style>{`
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 0 0 ${HOTEL_CONFIG.accent}30; }
+          50% { box-shadow: 0 0 0 12px ${HOTEL_CONFIG.accent}00; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// Main App
+function HotelWellnessPortal() {
+  const [screen, setScreen] = useState("home");
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [showIntro, setShowIntro] = useState(true);
+  const scrollRef = useRef(null);
+  const topRef = useRef(null);
+
+  const scrollToTop = () => {
+    setTimeout(() => {
+      topRef.current?.scrollIntoView({ behavior: "auto", block: "start" });
+    }, 10);
+  };
+
+  const navigate = (target, data) => {
+    if (target === "session") {
+      setSelectedSession(data);
+      setScreen("session");
+    } else if (target === "unlock") {
+      setSelectedSession(data || null);
+      setScreen("unlock");
+    } else {
+      setScreen(target);
+    }
+    scrollToTop();
+  };
+
+  const goHome = () => {
+    setScreen("home");
+    setSelectedSession(null);
+    scrollToTop();
+  };
+
+  return (
+    <div style={{
+      width: "100%",
+      maxWidth: 430,
+      margin: "0 auto",
+      minHeight: "100vh",
+      background: HOTEL_CONFIG.dark,
+      fontFamily: "'Lato', sans-serif",
+      position: "relative",
+    }}>
+      
+      {/* Top accent line */}
+      <div ref={topRef} style={{ width: "100%", height: 3, background: `linear-gradient(90deg, transparent, ${HOTEL_CONFIG.accent}, transparent)` }} />
+
+      {/* Intro Video Modal */}
+      {showIntro && <IntroModal onClose={() => setShowIntro(false)} />}
+
+      <div ref={scrollRef} style={{ overflowY: "auto" }}>
+        {screen === "home" && <HomeScreen onNavigate={navigate} />}
+        {screen === "session" && selectedSession && <SessionScreen session={selectedSession} onBack={goHome} onNavigate={navigate} />}
+        {screen === "unlock" && <UnlockScreen session={selectedSession} onBack={goHome} onNavigate={navigate} />}
+        {screen === "equipment" && <EquipmentScreen onBack={goHome} />}
+        {screen === "about" && <AboutScreen onBack={goHome} />}
+        {screen === "premium" && <PremiumScreen onBack={goHome} />}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(HotelWellnessPortal));
+
+  </script>
+</body>
+</html>
