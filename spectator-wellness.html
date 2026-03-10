@@ -7,6 +7,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#0d1117" />
   <title>The Spectator — Wellness Experience</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VNS74B2YX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4VNS74B2YX');
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -49,6 +57,13 @@ const HOTEL_CONFIG = {
   cardBorder: "rgba(201,168,76,0.15)",
   textPrimary: "#f0ece4",
   textSecondary: "#8a9ab0",
+};
+
+// Analytics tracking helper
+const track = (eventName, params = {}) => {
+  if (typeof gtag === 'function') {
+    gtag('event', eventName, { hotel: 'spectator', ...params });
+  }
 };
 
 const equipment = [
@@ -1387,7 +1402,7 @@ function PremiumScreen({ onBack }) {
         </div>
       </div>
       <button
-        onClick={() => window.open(prog.link, '_blank')}
+        onClick={() => { track('storefront_click', { program: prog.title, price: prog.price }); window.open(prog.link, '_blank'); }}
         style={{
           width: "100%", marginTop: 16, padding: "12px",
           background: "transparent", border: `1px solid ${HOTEL_CONFIG.accent}40`,
@@ -1464,7 +1479,7 @@ function PremiumScreen({ onBack }) {
             </div>
           </div>
           <button
-            onClick={() => window.open(bundleProgram.link, '_blank')}
+            onClick={() => { track('storefront_click', { program: 'Complete Arsenal', price: '$597' }); window.open(bundleProgram.link, '_blank'); }}
             style={{
               width: "100%", marginTop: 16, padding: "14px",
               background: HOTEL_CONFIG.accent, color: HOTEL_CONFIG.dark,
@@ -1493,6 +1508,7 @@ function UnlockScreen({ session, onBack, onNavigate }) {
   const lockedSessions = sessions.filter(s => !s.free);
 
   const handleSubmit = () => {
+    track('access_code_submit', { code: code });
     // In production, validate against your backend
     setError(true);
     setTimeout(() => setError(false), 2000);
@@ -1552,7 +1568,7 @@ function UnlockScreen({ session, onBack, onNavigate }) {
 
         {/* Purchase Button */}
         <button
-          onClick={() => window.open(STRIPE_LINKS.premiumUnlock, '_blank')}
+          onClick={() => { track('premium_unlock_click', { price: 29 }); window.open(STRIPE_LINKS.premiumUnlock, '_blank'); }}
           style={{
           width: "100%", padding: "16px",
           background: HOTEL_CONFIG.accent, color: HOTEL_CONFIG.dark,
@@ -1828,11 +1844,14 @@ function HotelWellnessPortal() {
     if (target === "session") {
       setSelectedSession(data);
       setScreen("session");
+      track('screen_view', { screen: 'session', session_title: data?.title });
     } else if (target === "unlock") {
       setSelectedSession(data || null);
       setScreen("unlock");
+      track('screen_view', { screen: 'unlock' });
     } else {
       setScreen(target);
+      track('screen_view', { screen: target });
     }
     scrollToTop();
   };
@@ -1840,6 +1859,7 @@ function HotelWellnessPortal() {
   const goHome = () => {
     setScreen("home");
     setSelectedSession(null);
+    track('screen_view', { screen: 'home' });
     scrollToTop();
   };
 
