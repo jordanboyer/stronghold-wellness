@@ -956,7 +956,6 @@ function HomeScreen({ onNavigate, completedSessions, completedFreeCount, unlocke
 function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted }) {
   const [visible, setVisible] = useState(false);
   const [expandedCircuit, setExpandedCircuit] = useState(0);
-  const [introPlaying, setIntroPlaying] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
 
   const isStretchFormat = !!session.exercises;
@@ -1001,82 +1000,16 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
         )}
       </div>
 
-      {/* Intro Video — Tap to play, has audio */}
+      {/* Session Description */}
       <div style={{ padding: "0 20px", marginBottom: 6 }}>
-        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, marginBottom: 10, fontFamily: "'Lato', sans-serif" }}>
-          COACH OVERVIEW
-        </p>
-        <div
-          onClick={() => setIntroPlaying(!introPlaying)}
-          style={{
-            background: HOTEL_CONFIG.cardBg, borderRadius: 14,
-            border: `1px solid ${introPlaying ? session.color + '50' : HOTEL_CONFIG.cardBorder}`,
-            overflow: "hidden", cursor: "pointer",
-            transition: "border-color 0.3s",
-          }}
-        >
-          {/* Video area — 16:9 landscape for intro explanation */}
-          <div style={{
-            width: "100%", aspectRatio: "16/9",
-            background: `linear-gradient(135deg, ${HOTEL_CONFIG.dark}, ${session.color}08)`,
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            position: "relative",
-          }}>
-            {introPlaying ? (
-              <>
-                {/* Simulated playing state */}
-                <div style={{
-                  position: "absolute", bottom: 12, left: 12, right: 12,
-                  display: "flex", alignItems: "center", gap: 10,
-                }}>
-                  <div style={{
-                    width: 28, height: 28, borderRadius: "50%",
-                    background: `${session.color}30`, display: "flex",
-                    alignItems: "center", justifyContent: "center",
-                  }}>
-                    <span style={{ fontSize: 10, color: session.color }}>❚❚</span>
-                  </div>
-                  {/* Progress bar */}
-                  <div style={{ flex: 1, height: 3, background: "rgba(123,45,62,0.1)", borderRadius: 2, overflow: "hidden" }}>
-                    <div style={{
-                      width: "35%", height: "100%", background: session.color, borderRadius: 2,
-                      animation: "progress-demo 8s linear infinite",
-                    }} />
-                  </div>
-                  <span style={{ fontSize: 10, color: HOTEL_CONFIG.textSecondary, fontFamily: "'JetBrains Mono', monospace" }}>0:12</span>
-                  {/* Volume icon */}
-                  <span style={{ fontSize: 12, color: HOTEL_CONFIG.textSecondary }}>🔊</span>
-                </div>
-                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, fontFamily: "'Playfair Display', serif", opacity: 0.5 }}>
-                  Video playing...
-                </p>
-              </>
-            ) : (
-              <>
-                <div style={{
-                  width: 56, height: 56, borderRadius: "50%",
-                  background: `${session.color}20`, border: `2px solid ${session.color}50`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  marginBottom: 10, transition: "all 0.2s",
-                }}>
-                  <span style={{ fontSize: 22, marginLeft: 3, color: session.color }}>▶</span>
-                </div>
-                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 14, margin: 0, fontFamily: "'Playfair Display', serif" }}>
-                  Watch Overview
-                </p>
-                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 11, margin: "4px 0 0", fontFamily: "'Lato', sans-serif" }}>
-                  ~30 sec • Tap to play with audio
-                </p>
-              </>
-            )}
-          </div>
-          {/* Description below video */}
-          <div style={{ padding: "12px 14px", borderTop: `1px solid ${HOTEL_CONFIG.cardBorder}` }}>
-            <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: 0, lineHeight: 1.6, fontFamily: "'Lato', sans-serif" }}>
-              {session.description}
-            </p>
-          </div>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, borderRadius: 14,
+          border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          padding: "16px 16px",
+        }}>
+          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: 0, lineHeight: 1.6, fontFamily: "'Lato', sans-serif" }}>
+            {session.description}
+          </p>
         </div>
       </div>
 
@@ -1446,13 +1379,6 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
           Powered by StrongHold Fitness
         </p>
       </div>
-
-      <style>{`
-        @keyframes progress-demo {
-          0% { width: 0%; }
-          100% { width: 100%; }
-        }
-      `}</style>
     </div>
   );
 }
