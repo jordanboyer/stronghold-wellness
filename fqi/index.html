@@ -7,6 +7,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#faf6f0" />
   <title>French Quarter Inn — Wellness Experience</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VNS74B2YX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4VNS74B2YX');
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -51,6 +59,13 @@ const HOTEL_CONFIG = {
   cardBorder: "rgba(123,45,62,0.12)",
   textPrimary: "#2c2420",
   textSecondary: "#7a706a",
+};
+
+// Analytics tracking helper
+const track = (eventName, params = {}) => {
+  if (typeof gtag === 'function') {
+    gtag('event', eventName, { hotel: 'fqi', ...params });
+  }
 };
 
 const db = {
@@ -927,7 +942,7 @@ function HomeScreen({ onNavigate, completedSessions, completedFreeCount, unlocke
 function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted }) {
   const [visible, setVisible] = useState(false);
   const [expandedCircuit, setExpandedCircuit] = useState(0);
-
+  const [introPlaying, setIntroPlaying] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
 
   const isStretchFormat = !!session.exercises;
@@ -972,16 +987,82 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
         )}
       </div>
 
-      {/* Session Description */}
+      {/* Intro Video — Tap to play, has audio */}
       <div style={{ padding: "0 20px", marginBottom: 6 }}>
-        <div style={{
-          background: HOTEL_CONFIG.cardBg, borderRadius: 14,
-          border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-          padding: "14px 16px",
-        }}>
-          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: 0, lineHeight: 1.6, fontFamily: "'Lato', sans-serif" }}>
-            {session.description}
-          </p>
+        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, marginBottom: 10, fontFamily: "'Lato', sans-serif" }}>
+          COACH OVERVIEW
+        </p>
+        <div
+          onClick={() => setIntroPlaying(!introPlaying)}
+          style={{
+            background: HOTEL_CONFIG.cardBg, borderRadius: 14,
+            border: `1px solid ${introPlaying ? session.color + '50' : HOTEL_CONFIG.cardBorder}`,
+            overflow: "hidden", cursor: "pointer",
+            transition: "border-color 0.3s",
+          }}
+        >
+          {/* Video area — 16:9 landscape for intro explanation */}
+          <div style={{
+            width: "100%", aspectRatio: "16/9",
+            background: `linear-gradient(135deg, ${HOTEL_CONFIG.dark}, ${session.color}08)`,
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            position: "relative",
+          }}>
+            {introPlaying ? (
+              <>
+                {/* Simulated playing state */}
+                <div style={{
+                  position: "absolute", bottom: 12, left: 12, right: 12,
+                  display: "flex", alignItems: "center", gap: 10,
+                }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: "50%",
+                    background: `${session.color}30`, display: "flex",
+                    alignItems: "center", justifyContent: "center",
+                  }}>
+                    <span style={{ fontSize: 10, color: session.color }}>❚❚</span>
+                  </div>
+                  {/* Progress bar */}
+                  <div style={{ flex: 1, height: 3, background: "rgba(123,45,62,0.1)", borderRadius: 2, overflow: "hidden" }}>
+                    <div style={{
+                      width: "35%", height: "100%", background: session.color, borderRadius: 2,
+                      animation: "progress-demo 8s linear infinite",
+                    }} />
+                  </div>
+                  <span style={{ fontSize: 10, color: HOTEL_CONFIG.textSecondary, fontFamily: "'JetBrains Mono', monospace" }}>0:12</span>
+                  {/* Volume icon */}
+                  <span style={{ fontSize: 12, color: HOTEL_CONFIG.textSecondary }}>🔊</span>
+                </div>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, fontFamily: "'Playfair Display', serif", opacity: 0.5 }}>
+                  Video playing...
+                </p>
+              </>
+            ) : (
+              <>
+                <div style={{
+                  width: 56, height: 56, borderRadius: "50%",
+                  background: `${session.color}20`, border: `2px solid ${session.color}50`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  marginBottom: 10, transition: "all 0.2s",
+                }}>
+                  <span style={{ fontSize: 22, marginLeft: 3, color: session.color }}>▶</span>
+                </div>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 14, margin: 0, fontFamily: "'Playfair Display', serif" }}>
+                  Watch Overview
+                </p>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 11, margin: "4px 0 0", fontFamily: "'Lato', sans-serif" }}>
+                  ~30 sec • Tap to play with audio
+                </p>
+              </>
+            )}
+          </div>
+          {/* Description below video */}
+          <div style={{ padding: "12px 14px", borderTop: `1px solid ${HOTEL_CONFIG.cardBorder}` }}>
+            <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: 0, lineHeight: 1.6, fontFamily: "'Lato', sans-serif" }}>
+              {session.description}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -1731,7 +1812,7 @@ function PremiumScreen({ onBack }) {
           <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 12px", fontFamily: "'Lato', sans-serif" }}>
             All five programs. One price. <span style={{ textDecoration: "line-through", color: HOTEL_CONFIG.textSecondary }}>$885</span> <span style={{ color: HOTEL_CONFIG.accent, fontWeight: 700 }}>$597</span>
           </p>
-          <a href={STOREFRONT_URL} target="_blank" rel="noopener noreferrer" style={{
+          <a href={STOREFRONT_URL} target="_blank" rel="noopener noreferrer" onClick={() => track('storefront_click', { source: 'premium_screen' })} style={{
             display: "block", width: "100%", padding: "14px",
             background: HOTEL_CONFIG.accent, color: "#fff",
             border: "none", borderRadius: 10, fontSize: 13, fontWeight: 700, letterSpacing: 2,
@@ -1904,6 +1985,7 @@ function UnlockScreen({ session, onBack, onNavigate, onUnlockAll, capturedEmail 
   const lockedSessions = sessions.filter(s => !s.free);
 
   const handlePurchase = () => {
+    track('premium_unlock_click', { price: 29 });
     setPurchasing(true);
     localStorage.setItem("sh_return_path", window.location.pathname);
     const url = new URL(STRIPE_PAYMENT_LINK);
@@ -2262,6 +2344,7 @@ function CelebrationScreen({ session, onNavigate, onHome, completedFreeCount, ca
   const handleEmailSubmit = async () => {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isValid) { setEmailError(true); setTimeout(() => setEmailError(false), 2000); return; }
+    track('email_capture', { completed_sessions: completedFreeCount });
     const result = await onSaveEmail(email);
     setEmailJustSubmitted(true);
     if (result === "returning") { setPickedSession({ title: "your selections", id: "_returning" }); }
@@ -2725,6 +2808,7 @@ function HotelWellnessPortal() {
     if (!completedSessions.includes(sessionId)) {
       setCompletedSessions(prev => [...prev, sessionId]);
     }
+    track('session_complete', { session_id: sessionId });
     setNavKey(k => k + 1);
     setScreen("celebration");
   };
@@ -2752,14 +2836,18 @@ function HotelWellnessPortal() {
     if (target === "session") {
       setSelectedSession(data);
       setScreen("session");
+      track('screen_view', { screen: 'session', session_title: data?.title });
     } else if (target === "preview") {
       setSelectedSession(data);
       setScreen("preview");
+      track('screen_view', { screen: 'preview', session_title: data?.title });
     } else if (target === "unlock") {
       setSelectedSession(data || null);
       setScreen("unlock");
+      track('screen_view', { screen: 'unlock' });
     } else {
       setScreen(target);
+      track('screen_view', { screen: target });
     }
     setNavKey(k => k + 1);
   };
@@ -2767,6 +2855,7 @@ function HotelWellnessPortal() {
   const goHome = () => {
     setScreen("home");
     setSelectedSession(null);
+    track('screen_view', { screen: 'home' });
     setNavKey(k => k + 1);
   };
 

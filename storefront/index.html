@@ -7,6 +7,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="theme-color" content="#FAF9F6" />
   <title>StrongHold Fitness — Premium Training Programs</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VNS74B2YX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4VNS74B2YX');
+  </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body, #root { height: 100%; width: 100%; background: #FAF9F6; overflow-x: hidden; }
@@ -46,6 +54,23 @@ const ACCESS_CODES = {
 
   // Master code — for demos and testing
   "STRONGHOLD":      { programs: "all", label: "Master demo code" },
+};
+
+const STRIPE_LINKS = {
+  "stronghold-method": "https://buy.stripe.com/9B6dRb69h4iIcl2fys2cg07",
+  "swing-reset": "https://buy.stripe.com/8x2aEZ1T13eEbgYdqk2cg06",
+  "core-forge": "https://buy.stripe.com/4gM7sNdBJ8yYdp68602cg05",
+  "long-game": "https://buy.stripe.com/14AaEZ9lt8yYbgY2LG2cg04",
+  "iron-range": "https://buy.stripe.com/6oU14p55d02setaae82cg03",
+  "complete-arsenal": "https://buy.stripe.com/5kQcN77dl4iI5WEae82cg02",
+  "grand-slam": "https://buy.stripe.com/aFaeVfapx9D23Owbic2cg01",
+};
+
+// Analytics tracking helper
+const track = (eventName, params = {}) => {
+  if (typeof gtag === 'function') {
+    gtag('event', eventName, { source: 'storefront', ...params });
+  }
 };
 
 function validateCode(code, programId) {
@@ -159,17 +184,22 @@ function ProgramDetail({ program, onBack, onSelect, onStart, allPrograms, unlock
   const related = allPrograms.filter(p => p.id !== program.id).slice(0, 2);
 
   const handlePurchase = () => {
-    // TODO: Replace with Stripe checkout
-    // On successful Stripe return, call: onUnlock(program.id)
-    // For demo, simulate instant unlock:
-    onUnlock(program.id);
-    setJustUnlocked(true);
-    setTimeout(() => setJustUnlocked(false), 3000);
+    const stripeLink = STRIPE_LINKS[program.id];
+    if (stripeLink) {
+      track('storefront_purchase_click', { program: program.name, price: program.price });
+      window.open(stripeLink, '_blank');
+    } else {
+      // Fallback for demo
+      onUnlock(program.id);
+      setJustUnlocked(true);
+      setTimeout(() => setJustUnlocked(false), 3000);
+    }
   };
 
   const handleCode = () => {
     const result = validateCode(code, program.id);
     if (result.valid) {
+      track('access_code_submit', { code: code, valid: true, program: program.name });
       if (result.programs === "all") {
         // Unlock all programs for hotel/master codes
         ["stronghold-method", "swing-reset", "core-forge", "long-game", "iron-range"].forEach(id => onUnlock(id));
@@ -1225,7 +1255,7 @@ function Storefront() {
               ))}
             </div>
             <div style={{ textAlign: "center" }}>
-              <button style={{ padding: "13px 44px", background: C.purple, border: "none", borderRadius: 9, color: C.white, fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "'Encode Sans Semi Condensed'" }}>Get The Complete Arsenal</button>
+              <button onClick={() => { track('storefront_purchase_click', { program: 'Complete Arsenal', price: 597 }); window.open(STRIPE_LINKS['complete-arsenal'], '_blank'); }} style={{ padding: "13px 44px", background: C.purple, border: "none", borderRadius: 9, color: C.white, fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "'Encode Sans Semi Condensed'" }}>Get The Complete Arsenal</button>
             </div>
           </div>
         </FadeIn>
