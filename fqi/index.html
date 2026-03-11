@@ -1934,10 +1934,19 @@ function UnlockScreen({ session, onBack, onNavigate, onUnlockAll, capturedEmail 
     window.location.href = url.toString();
   };
 
+  const [success, setSuccess] = useState(false);
+
   const handleSubmit = () => {
-    // In production, validate against your backend
-    setError(true);
-    setTimeout(() => setError(false), 2000);
+    track('access_code_submit', { code: code });
+    const validCodes = ["FQI2026", "STRONGHOLD"];
+    if (validCodes.includes(code.toUpperCase().trim())) {
+      onUnlockAll();
+      setSuccess(true);
+      setTimeout(() => onNavigate("home"), 1200);
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 2000);
+    }
   };
 
   return (
@@ -2017,7 +2026,7 @@ function UnlockScreen({ session, onBack, onNavigate, onUnlockAll, capturedEmail 
 
         {/* Access Code Entry */}
         <div style={{
-          background: HOTEL_CONFIG.cardBg, border: `1px solid ${error ? '#c44040' : HOTEL_CONFIG.cardBorder}`,
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${error ? '#c44040' : success ? '#16a34a' : HOTEL_CONFIG.cardBorder}`,
           borderRadius: 12, padding: "18px 16px", transition: "border-color 0.3s",
         }}>
           <p style={{ fontSize: 11, letterSpacing: 2, color: HOTEL_CONFIG.textSecondary, fontWeight: 600, margin: "0 0 12px", fontFamily: "'Lato', sans-serif" }}>
@@ -2057,6 +2066,11 @@ function UnlockScreen({ session, onBack, onNavigate, onUnlockAll, capturedEmail 
           {error && (
             <p style={{ color: "#c44040", fontSize: 12, margin: "10px 0 0", fontFamily: "'Lato', sans-serif" }}>
               Invalid code. Please check and try again.
+            </p>
+          )}
+          {success && (
+            <p style={{ color: "#16a34a", fontSize: 12, margin: "10px 0 0", fontFamily: "'Lato', sans-serif" }}>
+              ✓ Premium sessions unlocked! Redirecting...
             </p>
           )}
           <p style={{ color: `${HOTEL_CONFIG.textSecondary}80`, fontSize: 11, margin: "12px 0 0", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
