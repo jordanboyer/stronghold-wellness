@@ -66,6 +66,12 @@ const STRIPE_LINKS = {
   "grand-slam": "https://buy.stripe.com/aFaeVfapx9D23Owbic2cg01",
 };
 
+const CAL_LINKS = {
+  consultation: "https://cal.com/stronghold-fitness/tailoredapproach",
+  fma: "https://cal.com/stronghold-fitness/fma",
+  tpiGolf: "https://cal.com/stronghold-fitness/tpi",
+};
+
 // Analytics tracking helper
 const track = (eventName, params = {}) => {
   if (typeof gtag === 'function') {
@@ -1275,6 +1281,29 @@ function Storefront() {
                   <span key={i} style={{ fontSize: 11, padding: "3px 9px", borderRadius: 4, background: C.tealDim, color: C.teal, fontWeight: 600 }}>{t}</span>
                 ))}
               </div>
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+
+      {/* THE TAILORED APPROACH */}
+      <div style={{ maxWidth: 740, margin: "0 auto", padding: "0 20px 64px" }}>
+        <FadeIn>
+          <div style={{ background: `linear-gradient(135deg, ${C.purple}08, ${C.teal}08)`, border: `2px solid ${C.purple}20`, borderRadius: 16, padding: "40px 28px", textAlign: "center" }}>
+            <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.15em", color: C.teal, fontWeight: 700, marginBottom: 8 }}>PERSONALIZED PROGRAMMING</div>
+            <h3 style={{ fontFamily: "'Encode Sans Condensed'", fontSize: 28, fontWeight: 700, color: C.text, margin: "0 0 12px" }}>The Tailored Approach</h3>
+            <p style={{ fontSize: 14, color: C.textMuted, lineHeight: 1.7, maxWidth: 500, margin: "0 auto 8px" }}>
+              Want something built specifically for your body, your goals, and your schedule? Book a free 15-minute consultation and I'll design a custom program delivered within one week.
+            </p>
+            <p style={{ fontSize: 13, color: C.teal, fontWeight: 600, margin: "0 0 28px" }}>
+              Every custom program includes a complimentary 1-on-1 movement analysis.
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <button onClick={() => { track('schedule_click', { type: 'consultation' }); window.open(CAL_LINKS.consultation, '_blank'); }} style={{ padding: "13px 32px", background: C.purple, border: "none", borderRadius: 9, color: C.white, fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "'Encode Sans Semi Condensed'" }}>Book a Consultation</button>
+            </div>
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginTop: 20 }}>
+              <span onClick={() => { track('schedule_click', { type: 'fma' }); window.open(CAL_LINKS.fma, '_blank'); }} style={{ fontSize: 12, color: C.purple, fontWeight: 600, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3 }}>Functional Movement Analysis →</span>
+              <span onClick={() => { track('schedule_click', { type: 'tpi_golf' }); window.open(CAL_LINKS.tpiGolf, '_blank'); }} style={{ fontSize: 12, color: C.teal, fontWeight: 600, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3 }}>TPI Golf Movement Analysis →</span>
             </div>
           </div>
         </FadeIn>

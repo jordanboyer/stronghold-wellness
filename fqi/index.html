@@ -56,6 +56,12 @@ const MAILERLITE = {
   },
 };
 
+const CAL_LINKS = {
+  consultation: "https://cal.com/stronghold-fitness/tailoredapproach",
+  fma: "https://cal.com/stronghold-fitness/fma",
+  tpiGolf: "https://cal.com/stronghold-fitness/tpi",
+};
+
 async function addToMailerLite(email, hotelName, sessionsCompleted) {
   if (MAILERLITE.apiKey === "YOUR_MAILERLITE_API_KEY") return; // Skip if placeholder
   try {
@@ -2606,6 +2612,13 @@ function CelebrationScreen({ session, onNavigate, onHome, completedFreeCount, ca
               cursor: "pointer", fontFamily: "'Lato', sans-serif",
               marginBottom: 12, boxShadow: `0 4px 20px ${HOTEL_CONFIG.accent}25`,
             }}>EXPLORE PREMIUM PROGRAMS</button>
+            <button onClick={() => { track('schedule_click', { type: 'consultation', source: 'celebration' }); window.open(CAL_LINKS.consultation, '_blank'); }} style={{
+              width: "100%", padding: "14px", border: `1px solid ${HOTEL_CONFIG.accent}40`,
+              background: "transparent", color: HOTEL_CONFIG.accent,
+              borderRadius: 12, fontSize: 12, fontWeight: 600, letterSpacing: 1,
+              cursor: "pointer", fontFamily: "'Lato', sans-serif",
+              marginBottom: 12,
+            }}>WANT SOMETHING CUSTOM? BOOK A FREE CALL</button>
             <button onClick={onHome} style={{
               width: "100%", padding: "14px", border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
               background: "transparent", color: HOTEL_CONFIG.textSecondary,
