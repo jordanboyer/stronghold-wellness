@@ -47,6 +47,35 @@ const _sb = (SUPABASE_URL !== "YOUR_SUPABASE_URL_HERE" && window.supabase)
 // Stripe Payment Link
 const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14AaEZ419bLabgYdqk2cg00";
 
+// MailerLite Configuration — Replace API key and group IDs once DNS authenticates
+const MAILERLITE = {
+  apiKey: "YOUR_MAILERLITE_API_KEY",  // Replace with your actual API key from Settings → Integrations → MailerLite API
+  groups: {
+    hotel: "YOUR_SPECTATOR_GROUP_ID",       // Replace with "Spectator Hotel" group ID
+    completed: "YOUR_COMPLETED_GROUP_ID",   // Replace with "Completed 3 Sessions" group ID
+  },
+};
+
+async function addToMailerLite(email, hotelName, sessionsCompleted) {
+  if (MAILERLITE.apiKey === "YOUR_MAILERLITE_API_KEY") return; // Skip if placeholder
+  try {
+    const groups = [MAILERLITE.groups.hotel];
+    if (sessionsCompleted >= 3) groups.push(MAILERLITE.groups.completed);
+    await fetch("https://connect.mailerlite.com/api/subscribers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${MAILERLITE.apiKey}`,
+      },
+      body: JSON.stringify({
+        email,
+        groups,
+        fields: { hotel: hotelName, sessions_completed: String(sessionsCompleted) },
+      }),
+    });
+  } catch (e) { console.log("MailerLite sync skipped:", e.message); }
+}
+
 const db = {
   async getGuest(email) {
     if (!_sb) return null;
@@ -2702,6 +2731,8 @@ function HotelWellnessPortal() {
       stored.push({ email, hotel: HOTEL_CONFIG.name, sessions: completedSessions.length, date: new Date().toISOString() });
       localStorage.setItem("sh_emails", JSON.stringify(stored));
     } catch {}
+    // Send to MailerLite
+    addToMailerLite(email, HOTEL_CONFIG.name, completedSessions.length);
     // Check Supabase for existing guest at THIS hotel
     const existing = await db.getGuest(email);
     if (existing) {
