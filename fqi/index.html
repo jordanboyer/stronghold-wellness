@@ -2800,7 +2800,13 @@ function HotelWellnessPortal() {
 
   const completeSession = (sessionId) => {
     if (!completedSessions.includes(sessionId)) {
-      setCompletedSessions(prev => [...prev, sessionId]);
+      const updated = [...completedSessions, sessionId];
+      setCompletedSessions(updated);
+      // If guest already gave email and just hit 3 free sessions, re-sync to MailerLite
+      const newFreeCount = updated.filter(id => FREE_SESSIONS.some(s => s.id === id)).length;
+      if (capturedEmail && newFreeCount >= 3) {
+        addToMailerLite(capturedEmail, HOTEL_CONFIG.name, updated.length);
+      }
     }
     track('session_complete', { session_id: sessionId });
     setNavKey(k => k + 1);
