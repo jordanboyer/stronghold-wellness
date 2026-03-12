@@ -63,16 +63,12 @@ const CAL_LINKS = {
 };
 
 async function addToMailerLite(email, hotelName, sessionsCompleted) {
-  if (MAILERLITE.apiKey === "YOUR_MAILERLITE_API_KEY") return; // Skip if placeholder
   try {
     const groups = [MAILERLITE.groups.hotel];
     if (sessionsCompleted >= 3) groups.push(MAILERLITE.groups.completed);
-    await fetch("https://connect.mailerlite.com/api/subscribers", {
+    await fetch("/.netlify/functions/mailerlite", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${MAILERLITE.apiKey}`,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email,
         groups,
