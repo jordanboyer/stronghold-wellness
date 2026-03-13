@@ -380,12 +380,6 @@
         track('tailored_track_select', { track: 'golf' });
       }
       active = t;
-
-      // Scroll detail into view
-      setTimeout(function() {
-        var el = document.getElementById('d-' + t);
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 200);
     }
 
     // Scroll-triggered reveals
