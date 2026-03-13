@@ -30,26 +30,17 @@
     }
     ::-webkit-scrollbar { width: 0; }
 
-    /* Animations */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
     .fade-up { opacity: 0; animation: fadeUp 0.8s ease forwards; }
-    .fade-in { opacity: 0; animation: fadeIn 1s ease forwards; }
     .d1 { animation-delay: 0.1s; }
     .d2 { animation-delay: 0.2s; }
     .d3 { animation-delay: 0.3s; }
     .d4 { animation-delay: 0.4s; }
     .d5 { animation-delay: 0.5s; }
-    .d6 { animation-delay: 0.6s; }
-    .d7 { animation-delay: 0.7s; }
 
-    /* Variables */
     :root {
       --purple: #9B40C2;
       --deep: #381045;
@@ -59,354 +50,134 @@
       --dark: #0d1117;
       --card: #161b22;
       --border: #262d38;
+      --golf: #4E7A5B;
     }
 
-    /* Hero */
     .hero {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 24px 60px;
-      position: relative;
-      overflow: hidden;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 80px 24px 60px; position: relative; overflow: hidden;
     }
     .hero::before {
-      content: '';
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(155,64,194,0.08), transparent 70%);
-      pointer-events: none;
+      content: ''; position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%);
+      width: 600px; height: 600px; background: radial-gradient(circle, rgba(155,64,194,0.08), transparent 70%); pointer-events: none;
     }
-    .hero-tag {
-      font-size: 11px;
-      letter-spacing: 4px;
-      color: var(--purple);
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
+    .hero-tag { font-size: 11px; letter-spacing: 4px; color: var(--purple); font-weight: 600; margin-bottom: 20px; }
     .hero-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(36px, 8vw, 56px);
-      font-weight: 300;
-      line-height: 1.15;
-      color: var(--cream);
-      margin-bottom: 24px;
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 8vw, 56px);
+      font-weight: 300; line-height: 1.15; color: var(--cream); margin-bottom: 24px;
     }
-    .hero-title em {
-      font-style: italic;
-      color: var(--purple);
-    }
-    .hero-sub {
-      font-size: 16px;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 480px;
-      margin-bottom: 40px;
-      font-weight: 300;
-    }
+    .hero-title em { font-style: italic; color: var(--purple); }
+    .hero-sub { font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 480px; margin-bottom: 40px; font-weight: 300; }
     .hero-cta {
-      display: inline-block;
-      padding: 18px 48px;
-      background: var(--purple);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-decoration: none;
-      font-family: 'Outfit', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s;
-      margin-bottom: 16px;
+      display: inline-block; padding: 18px 48px; background: var(--purple); color: #fff;
+      border: none; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: 2px;
+      text-decoration: none; font-family: 'Outfit', sans-serif; cursor: pointer; transition: all 0.3s; margin-bottom: 16px;
     }
     .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(155,64,194,0.3); }
-    .hero-note {
-      font-size: 12px;
-      color: var(--muted);
-      opacity: 0.6;
-    }
+    .hero-note { font-size: 12px; color: var(--muted); opacity: 0.6; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 48px; }
+    .section { padding: 80px 24px; max-width: 640px; margin: 0 auto; }
+    .section-tag { font-size: 10px; letter-spacing: 4px; color: var(--teal); font-weight: 700; margin-bottom: 16px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--cream); margin-bottom: 20px; line-height: 1.2; }
+    .section-body { font-size: 15px; color: var(--muted); line-height: 1.8; font-weight: 300; }
 
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 0 48px;
+    /* Track cards */
+    .track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    @media (max-width: 500px) { .track-grid { grid-template-columns: 1fr; } }
+    .track-card {
+      background: var(--card); border: 2px solid var(--border); border-radius: 14px;
+      padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.35s ease;
     }
+    .track-card:hover { border-color: var(--muted); transform: translateY(-2px); }
+    .track-card.sel-func { border-color: var(--purple); background: linear-gradient(135deg, rgba(155,64,194,0.08), var(--card)); box-shadow: 0 0 30px rgba(155,64,194,0.1); }
+    .track-card.sel-golf { border-color: var(--golf); background: linear-gradient(135deg, rgba(78,122,91,0.08), var(--card)); box-shadow: 0 0 30px rgba(78,122,91,0.1); }
+    .track-icon { font-size: 32px; margin-bottom: 14px; }
+    .track-label { font-size: 10px; letter-spacing: 3px; color: var(--purple); font-weight: 700; margin-bottom: 8px; }
+    .sel-golf .track-label { color: var(--golf); }
+    .track-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--cream); margin-bottom: 10px; font-weight: 400; }
+    .track-desc { font-size: 12px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+    .track-badge {
+      display: inline-block; margin-top: 14px; font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      padding: 6px 16px; border-radius: 20px; transition: all 0.3s;
+      background: rgba(138,154,176,0.1); border: 1px solid rgba(138,154,176,0.2); color: var(--muted);
+    }
+    .sel-func .track-badge { background: rgba(155,64,194,0.15); border-color: rgba(155,64,194,0.3); color: var(--purple); }
+    .sel-golf .track-badge { background: rgba(78,122,91,0.15); border-color: rgba(78,122,91,0.3); color: var(--golf); }
 
-    /* Section */
-    .section {
-      padding: 80px 24px;
-      max-width: 640px;
-      margin: 0 auto;
+    /* Detail panel */
+    .track-detail {
+      margin-top: 32px; opacity: 0; transform: translateY(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.5s ease;
+      pointer-events: none; max-height: 0; overflow: hidden;
     }
-    .section-tag {
-      font-size: 10px;
-      letter-spacing: 4px;
-      color: var(--teal);
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
-      font-weight: 300;
-      color: var(--cream);
-      margin-bottom: 20px;
-      line-height: 1.2;
-    }
-    .section-body {
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.8;
-      font-weight: 300;
-    }
+    .track-detail.show { opacity: 1; transform: translateY(0); pointer-events: all; max-height: 1200px; }
 
-    /* The Problem */
-    .problem-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 28px 24px;
-      margin: 24px 0;
+    .inc-item { display: flex; gap: 16px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+    .inc-item:last-of-type { border-bottom: none; }
+    .inc-icon {
+      width: 44px; height: 44px; border-radius: 12px; display: flex;
+      align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
     }
-    .problem-card p {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 12px;
-    }
-    .problem-card p:last-child { margin-bottom: 0; }
-    .problem-card strong { color: var(--cream); font-weight: 500; }
+    .ic-p { background: rgba(155,64,194,0.1); border: 1px solid rgba(155,64,194,0.2); }
+    .ic-g { background: rgba(78,122,91,0.1); border: 1px solid rgba(78,122,91,0.2); }
+    .inc-title { font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+    .inc-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+    .inc-val { font-size: 11px; font-weight: 600; margin-top: 4px; }
+    .vp { color: var(--purple); }
+    .vg { color: var(--golf); }
 
-    /* What's Included */
-    .included-item {
-      display: flex;
-      gap: 16px;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border);
+    .detail-cta-wrap { text-align: center; margin-top: 32px; }
+    .detail-cta {
+      display: inline-block; padding: 16px 40px; border: none; border-radius: 8px;
+      font-size: 13px; font-weight: 700; letter-spacing: 2px; text-decoration: none;
+      font-family: 'Outfit', sans-serif; cursor: pointer; transition: all 0.3s; color: #fff;
     }
-    .included-item:last-child { border-bottom: none; }
-    .included-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: rgba(155,64,194,0.1);
-      border: 1px solid rgba(155,64,194,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-    .included-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--cream);
-      margin-bottom: 4px;
-    }
-    .included-desc {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
-      font-weight: 300;
-    }
-    .included-value {
-      font-size: 11px;
-      color: var(--teal);
-      font-weight: 600;
-      margin-top: 4px;
-    }
-
-    /* Paths */
-    .path-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 24px;
-    }
-    @media (max-width: 500px) { .path-grid { grid-template-columns: 1fr; } }
-    .path-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px 20px;
-      text-align: center;
-    }
-    .path-card-accent {
-      border-color: rgba(155,64,194,0.3);
-      background: linear-gradient(135deg, rgba(155,64,194,0.06), var(--card));
-    }
-    .path-icon { font-size: 28px; margin-bottom: 12px; }
-    .path-label {
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--purple);
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .path-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      color: var(--cream);
-      margin-bottom: 8px;
-      font-weight: 400;
-    }
-    .path-desc {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.5;
-      font-weight: 300;
-    }
+    .dc-p { background: var(--purple); }
+    .dc-p:hover { box-shadow: 0 8px 30px rgba(155,64,194,0.3); transform: translateY(-2px); }
+    .dc-g { background: var(--golf); }
+    .dc-g:hover { box-shadow: 0 8px 30px rgba(78,122,91,0.3); transform: translateY(-2px); }
 
     /* Price */
-    .price-section {
-      text-align: center;
-      padding: 80px 24px;
-      position: relative;
-    }
+    .price-section { text-align: center; padding: 80px 24px; position: relative; }
     .price-section::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(0,120,140,0.06), transparent 70%);
-      pointer-events: none;
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,120,140,0.06), transparent 70%); pointer-events: none;
     }
     .price-box {
-      background: var(--card);
-      border: 1px solid rgba(155,64,194,0.25);
-      border-radius: 20px;
-      padding: 48px 32px;
-      max-width: 480px;
-      margin: 0 auto;
-      position: relative;
+      background: var(--card); border: 1px solid rgba(155,64,194,0.25); border-radius: 20px;
+      padding: 48px 32px; max-width: 480px; margin: 0 auto; position: relative;
     }
-    .price-amount {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 64px;
-      font-weight: 300;
-      color: var(--cream);
-      margin: 16px 0 8px;
+    .price-amount { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--cream); margin: 16px 0 8px; }
+    .price-per { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .price-list { text-align: left; margin: 24px 0 32px; }
+    .price-list li {
+      list-style: none; font-size: 14px; color: var(--muted); padding: 8px 0;
+      border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
     }
-    .price-per {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 24px;
+    .price-list li:last-child { border-bottom: none; }
+    .pchk { color: var(--purple); font-weight: 700; font-size: 14px; }
+    .price-btn {
+      display: block; width: 100%; padding: 18px; background: var(--purple); color: #fff;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px;
+      cursor: pointer; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center; transition: all 0.3s;
     }
-    .price-includes {
-      text-align: left;
-      margin: 24px 0 32px;
-    }
-    .price-includes li {
-      list-style: none;
-      font-size: 14px;
-      color: var(--muted);
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .price-includes li:last-child { border-bottom: none; }
-    .price-check {
-      color: var(--purple);
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .price-cta {
-      display: block;
-      width: 100%;
-      padding: 18px;
-      background: var(--purple);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      cursor: pointer;
-      font-family: 'Outfit', sans-serif;
-      text-decoration: none;
-      text-align: center;
-      transition: all 0.3s;
-    }
-    .price-cta:hover { box-shadow: 0 8px 30px rgba(155,64,194,0.3); transform: translateY(-2px); }
-    .price-note {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 14px;
-      opacity: 0.6;
-    }
+    .price-btn:hover { box-shadow: 0 8px 30px rgba(155,64,194,0.3); transform: translateY(-2px); }
+    .price-note { font-size: 12px; color: var(--muted); margin-top: 14px; opacity: 0.6; }
 
-    /* Coach */
-    .coach-section {
-      padding: 60px 24px;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    .coach-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 32px 24px;
-    }
-    .coach-creds {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+    .coach-section { padding: 60px 24px; max-width: 640px; margin: 0 auto; }
+    .coach-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 32px 24px; }
+    .coach-creds { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
     .coach-cred {
-      font-size: 11px;
-      color: var(--teal);
-      background: rgba(0,120,140,0.08);
-      border: 1px solid rgba(0,120,140,0.2);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: 500;
+      font-size: 11px; color: var(--teal); background: rgba(0,120,140,0.08);
+      border: 1px solid rgba(0,120,140,0.2); padding: 6px 14px; border-radius: 20px; font-weight: 500;
     }
-    .coach-bio {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      font-weight: 300;
-    }
+    .coach-bio { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
 
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 48px 24px;
-      border-top: 1px solid var(--border);
-    }
-    .footer-brand {
-      font-size: 11px;
-      letter-spacing: 4px;
-      color: var(--muted);
-      opacity: 0.4;
-      margin-bottom: 8px;
-    }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .footer-links a {
-      font-size: 11px;
-      color: var(--muted);
-      text-decoration: none;
-      opacity: 0.5;
-    }
+    .footer { text-align: center; padding: 48px 24px; border-top: 1px solid var(--border); }
+    .footer-brand { font-size: 11px; letter-spacing: 4px; color: var(--muted); opacity: 0.4; margin-bottom: 8px; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; }
+    .footer-links a { font-size: 11px; color: var(--muted); text-decoration: none; opacity: 0.5; }
     .footer-links a:hover { opacity: 1; color: var(--purple); }
   </style>
 </head>
@@ -419,127 +190,110 @@
     <p class="hero-sub fade-up d3">
       A custom training program built around how your body actually moves — not a template. Designed for you, by a certified professional who's spent 10+ years learning what works.
     </p>
-    <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="hero-cta fade-up d4" onclick="track('tailored_hero_cta')">BOOK YOUR FREE CONSULTATION</a>
-    <p class="hero-note fade-up d5">15-minute call. No pressure. No commitment.</p>
+    <a href="#tracks" class="hero-cta fade-up d4">CHOOSE YOUR TRACK</a>
+    <p class="hero-note fade-up d5">Starts with a free 15-minute consultation</p>
   </section>
 
   <div class="divider"></div>
 
-  <!-- THE PROBLEM -->
-  <section class="section">
-    <p class="section-tag">THE PROBLEM</p>
-    <h2 class="section-title">Most programs weren't built for your body</h2>
-    <div class="problem-card">
-      <p>You've done the group classes. Downloaded the app. Maybe followed a program from someone on Instagram. And it kind of worked — until it didn't.</p>
-      <p>The issue isn't effort. It's that <strong>no one assessed how you actually move</strong> before handing you a program. Your tight hips, your limited rotation, the shoulder that nags on overhead presses — those things matter. And every generic program ignores them.</p>
-      <p>The Tailored Approach starts where most programs skip: <strong>a live movement screen</strong> that identifies what your body can and can't do right now. Then I build around that — not despite it.</p>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- TWO PATHS -->
-  <section class="section">
-    <p class="section-tag">TWO PATHS</p>
+  <!-- CHOOSE YOUR TRACK -->
+  <section class="section" id="tracks">
+    <p class="section-tag">TWO PATHS, ONE APPROACH</p>
     <h2 class="section-title">Choose your track</h2>
     <p class="section-body" style="margin-bottom: 8px;">
-      Every Tailored Approach starts the same way — with a live screen and a conversation about your goals. Then the program branches based on what you're training for.
+      Every Tailored Approach starts with a live screen and a conversation about your goals. The program is then built around what your body needs.
     </p>
-    <div class="path-grid">
-      <div class="path-card">
-        <div class="path-icon">🏋️</div>
-        <p class="path-label">GENERAL FITNESS</p>
-        <p class="path-name">Functional Track</p>
-        <p class="path-desc">Functional Movement Analysis screen. Custom strength & conditioning program. Full-body mobility program included.</p>
+
+    <div class="track-grid">
+      <div class="track-card" id="c-func" onclick="pick('func')">
+        <div class="track-icon">🏋️</div>
+        <p class="track-label">GENERAL FITNESS</p>
+        <p class="track-name">Functional Track</p>
+        <p class="track-desc">Functional Movement Analysis. Custom strength & conditioning. Full-body mobility program.</p>
+        <span class="track-badge" id="b-func">SELECT</span>
       </div>
-      <div class="path-card path-card-accent">
-        <div class="path-icon">⛳</div>
-        <p class="path-label">TPI CERTIFIED</p>
-        <p class="path-name">Golf Track</p>
-        <p class="path-desc">TPI Golf Movement Analysis screen. Custom golf-fitness program. Swing Reset mobility program included.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- WHAT'S INCLUDED -->
-  <section class="section">
-    <p class="section-tag">WHAT'S INCLUDED</p>
-    <h2 class="section-title">Everything in your Tailored Approach</h2>
-
-    <div class="included-item">
-      <div class="included-icon">📋</div>
-      <div>
-        <p class="included-title">Live Movement Screen (30 min)</p>
-        <p class="included-desc">TPI Golf Movement Analysis or Functional Movement Analysis via video call. I watch how you move and identify the limitations holding you back.</p>
-        <p class="included-value">$150–200 value</p>
+      <div class="track-card" id="c-golf" onclick="pick('golf')">
+        <div class="track-icon">⛳</div>
+        <p class="track-label">TPI CERTIFIED</p>
+        <p class="track-name">Golf Track</p>
+        <p class="track-desc">TPI Golf Movement Analysis. Custom golf-fitness program. Swing Reset mobility program.</p>
+        <span class="track-badge" id="b-golf">SELECT</span>
       </div>
     </div>
 
-    <div class="included-item">
-      <div class="included-icon">📄</div>
-      <div>
-        <p class="included-title">Screen Results & Recommendations PDF</p>
-        <p class="included-desc">Written report of your screen findings, movement limitations, and specific recommendations — yours to keep and share with other providers.</p>
+    <!-- FUNCTIONAL DETAIL -->
+    <div class="track-detail" id="d-func">
+      <div class="inc-item">
+        <div class="inc-icon ic-p">📋</div>
+        <div>
+          <p class="inc-title">Functional Movement Analysis (30 min)</p>
+          <p class="inc-desc">Live video screen identifying mobility limitations, stability deficits, and movement patterns holding you back. I watch how your body actually moves — not just where it hurts.</p>
+          <p class="inc-val vp">$150–200 value</p>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon ic-p">📄</div>
+        <div>
+          <p class="inc-title">Screen Results & Recommendations PDF</p>
+          <p class="inc-desc">Written report of your findings and specific recommendations. Yours to keep, reference, and share with other healthcare providers.</p>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon ic-p">💪</div>
+        <div>
+          <p class="inc-title">6-Week Custom Strength & Conditioning Program</p>
+          <p class="inc-desc">12 workouts built around your screen results, goals, available equipment, and schedule. Warm-ups and cool downs designed into every session. Nothing generic — every exercise selected for a reason.</p>
+          <p class="inc-val vp">$497+ value</p>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon ic-p">🔄</div>
+        <div>
+          <p class="inc-title">Full-Body Mobility Program</p>
+          <p class="inc-desc">A complete mobility program matched to your screen results. Designed to address the specific limitations identified in your assessment — not a one-size-fits-all stretch routine.</p>
+          <p class="inc-val vp">$97 value</p>
+        </div>
+      </div>
+      <div class="detail-cta-wrap">
+        <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="detail-cta dc-p" onclick="track('tailored_functional_cta')">BOOK YOUR FREE CONSULTATION</a>
       </div>
     </div>
 
-    <div class="included-item">
-      <div class="included-icon">💪</div>
-      <div>
-        <p class="included-title">6-Week Custom Program (12 Workouts)</p>
-        <p class="included-desc">Built around your screen results, goals, available equipment, and schedule. Warm-ups and cool downs designed into every session. Nothing generic.</p>
-        <p class="included-value">$497+ value</p>
+    <!-- GOLF DETAIL -->
+    <div class="track-detail" id="d-golf">
+      <div class="inc-item">
+        <div class="inc-icon ic-g">📋</div>
+        <div>
+          <p class="inc-title">TPI Golf Movement Analysis (30 min)</p>
+          <p class="inc-desc">The same 16-part screen used by tour professionals worldwide. Live video assessment identifying the physical limitations directly affecting your golf swing — rotation restrictions, hip mobility, thoracic spine, and more.</p>
+          <p class="inc-val vg">$150–200 value</p>
+        </div>
       </div>
-    </div>
-
-    <div class="included-item">
-      <div class="included-icon">🔄</div>
-      <div>
-        <p class="included-title">Swing Reset or Full-Body Mobility Program</p>
-        <p class="included-desc">Golf clients receive Swing Reset — a TPI-certified mobility program. General fitness clients receive a full-body mobility program matched to their screen results.</p>
-        <p class="included-value">$97 value</p>
+      <div class="inc-item">
+        <div class="inc-icon ic-g">📄</div>
+        <div>
+          <p class="inc-title">Screen Results & Recommendations PDF</p>
+          <p class="inc-desc">Written report connecting your physical screen findings to your swing characteristics. Share it with your golf instructor for a complete body-swing picture.</p>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- HOW IT WORKS -->
-  <section class="section">
-    <p class="section-tag">HOW IT WORKS</p>
-    <h2 class="section-title">From consultation to custom program in one week</h2>
-
-    <div class="included-item">
-      <div class="included-icon" style="background: rgba(0,120,140,0.1); border-color: rgba(0,120,140,0.2);">1</div>
-      <div>
-        <p class="included-title">Book a Free Consultation</p>
-        <p class="included-desc">15-minute call. We talk about your goals, training history, and what you're working with. No commitment — just a conversation to see if this is right for you.</p>
+      <div class="inc-item">
+        <div class="inc-icon ic-g">⛳</div>
+        <div>
+          <p class="inc-title">6-Week Custom Golf Fitness Program</p>
+          <p class="inc-desc">12 workouts built on TPI methodology — targeting the exact physical limitations holding your swing back. Strength, power, stability, and rotational training. Warm-ups and cool downs in every session.</p>
+          <p class="inc-val vg">$497+ value</p>
+        </div>
       </div>
-    </div>
-
-    <div class="included-item">
-      <div class="included-icon" style="background: rgba(0,120,140,0.1); border-color: rgba(0,120,140,0.2);">2</div>
-      <div>
-        <p class="included-title">Live Movement Screen</p>
-        <p class="included-desc">30-minute video session. I take you through a full TPI or Functional Movement screen and identify exactly what your body needs to work on.</p>
+      <div class="inc-item">
+        <div class="inc-icon ic-g">🔄</div>
+        <div>
+          <p class="inc-title">Swing Reset — TPI Mobility Program</p>
+          <p class="inc-desc">A golf-specific mobility program built on Titleist Performance Institute methodology. Targets the rotation, hip mobility, and thoracic spine movement that directly translates to your swing.</p>
+          <p class="inc-val vg">$97 value</p>
+        </div>
       </div>
-    </div>
-
-    <div class="included-item">
-      <div class="included-icon" style="background: rgba(0,120,140,0.1); border-color: rgba(0,120,140,0.2);">3</div>
-      <div>
-        <p class="included-title">I Build Your Program</p>
-        <p class="included-desc">Within one week, you receive your full 6-week custom program, screen results PDF, and mobility program — all designed around what I learned from your screen.</p>
-      </div>
-    </div>
-
-    <div class="included-item" style="border-bottom: none;">
-      <div class="included-icon" style="background: rgba(0,120,140,0.1); border-color: rgba(0,120,140,0.2);">4</div>
-      <div>
-        <p class="included-title">You Start Training</p>
-        <p class="included-desc">Follow the program on your schedule, in your space, with your equipment. Every exercise, every warm-up, every cool down — built for your body.</p>
+      <div class="detail-cta-wrap">
+        <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="detail-cta dc-g" onclick="track('tailored_golf_cta')">BOOK YOUR FREE CONSULTATION</a>
       </div>
     </div>
   </section>
@@ -552,16 +306,14 @@
       <p class="section-tag" style="text-align: center;">THE TAILORED APPROACH</p>
       <div class="price-amount">$797</div>
       <p class="price-per">One-time investment · 6-week program</p>
-
-      <ul class="price-includes">
-        <li><span class="price-check">✓</span> 30-min live movement screen (TPI or Functional)</li>
-        <li><span class="price-check">✓</span> Written screen results & recommendations PDF</li>
-        <li><span class="price-check">✓</span> 6-week custom program — 12 workouts</li>
-        <li><span class="price-check">✓</span> Warm-ups & cool downs in every session</li>
-        <li><span class="price-check">✓</span> Swing Reset or full-body mobility program</li>
+      <ul class="price-list">
+        <li><span class="pchk">✓</span> 30-min live movement screen (TPI or Functional)</li>
+        <li><span class="pchk">✓</span> Written screen results & recommendations PDF</li>
+        <li><span class="pchk">✓</span> 6-week custom program — 12 workouts</li>
+        <li><span class="pchk">✓</span> Warm-ups & cool downs in every session</li>
+        <li><span class="pchk">✓</span> Swing Reset or full-body mobility program</li>
       </ul>
-
-      <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="price-cta" onclick="track('tailored_price_cta')">BOOK YOUR FREE CONSULTATION</a>
+      <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="price-btn" onclick="track('tailored_price_cta')">BOOK YOUR FREE CONSULTATION</a>
       <p class="price-note">Starts with a free 15-minute call. Payment after consultation.</p>
     </div>
   </section>
@@ -591,7 +343,6 @@
     <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="hero-cta" onclick="track('tailored_final_cta')" style="margin-bottom: 0;">BOOK YOUR FREE CONSULTATION</a>
   </section>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <p class="footer-brand">STRONGHOLD WELLNESS</p>
     <div class="footer-links">
@@ -600,22 +351,63 @@
     </div>
   </footer>
 
-  <!-- Scroll animations -->
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
+    var active = null;
+    function pick(t) {
+      var cf = document.getElementById('c-func');
+      var cg = document.getElementById('c-golf');
+      var df = document.getElementById('d-func');
+      var dg = document.getElementById('d-golf');
+      var bf = document.getElementById('b-func');
+      var bg = document.getElementById('b-golf');
+
+      // Toggle off if same track tapped
+      if (active === t) {
+        cf.classList.remove('sel-func'); cg.classList.remove('sel-golf');
+        df.classList.remove('show'); dg.classList.remove('show');
+        bf.textContent = 'SELECT'; bg.textContent = 'SELECT';
+        active = null;
+        return;
+      }
+
+      // Reset
+      cf.classList.remove('sel-func'); cg.classList.remove('sel-golf');
+      df.classList.remove('show'); dg.classList.remove('show');
+
+      if (t === 'func') {
+        cf.classList.add('sel-func');
+        bf.textContent = 'SELECTED'; bg.textContent = 'SELECT';
+        setTimeout(function() { df.classList.add('show'); }, 50);
+        track('tailored_track_select', { track: 'functional' });
+      } else {
+        cg.classList.add('sel-golf');
+        bg.textContent = 'SELECTED'; bf.textContent = 'SELECT';
+        setTimeout(function() { dg.classList.add('show'); }, 50);
+        track('tailored_track_select', { track: 'golf' });
+      }
+      active = t;
+
+      // Scroll detail into view
+      setTimeout(function() {
+        var el = document.getElementById('d-' + t);
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 200);
+    }
+
+    // Scroll-triggered reveals
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
         }
       });
     }, { threshold: 0.1 });
-
-    document.querySelectorAll('.section, .price-box, .coach-card').forEach(el => {
+    document.querySelectorAll('.section, .price-box, .coach-card').forEach(function(el) {
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px)';
       el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      observer.observe(el);
+      obs.observe(el);
     });
   </script>
 
