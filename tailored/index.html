@@ -30,16 +30,57 @@
     }
     ::-webkit-scrollbar { width: 0; }
 
+    /* ===== POLISH: Noise texture overlay ===== */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ===== POLISH: Animated hero gradient ===== */
+    @keyframes heroGlow {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      33% { transform: translate(-45%, -55%) scale(1.1); opacity: 0.8; }
+      66% { transform: translate(-55%, -45%) scale(0.95); opacity: 0.5; }
+    }
+    @keyframes heroGlow2 {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+      50% { transform: translate(-55%, -48%) scale(1.15); opacity: 0.5; }
+    }
+
+    /* ===== POLISH: CTA shimmer ===== */
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) skewX(-15deg); }
+      100% { transform: translateX(200%) skewX(-15deg); }
+    }
+
+    /* ===== POLISH: Staggered scroll reveals ===== */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(30px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .fade-up { opacity: 0; animation: fadeUp 0.8s ease forwards; }
-    .d1 { animation-delay: 0.1s; }
-    .d2 { animation-delay: 0.2s; }
-    .d3 { animation-delay: 0.3s; }
-    .d4 { animation-delay: 0.4s; }
-    .d5 { animation-delay: 0.5s; }
+    .fade-up { opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .d1 { animation-delay: 0.15s; }
+    .d2 { animation-delay: 0.3s; }
+    .d3 { animation-delay: 0.5s; }
+    .d4 { animation-delay: 0.7s; }
+    .d5 { animation-delay: 0.9s; }
+
+    /* Scroll reveal classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
 
     :root {
       --purple: #9B40C2;
@@ -58,9 +99,20 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; padding: 80px 24px 60px; position: relative; overflow: hidden;
     }
+    /* Animated gradient orbs */
     .hero::before {
       content: ''; position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%);
-      width: 600px; height: 600px; background: radial-gradient(circle, rgba(155,64,194,0.08), transparent 70%); pointer-events: none;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(155,64,194,0.1), transparent 65%);
+      pointer-events: none;
+      animation: heroGlow 18s ease-in-out infinite;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: 35%; left: 40%; transform: translate(-50%, -50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,120,140,0.06), transparent 65%);
+      pointer-events: none;
+      animation: heroGlow2 22s ease-in-out infinite;
     }
     .hero-tag { font-size: 11px; letter-spacing: 4px; color: var(--purple); font-weight: 600; margin-bottom: 20px; }
     .hero-title {
@@ -69,29 +121,66 @@
     }
     .hero-title em { font-style: italic; color: var(--purple); }
     .hero-sub { font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 480px; margin-bottom: 40px; font-weight: 300; }
+
+    /* CTA with shimmer */
     .hero-cta {
       display: inline-block; padding: 18px 48px; background: var(--purple); color: #fff;
       border: none; border-radius: 8px; font-size: 13px; font-weight: 700; letter-spacing: 2px;
-      text-decoration: none; font-family: 'Outfit', sans-serif; cursor: pointer; transition: all 0.3s; margin-bottom: 16px;
+      text-decoration: none; font-family: 'Outfit', sans-serif; cursor: pointer;
+      transition: all 0.3s; margin-bottom: 16px;
+      position: relative; overflow: hidden;
     }
-    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(155,64,194,0.3); }
+    .hero-cta::after {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: shimmer 3.5s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(155,64,194,0.35); }
     .hero-note { font-size: 12px; color: var(--muted); opacity: 0.6; }
-    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 48px; }
+
+    /* Upgraded dividers */
+    .divider {
+      height: 1px; margin: 0 48px; position: relative;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    .divider::after {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--purple);
+      box-shadow: 0 0 12px rgba(155,64,194,0.4), 0 0 24px rgba(155,64,194,0.15);
+    }
+
     .section { padding: 80px 24px; max-width: 640px; margin: 0 auto; }
     .section-tag { font-size: 10px; letter-spacing: 4px; color: var(--teal); font-weight: 700; margin-bottom: 16px; }
     .section-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--cream); margin-bottom: 20px; line-height: 1.2; }
     .section-body { font-size: 15px; color: var(--muted); line-height: 1.8; font-weight: 300; }
 
-    /* Track cards */
+    /* Track cards with glow hover */
     .track-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
     @media (max-width: 500px) { .track-grid { grid-template-columns: 1fr; } }
     .track-card {
       background: var(--card); border: 2px solid var(--border); border-radius: 14px;
-      padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.35s ease;
+      padding: 28px 20px; text-align: center; cursor: pointer;
+      transition: all 0.35s ease;
     }
-    .track-card:hover { border-color: var(--muted); transform: translateY(-2px); }
-    .track-card.sel-func { border-color: var(--purple); background: linear-gradient(135deg, rgba(155,64,194,0.08), var(--card)); box-shadow: 0 0 30px rgba(155,64,194,0.1); }
-    .track-card.sel-golf { border-color: var(--golf); background: linear-gradient(135deg, rgba(78,122,91,0.08), var(--card)); box-shadow: 0 0 30px rgba(78,122,91,0.1); }
+    .track-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 20px rgba(155,64,194,0.12), 0 0 0 1px rgba(155,64,194,0.08);
+    }
+    .track-card.sel-func {
+      border-color: var(--purple);
+      background: linear-gradient(135deg, rgba(155,64,194,0.08), var(--card));
+      box-shadow: 0 0 30px rgba(155,64,194,0.12), 0 0 0 1px rgba(155,64,194,0.15);
+    }
+    .track-card.sel-golf {
+      border-color: var(--golf);
+      background: linear-gradient(135deg, rgba(78,122,91,0.08), var(--card));
+      box-shadow: 0 0 30px rgba(78,122,91,0.12), 0 0 0 1px rgba(78,122,91,0.15);
+    }
+    .track-card.sel-golf:hover { border-color: var(--golf); box-shadow: 0 0 30px rgba(78,122,91,0.15); }
     .track-icon { font-size: 32px; margin-bottom: 14px; }
     .track-label { font-size: 10px; letter-spacing: 3px; color: var(--purple); font-weight: 700; margin-bottom: 8px; }
     .sel-golf .track-label { color: var(--golf); }
@@ -118,9 +207,12 @@
     .inc-icon {
       width: 44px; height: 44px; border-radius: 12px; display: flex;
       align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+      transition: box-shadow 0.3s ease;
     }
     .ic-p { background: rgba(155,64,194,0.1); border: 1px solid rgba(155,64,194,0.2); }
     .ic-g { background: rgba(78,122,91,0.1); border: 1px solid rgba(78,122,91,0.2); }
+    .inc-item:hover .ic-p { box-shadow: 0 0 16px rgba(155,64,194,0.2); }
+    .inc-item:hover .ic-g { box-shadow: 0 0 16px rgba(78,122,91,0.2); }
     .inc-title { font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
     .inc-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
     .inc-val { font-size: 11px; font-weight: 600; margin-top: 4px; }
@@ -144,10 +236,33 @@
       content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,120,140,0.06), transparent 70%); pointer-events: none;
     }
-    .price-box {
-      background: var(--card); border: 1px solid rgba(155,64,194,0.25); border-radius: 20px;
-      padding: 48px 32px; max-width: 480px; margin: 0 auto; position: relative;
+
+    /* Pricing card shared glow hover */
+    .pricing-card {
+      transition: box-shadow 0.4s ease, transform 0.3s ease;
     }
+    .pricing-card:hover {
+      transform: translateY(-2px);
+    }
+    .pricing-card.teal-card:hover {
+      box-shadow: 0 8px 40px rgba(0,120,140,0.12), 0 0 0 1px rgba(0,120,140,0.15);
+    }
+    .pricing-card.purple-card:hover {
+      box-shadow: 0 8px 40px rgba(155,64,194,0.12), 0 0 0 1px rgba(155,64,194,0.15);
+    }
+
+    /* Shimmer on all primary CTAs */
+    .cta-shimmer {
+      position: relative; overflow: hidden;
+    }
+    .cta-shimmer::after {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      animation: shimmer 4s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+
     .price-amount { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--cream); margin: 16px 0 8px; }
     .price-per { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
     .price-list { text-align: left; margin: 24px 0 32px; }
@@ -166,7 +281,11 @@
     .price-note { font-size: 12px; color: var(--muted); margin-top: 14px; opacity: 0.6; }
 
     .coach-section { padding: 60px 24px; max-width: 640px; margin: 0 auto; }
-    .coach-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 32px 24px; }
+    .coach-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 32px 24px;
+      transition: box-shadow 0.4s ease;
+    }
+    .coach-card:hover { box-shadow: 0 4px 24px rgba(0,120,140,0.08); }
     .coach-creds { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
     .coach-cred {
       font-size: 11px; color: var(--teal); background: rgba(0,120,140,0.08);
@@ -177,7 +296,7 @@
     .footer { text-align: center; padding: 48px 24px; border-top: 1px solid var(--border); }
     .footer-brand { font-size: 11px; letter-spacing: 4px; color: var(--muted); opacity: 0.4; margin-bottom: 8px; }
     .footer-links { display: flex; justify-content: center; gap: 20px; }
-    .footer-links a { font-size: 11px; color: var(--muted); text-decoration: none; opacity: 0.5; }
+    .footer-links a { font-size: 11px; color: var(--muted); text-decoration: none; opacity: 0.5; transition: all 0.3s; }
     .footer-links a:hover { opacity: 1; color: var(--purple); }
   </style>
 </head>
@@ -302,7 +421,7 @@
     <div style="display: flex; flex-direction: column; gap: 24px; max-width: 520px; margin: 0 auto;">
 
       <!-- COVENANT — the anchor -->
-      <div style="
+      <div class="pricing-card teal-card" style="
         background: var(--card);
         border: 1px solid rgba(0,120,140,0.3);
         border-radius: 20px;
@@ -380,7 +499,7 @@
           </div>
         </div>
 
-        <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" onclick="track('covenant_cta')" style="
+        <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" onclick="track('covenant_cta')" class="cta-shimmer" style="
           display: block; width: 100%; padding: 18px; background: var(--teal); color: #fff;
           border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px;
           cursor: pointer; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center;
@@ -397,7 +516,7 @@
       </div>
 
       <!-- TAILORED APPROACH — matching format -->
-      <div style="
+      <div class="pricing-card purple-card" style="
         background: var(--card);
         border: 1px solid rgba(155,64,194,0.25);
         border-radius: 20px;
@@ -455,7 +574,7 @@
           </div>
         </div>
 
-        <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" onclick="track('tailored_price_cta')" style="
+        <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" onclick="track('tailored_price_cta')" class="cta-shimmer" style="
           display: block; width: 100%; padding: 18px; background: var(--purple); color: #fff;
           border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px;
           cursor: pointer; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center;
@@ -489,7 +608,7 @@
   <section style="text-align: center; padding: 60px 24px 80px;">
     <p style="font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--cream); margin-bottom: 8px; font-weight: 300;">Ready?</p>
     <p style="font-size: 14px; color: var(--muted); margin-bottom: 32px; font-weight: 300;">Let's start with a conversation.</p>
-    <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="hero-cta" onclick="track('tailored_final_cta')" style="margin-bottom: 0;">BOOK YOUR FREE CONSULTATION</a>
+    <a href="https://cal.com/stronghold-fitness/tailoredapproach" target="_blank" rel="noopener noreferrer" class="hero-cta cta-shimmer" onclick="track('tailored_final_cta')" style="margin-bottom: 0;">BOOK YOUR FREE CONSULTATION</a>
   </section>
 
   <footer class="footer">
@@ -537,19 +656,25 @@
       active = t;
     }
 
-    // Scroll-triggered reveals
+    // Staggered scroll reveals
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
         if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
+          e.target.classList.add('visible');
         }
       });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.section:not(#tracks), .price-box, .coach-card').forEach(function(el) {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    }, { threshold: 0.08 });
+
+    // Apply reveal class to all sections, cards, and pricing tiers
+    document.querySelectorAll('.section:not(#tracks), .pricing-card, .coach-card').forEach(function(el) {
+      el.classList.add('reveal');
+      obs.observe(el);
+    });
+
+    // Stagger include items within track details
+    document.querySelectorAll('.inc-item').forEach(function(el, i) {
+      el.classList.add('reveal');
+      el.classList.add('reveal-d' + Math.min((i % 4) + 1, 4));
       obs.observe(el);
     });
   </script>
