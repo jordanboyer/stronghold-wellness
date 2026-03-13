@@ -2309,7 +2309,7 @@ const FREE_COUNT = FREE_SESSIONS.length;
 // ═══════════════════════════════════════════════════════════════
 // CELEBRATION SCREEN
 // ═══════════════════════════════════════════════════════════════
-function CelebrationScreen({ session, onNavigate, onHome, completedFreeCount, capturedEmail, onSaveEmail, unlockedSessions, onUnlockSession }) {
+function CelebrationScreen({ session, onNavigate, onHome, completedFreeCount, capturedEmail, onSaveEmail, unlockedSessions, onUnlockSession, completedSessions }) {
   const [phase, setPhase] = useState(0);
   const [email, setEmail] = useState("");
   const [emailJustSubmitted, setEmailJustSubmitted] = useState(false);
@@ -2328,6 +2328,9 @@ function CelebrationScreen({ session, onNavigate, onHome, completedFreeCount, ca
   const showEmailCapture = !capturedEmail && !emailJustSubmitted && !skipped;
   const showPicker = emailJustSubmitted && !pickedSession;
   const lockedPremium = sessions.filter(s => !s.free && !unlockedSessions.includes(s.id));
+  const completedPremiumCount = (completedSessions || []).filter(id => sessions.some(s => s.id === id && !s.free)).length;
+  const STOREFRONT_URL = "https://wellness.strongholdfitness.co/storefront";
+  const GRAND_SLAM_URL = "https://buy.stripe.com/aFaeVfapx9D23Owbic2cg01";
 
   const handleEmailSubmit = async () => {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -2340,13 +2343,18 @@ function CelebrationScreen({ session, onNavigate, onHome, completedFreeCount, ca
 
   const getMessage = () => {
     if (completedFreeCount === 1 && isFreeSession) return "That's one down. You just did more for your body than most people do on vacation.";
-    if (completedFreeCount === 2 && isFreeSession) return "Two sessions in. You're building momentum — your body is already thanking you.";
-    if (allFreeComplete && isFreeSession) return "All three complimentary sessions — complete. You didn't just work out on vacation. You started something.";
+    if (completedFreeCount === 2 && isFreeSession) return "Two sessions in. You're building momentum \u2014 your body is already thanking you.";
+    if (allFreeComplete && isFreeSession) return "All three complimentary sessions \u2014 complete. You didn't just work out on vacation. You started something.";
+    if (!isFreeSession && completedPremiumCount === 1) return "Premium unlocked and already putting in work. This is where real progress starts.";
+    if (!isFreeSession && completedPremiumCount === 2) return "Two premium sessions done. You're not just working out on vacation \u2014 you're training.";
+    if (!isFreeSession && completedPremiumCount >= 3) return "You've gone deeper than almost any guest ever has. This kind of consistency changes things.";
     return "Another session in the books. Keep this momentum going.";
   };
 
   const getSubMessage = () => {
     if (allFreeComplete && isFreeSession) return "Ready to take this home with you?";
+    if (!isFreeSession && completedPremiumCount >= 3) return "Ready for something built just for you?";
+    if (!isFreeSession) return "Your next level is waiting.";
     if (nextFree && !nextFree.free) return "Your next chapter is waiting behind the premium unlock.";
     return session.pairWith ? session.pairWith.reason : "Check out another session whenever you're ready.";
   };
@@ -2598,6 +2606,89 @@ function CelebrationScreen({ session, onNavigate, onHome, completedFreeCount, ca
             <p style={{ fontSize: 12, color: HOTEL_CONFIG.accent, margin: 0, fontFamily: "'Lato', sans-serif", opacity: 0.8 }}>
               ✓ Progress saved to {capturedEmail}
             </p>
+          </div>
+        )}
+
+        {/* Premium Upsell — evolves based on completed premium count */}
+        {!isFreeSession && (
+          <div style={{ width: "100%", maxWidth: 340, marginTop: 20, marginBottom: 20 }}>
+
+            {/* TIER 3: Tailored Approach — shows after 3+ premium sessions */}
+            {completedPremiumCount >= 3 && (
+              <div style={{
+                background: `linear-gradient(135deg, ${HOTEL_CONFIG.accent}12, ${HOTEL_CONFIG.accent}06)`,
+                border: `1px solid ${HOTEL_CONFIG.accent}30`,
+                borderRadius: 14, padding: "22px 18px", marginBottom: 14, textAlign: "center",
+              }}>
+                <p style={{ fontSize: 10, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 700, margin: "0 0 6px", fontFamily: "'Lato', sans-serif" }}>PERSONALIZED PROGRAMMING</p>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 18, margin: "0 0 8px", fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>The Tailored Approach</p>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, lineHeight: 1.6, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>
+                  You've proven you'll do the work. Let me build something designed specifically for your body, your goals, and your schedule. Includes a complimentary movement analysis.
+                </p>
+                <button onClick={() => { track('schedule_click', { type: 'consultation', source: 'premium_upsell' }); window.open(CAL_LINKS.consultation, '_blank'); }} style={{
+                  width: "100%", padding: "14px", border: "none",
+                  background: HOTEL_CONFIG.accent, color: "#fff",
+                  borderRadius: 10, fontSize: 12, fontWeight: 700, letterSpacing: 1.5,
+                  cursor: "pointer", fontFamily: "'Lato', sans-serif",
+                }}>BOOK A FREE CONSULTATION</button>
+              </div>
+            )}
+
+            {/* TIER 2: Grand Slam — shows after 2+ premium sessions */}
+            {completedPremiumCount >= 2 && (
+              <div style={{
+                background: `${HOTEL_CONFIG.cardBg || "#fff"}`,
+                border: `1px solid ${HOTEL_CONFIG.cardBorder || HOTEL_CONFIG.accent + '20'}`,
+                borderRadius: 14, padding: "20px 18px", marginBottom: 14, textAlign: "center",
+              }}>
+                <p style={{ fontSize: 10, letterSpacing: 3, color: "#b8860b", fontWeight: 700, margin: "0 0 6px", fontFamily: "'Lato', sans-serif" }}>HOTEL GUEST EXCLUSIVE</p>
+                <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 18, margin: "0 0 4px", fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>The Complete Arsenal</p>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
+                  All five programs. Every session. Every coaching cue.
+                </p>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>
+                  <span style={{ textDecoration: "line-through", opacity: 0.5 }}>$597</span>{" "}
+                  <span style={{ color: HOTEL_CONFIG.accent, fontWeight: 700, fontSize: 16 }}>$497</span>
+                  <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, marginLeft: 6 }}>— 72hrs only</span>
+                </p>
+                <button onClick={() => { track('grand_slam_click', { source: 'premium_upsell', premium_count: completedPremiumCount }); window.open(GRAND_SLAM_URL, '_blank'); }} style={{
+                  width: "100%", padding: "13px", border: "none",
+                  background: "linear-gradient(135deg, #b8860b, #9a7209)",
+                  color: "#fff", borderRadius: 10,
+                  fontSize: 12, fontWeight: 700, letterSpacing: 1.5,
+                  cursor: "pointer", fontFamily: "'Lato', sans-serif",
+                }}>CLAIM YOUR EXCLUSIVE PRICE</button>
+              </div>
+            )}
+
+            {/* TIER 1: Storefront programs — shows after any premium session */}
+            <div style={{
+              background: `${HOTEL_CONFIG.cardBg || "#fff"}`,
+              border: `1px solid ${HOTEL_CONFIG.cardBorder || HOTEL_CONFIG.accent + '20'}`,
+              borderRadius: 14, padding: "18px 18px", textAlign: "center",
+            }}>
+              <p style={{ fontSize: 10, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 700, margin: "0 0 6px", fontFamily: "'Lato', sans-serif" }}>
+                {completedPremiumCount === 1 ? "TAKE IT HOME" : "INDIVIDUAL PROGRAMS"}
+              </p>
+              <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, lineHeight: 1.5, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>
+                {completedPremiumCount === 1
+                  ? "Continue your momentum with full-length programs designed by your coach. Same methodology. Built for home."
+                  : "Browse individual programs from $97 \u2014 strength, golf fitness, and more."
+                }
+              </p>
+              <a href={STOREFRONT_URL} target="_blank" rel="noopener noreferrer"
+                onClick={() => track('storefront_click', { source: 'premium_upsell', premium_count: completedPremiumCount })}
+                style={{
+                  display: "block", width: "100%", padding: "13px",
+                  background: "transparent", border: `1.5px solid ${HOTEL_CONFIG.accent}`,
+                  color: HOTEL_CONFIG.accent, borderRadius: 10,
+                  fontSize: 12, fontWeight: 700, letterSpacing: 1.5,
+                  cursor: "pointer", fontFamily: "'Lato', sans-serif",
+                  textDecoration: "none", textAlign: "center",
+                }}
+              >BROWSE PROGRAMS</a>
+            </div>
+
           </div>
         )}
 
@@ -2884,7 +2975,7 @@ function HotelWellnessPortal() {
       <div ref={scrollRef} key={navKey} style={{ overflowY: "auto" }}>
         {screen === "home" && <HomeScreen onNavigate={navigate} completedSessions={completedSessions} completedFreeCount={completedFreeCount} unlockedSessions={unlockedSessions} capturedEmail={capturedEmail} onLogin={loginGuest} />}
         {screen === "session" && selectedSession && <SessionScreen session={selectedSession} onBack={goHome} onNavigate={navigate} onComplete={completeSession} isCompleted={completedSessions.includes(selectedSession.id)} />}
-        {screen === "celebration" && selectedSession && <CelebrationScreen session={selectedSession} onNavigate={navigate} onHome={goHome} completedFreeCount={completedFreeCount} capturedEmail={capturedEmail} onSaveEmail={saveEmail} unlockedSessions={unlockedSessions} onUnlockSession={unlockSession} />}
+        {screen === "celebration" && selectedSession && <CelebrationScreen session={selectedSession} onNavigate={navigate} onHome={goHome} completedFreeCount={completedFreeCount} capturedEmail={capturedEmail} onSaveEmail={saveEmail} unlockedSessions={unlockedSessions} onUnlockSession={unlockSession} completedSessions={completedSessions} />}
         {screen === "preview" && selectedSession && <PreviewScreen session={selectedSession} onBack={goHome} onNavigate={navigate} />}
         {screen === "unlock" && <UnlockScreen session={selectedSession} onBack={goHome} onNavigate={navigate} onUnlockAll={unlockAllSessions} capturedEmail={capturedEmail} />}
         {screen === "purchase-success" && <PurchaseSuccessScreen onNavigate={navigate} onHome={goHome} />}
