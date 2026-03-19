@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0c1a12" />
+  <title>TPI Golf Fitness — StrongHold Wellness</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VNS74B2YX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4VNS74B2YX');
+    function track(e, p) { gtag('event', 'sh_' + e, p || {}); }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #0c1a12;
+      color: #e8e4df;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 0; }
+
+    /* Noise texture */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    @keyframes heroGlow {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      33% { transform: translate(-45%, -55%) scale(1.1); opacity: 0.7; }
+      66% { transform: translate(-55%, -45%) scale(0.95); opacity: 0.4; }
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) skewX(-15deg); }
+      100% { transform: translateX(200%) skewX(-15deg); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .d1 { animation-delay: 0.15s; }
+    .d2 { animation-delay: 0.3s; }
+    .d3 { animation-delay: 0.5s; }
+    .d4 { animation-delay: 0.7s; }
+    .d5 { animation-delay: 0.9s; }
+
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.08s; }
+    .reveal-d2 { transition-delay: 0.16s; }
+    .reveal-d3 { transition-delay: 0.24s; }
+    .reveal-d4 { transition-delay: 0.32s; }
+
+    :root {
+      --green: #4E7A5B;
+      --green-light: #6B9E7A;
+      --gold: #C5A55A;
+      --gold-light: #D4BE7E;
+      --cream: #f0ece4;
+      --muted: #8a9a8e;
+      --dark: #0c1a12;
+      --card: #132019;
+      --border: #1e3228;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 80px 24px 60px; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(78,122,91,0.15), transparent 70%);
+      animation: heroGlow 12s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: 40%; left: 40%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(197,165,90,0.08), transparent 70%);
+      animation: heroGlow 16s ease-in-out infinite reverse;
+      pointer-events: none;
+    }
+    .hero-tag {
+      font-size: 11px; letter-spacing: 6px; color: var(--gold);
+      font-weight: 700; margin-bottom: 20px; position: relative;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 8vw, 56px);
+      font-weight: 300; color: var(--cream); line-height: 1.1;
+      margin-bottom: 20px; position: relative;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+      max-width: 480px; font-weight: 300; margin-bottom: 36px; position: relative;
+    }
+    .hero-cta {
+      display: inline-block; padding: 18px 48px;
+      background: var(--gold); color: var(--dark);
+      font-size: 13px; font-weight: 700; letter-spacing: 3px;
+      text-decoration: none; border-radius: 6px;
+      transition: all 0.3s; position: relative; overflow: hidden;
+      border: none; cursor: pointer; font-family: 'Outfit', sans-serif;
+    }
+    .hero-cta:hover { background: var(--gold-light); box-shadow: 0 8px 30px rgba(197,165,90,0.25); transform: translateY(-2px); }
+    .hero-note {
+      font-size: 12px; color: var(--muted); margin-top: 16px;
+      font-weight: 300; opacity: 0.6; position: relative;
+    }
+
+    /* TPI badge */
+    .tpi-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(197,165,90,0.08); border: 1px solid rgba(197,165,90,0.2);
+      padding: 8px 18px; border-radius: 20px; margin-bottom: 24px;
+      font-size: 11px; letter-spacing: 2px; color: var(--gold); font-weight: 600;
+      position: relative;
+    }
+
+    .divider {
+      width: 60px; height: 1px; margin: 0 auto;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .section {
+      padding: 80px 24px; max-width: 640px; margin: 0 auto;
+    }
+    .section-tag {
+      font-size: 11px; letter-spacing: 5px; color: var(--gold);
+      font-weight: 700; text-align: center; margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px; font-weight: 300; color: var(--cream);
+      text-align: center; margin-bottom: 16px;
+    }
+    .section-body {
+      font-size: 15px; color: var(--muted); text-align: center;
+      line-height: 1.7; font-weight: 300; max-width: 520px; margin: 0 auto;
+    }
+
+    .inc-item { display: flex; gap: 16px; padding: 24px 0; border-bottom: 1px solid var(--border); }
+    .inc-item:last-of-type { border-bottom: none; }
+    .inc-icon {
+      width: 44px; height: 44px; border-radius: 12px; display: flex;
+      align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+      transition: box-shadow 0.3s ease;
+      background: rgba(78,122,91,0.1); border: 1px solid rgba(78,122,91,0.2);
+    }
+    .inc-item:hover .inc-icon { box-shadow: 0 0 16px rgba(78,122,91,0.2); }
+    .inc-gold { background: rgba(197,165,90,0.08); border: 1px solid rgba(197,165,90,0.2); }
+    .inc-item:hover .inc-gold { box-shadow: 0 0 16px rgba(197,165,90,0.2); }
+    .inc-title { font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+    .inc-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+    .inc-val { font-size: 11px; font-weight: 600; margin-top: 4px; color: var(--green); }
+    .inc-val-gold { font-size: 11px; font-weight: 600; margin-top: 4px; color: var(--gold); }
+
+    /* Pricing */
+    .price-section { text-align: center; padding: 80px 24px; position: relative; }
+    .price-section::before {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 500px; height: 500px; background: radial-gradient(circle, rgba(197,165,90,0.04), transparent 70%); pointer-events: none;
+    }
+
+    .pricing-card { transition: box-shadow 0.4s ease, transform 0.3s ease; }
+    .pricing-card:hover { transform: translateY(-2px); }
+    .gold-card:hover { box-shadow: 0 8px 40px rgba(197,165,90,0.12), 0 0 0 1px rgba(197,165,90,0.15); }
+    .green-card:hover { box-shadow: 0 8px 40px rgba(78,122,91,0.12), 0 0 0 1px rgba(78,122,91,0.15); }
+
+    .cta-shimmer { position: relative; overflow: hidden; }
+    .cta-shimmer::after {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmer 4s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+
+    .coach-section { padding: 60px 24px; max-width: 640px; margin: 0 auto; }
+    .coach-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 32px 24px;
+      transition: box-shadow 0.4s ease;
+    }
+    .coach-card:hover { box-shadow: 0 4px 24px rgba(78,122,91,0.08); }
+    .coach-creds { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .coach-cred {
+      font-size: 11px; color: var(--gold); background: rgba(197,165,90,0.08);
+      border: 1px solid rgba(197,165,90,0.2); padding: 6px 14px; border-radius: 20px; font-weight: 500;
+    }
+    .coach-bio { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    .footer { text-align: center; padding: 48px 24px; border-top: 1px solid var(--border); }
+    .footer-brand { font-size: 11px; letter-spacing: 4px; color: var(--muted); opacity: 0.4; margin-bottom: 8px; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; }
+    .footer-links a { font-size: 11px; color: var(--muted); text-decoration: none; opacity: 0.5; transition: all 0.3s; }
+    .footer-links a:hover { opacity: 1; color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="tpi-badge fade-up d1">⛳ TPI CERTIFIED GOLF FITNESS</div>
+    <h1 class="hero-title fade-up d2">Train Your Body<br>for <em>Your Swing</em></h1>
+    <p class="hero-sub fade-up d3">
+      Golf-specific programming built on Titleist Performance Institute methodology. Custom corrective training designed around how your body actually moves — so your swing can do what your coach is asking it to.
+    </p>
+    <a href="https://cal.com/stronghold-fitness/tpi" target="_blank" rel="noopener noreferrer" class="hero-cta fade-up d4" onclick="track('golf_hero_cta')">BOOK YOUR FREE CONSULTATION</a>
+    <p class="hero-note fade-up d5">15-minute call. No pressure. No commitment.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- THE PROBLEM -->
+  <section class="section">
+    <p class="section-tag">THE GAP IN YOUR GAME</p>
+    <h2 class="section-title">Your swing coach sees it. Your body can't do it.</h2>
+    <p class="section-body">
+      You've taken lessons. You know what your swing should look like. But your body won't cooperate — restricted hips, limited thoracic rotation, unstable lower half. The issue isn't your swing. It's the body trying to execute it. A TPI screen identifies exactly where the disconnect is, and the program fixes it.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- WHAT'S INCLUDED -->
+  <section class="section" id="included">
+    <p class="section-tag">WHAT'S INCLUDED</p>
+    <h2 class="section-title">Built around your TPI screen results</h2>
+    <p class="section-body" style="margin-bottom: 8px;">
+      The same 16-part movement screen used by PGA Tour professionals — applied to your body, translated into a custom training program.
+    </p>
+
+    <div style="max-width: 540px; margin: 32px auto 0;">
+      <div class="inc-item">
+        <div class="inc-icon inc-gold">📋</div>
+        <div>
+          <p class="inc-title">TPI Golf Movement Screen (30 min)</p>
+          <p class="inc-desc">Live video assessment of all 16 movement patterns. I identify the exact physical limitations affecting your swing — rotation restrictions, hip mobility, thoracic spine, stability, and sequencing.</p>
+          <p class="inc-val-gold">$200 value</p>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon">📄</div>
+        <div>
+          <p class="inc-title">Screen Results & Swing Fault Mapping</p>
+          <p class="inc-desc">Written report connecting your physical screen findings to your specific swing characteristics. Share it with your golf instructor for a complete body-swing picture.</p>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon">⛳</div>
+        <div>
+          <p class="inc-title">6-Week Custom Golf Fitness Program</p>
+          <p class="inc-desc">12 workouts built on TPI methodology — targeting the exact physical limitations holding your swing back. Corrective exercises, strength, power, rotational training. Warm-ups and cool downs in every session.</p>
+          <p class="inc-val">$497+ value</p>
+        </div>
+      </div>
+      <div class="inc-item">
+        <div class="inc-icon">🔄</div>
+        <div>
+          <p class="inc-title">Swing Reset — TPI Mobility Program</p>
+          <p class="inc-desc">A golf-specific mobility program targeting the rotation, hip mobility, and thoracic spine movement that directly translates to your swing. Built on Titleist Performance Institute methodology.</p>
+          <p class="inc-val">$97 value</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRICING -->
+  <section class="price-section">
+    <p style="font-size: 12px; letter-spacing: 5px; color: var(--gold); font-weight: 700; text-align: center; margin-bottom: 12px;">CHOOSE YOUR LEVEL</p>
+    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--cream); text-align: center; margin-bottom: 40px;">Two ways to work with me</h2>
+
+    <div style="display: flex; flex-direction: column; gap: 24px; max-width: 520px; margin: 0 auto;">
+
+      <!-- GOLF COVENANT — the anchor -->
+      <div class="pricing-card gold-card" style="
+        background: var(--card);
+        border: 1px solid rgba(197,165,90,0.3);
+        border-radius: 20px;
+        padding: 40px 28px;
+        position: relative;
+        overflow: hidden;
+      ">
+        <div style="position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(197,165,90,0.06), transparent 70%); pointer-events: none;"></div>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+          <span style="font-size: 12px; letter-spacing: 3px; color: var(--gold); font-weight: 700;">THE GOLF COVENANT</span>
+          <span style="font-size: 10px; background: rgba(197,165,90,0.12); border: 1px solid rgba(197,165,90,0.25); color: var(--gold); padding: 3px 10px; border-radius: 12px; font-weight: 600;">3 MONTHS</span>
+        </div>
+
+        <div style="margin: 12px 0 4px;">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--cream);">$4,997</span>
+        </div>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">The complete golf performance partnership. TPI-certified coaching built around your swing.</p>
+
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">TPI Golf Movement Screen + results PDF</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$200</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Phase 1 golf-specific corrective program — weeks 1–6</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$797</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Phase 2 golf performance progression — weeks 7–12</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$797</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Swing Reset — TPI mobility program</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$97</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Complete Arsenal — all 5 storefront programs</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$597</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Custom on-course warmup routine (from your screen)</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$150</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Post-round recovery protocol</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$97</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Video form corrections — submit videos, get coaching</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$450</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Direct email access — full 3 months</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$450</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Program walkthrough video per phase</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">Included</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Progress photo tracking (weeks 1, 6, 12)</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">Included</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">TPI re-screen comparison at week 12</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$200</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Mid-program check-in call (week 6)</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$150</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">End-of-program review call (week 12)</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">$150</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+            <span style="color: var(--gold); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Golf foam rolling protocol, golf mobility guide, equipment recs, First Tee Protocol, nutrition framework</span>
+            <span style="font-size: 11px; color: var(--gold); font-weight: 600;">Bonus</span>
+          </div>
+        </div>
+
+        <div style="
+          background: rgba(197,165,90,0.06);
+          border: 1px solid rgba(197,165,90,0.15);
+          border-radius: 10px;
+          padding: 14px 16px;
+          display: flex; justify-content: space-between; align-items: center;
+          margin-bottom: 16px;
+        ">
+          <span style="font-size: 13px; color: var(--muted);">Total value</span>
+          <div>
+            <span style="font-size: 15px; color: var(--muted); text-decoration: line-through; opacity: 0.5; margin-right: 8px;">$4,135+</span>
+            <span style="font-size: 18px; color: var(--gold); font-weight: 700;">$4,997</span>
+          </div>
+        </div>
+
+        <!-- Gift a TPI Screen -->
+        <div style="
+          background: rgba(197,165,90,0.04);
+          border: 1px solid rgba(197,165,90,0.12);
+          border-radius: 10px;
+          padding: 12px 16px;
+          margin-bottom: 24px;
+          text-align: center;
+        ">
+          <p style="font-size: 12px; color: var(--gold); font-weight: 600; margin-bottom: 2px;">🎁 COVENANT BONUS</p>
+          <p style="font-size: 12px; color: var(--muted);">Gift a free TPI Golf Movement Screen to a playing partner</p>
+        </div>
+
+        <a href="#apply" onclick="track('golf_covenant_apply')" class="cta-shimmer" style="
+          display: block; width: 100%; padding: 18px; background: var(--gold); color: var(--dark);
+          border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px;
+          cursor: pointer; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center;
+          transition: all 0.3s;
+        ">APPLY NOW</a>
+        <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; opacity: 0.5;">Limited availability. Application reviewed within 24 hours.</p>
+      </div>
+
+      <!-- OR divider -->
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="flex: 1; height: 1px; background: var(--border);"></div>
+        <span style="font-size: 11px; color: var(--muted); letter-spacing: 2px;">OR START WITH</span>
+        <div style="flex: 1; height: 1px; background: var(--border);"></div>
+      </div>
+
+      <!-- GOLF TAILORED APPROACH -->
+      <div class="pricing-card green-card" style="
+        background: var(--card);
+        border: 1px solid rgba(78,122,91,0.25);
+        border-radius: 20px;
+        padding: 40px 28px;
+        position: relative;
+        overflow: hidden;
+      ">
+        <div style="position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(78,122,91,0.06), transparent 70%); pointer-events: none;"></div>
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+          <span style="font-size: 12px; letter-spacing: 3px; color: var(--green); font-weight: 700;">THE TAILORED APPROACH</span>
+          <span style="font-size: 10px; background: rgba(78,122,91,0.12); border: 1px solid rgba(78,122,91,0.25); color: var(--green); padding: 3px 10px; border-radius: 12px; font-weight: 600;">6 WEEKS</span>
+        </div>
+
+        <div style="margin: 12px 0 4px;">
+          <span style="font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--cream);">$897</span>
+        </div>
+        <p style="font-size: 13px; color: var(--muted); margin-bottom: 20px;">One-time investment. Your custom golf fitness starting point.</p>
+
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--green); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">TPI Golf Movement Screen + results PDF</span>
+            <span style="font-size: 11px; color: var(--green); font-weight: 600;">$200</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--green); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">6-week custom golf fitness program — 12 workouts</span>
+            <span style="font-size: 11px; color: var(--green); font-weight: 600;">$497+</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border);">
+            <span style="color: var(--green); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Warm-ups & cool downs in every session</span>
+            <span style="font-size: 11px; color: var(--green); font-weight: 600;">Included</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+            <span style="color: var(--green); font-weight: 700; font-size: 14px;">✓</span>
+            <span style="font-size: 13px; color: var(--muted); flex: 1;">Swing Reset — TPI mobility program</span>
+            <span style="font-size: 11px; color: var(--green); font-weight: 600;">$97</span>
+          </div>
+        </div>
+
+        <div style="
+          background: rgba(78,122,91,0.06);
+          border: 1px solid rgba(78,122,91,0.15);
+          border-radius: 10px;
+          padding: 14px 16px;
+          display: flex; justify-content: space-between; align-items: center;
+          margin-bottom: 24px;
+        ">
+          <span style="font-size: 13px; color: var(--muted);">Total value</span>
+          <div>
+            <span style="font-size: 15px; color: var(--muted); text-decoration: line-through; opacity: 0.5; margin-right: 8px;">$1,094+</span>
+            <span style="font-size: 18px; color: var(--green); font-weight: 700;">$897</span>
+          </div>
+        </div>
+
+        <a href="https://cal.com/stronghold-fitness/tpi" target="_blank" rel="noopener noreferrer" onclick="track('golf_tailored_cta')" class="cta-shimmer" style="
+          display: block; width: 100%; padding: 18px; background: var(--green); color: #fff;
+          border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px;
+          cursor: pointer; font-family: 'Outfit', sans-serif; text-decoration: none; text-align: center;
+          transition: all 0.3s;
+        ">BOOK YOUR FREE CONSULTATION</a>
+        <p style="font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; opacity: 0.5;">Starts with a free 15-minute call. Payment after consultation.</p>
+      </div>
+
+    </div>
+
+    <!-- Gen pop crosslink -->
+    <div style="text-align: center; margin-top: 32px;">
+      <p style="font-size: 13px; color: var(--muted); margin-bottom: 4px;">Not a golfer?</p>
+      <a href="/tailored" style="font-size: 13px; color: var(--green-light); text-decoration: none; border-bottom: 1px solid rgba(78,122,91,0.3);">
+        View general fitness programming →
+      </a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- APPLICATION -->
+  <section class="section" id="apply">
+    <p class="section-tag">APPLICATION</p>
+    <h2 class="section-title">Apply for The Golf Covenant</h2>
+    <p class="section-body">The Golf Covenant is limited to ensure every client gets my full attention. Tell me about your game and I'll follow up within 24 hours.</p>
+
+    <div style="max-width: 480px; margin: 32px auto 0;">
+      <form name="golf-covenant-application" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="display: flex; flex-direction: column; gap: 16px;">
+        <input type="hidden" name="form-name" value="golf-covenant-application" />
+        <input type="hidden" name="offer" value="Golf Covenant — $4,997" />
+        <p style="display:none;"><label>Don't fill: <input name="bot-field" /></label></p>
+
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; margin-bottom: 6px;">FULL NAME</label>
+          <input type="text" name="name" required placeholder="Your name" style="width: 100%; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; margin-bottom: 6px;">EMAIL</label>
+          <input type="email" name="email" required placeholder="you@email.com" style="width: 100%; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; margin-bottom: 6px;">PHONE (OPTIONAL)</label>
+          <input type="tel" name="phone" placeholder="(555) 123-4567" style="width: 100%; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; margin-bottom: 6px;">HANDICAP / SKILL LEVEL</label>
+          <select name="handicap" required style="width: 100%; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+            <option value="">Select</option>
+            <option value="beginner">Beginner (36+ / just starting)</option>
+            <option value="high">High handicap (18–36)</option>
+            <option value="mid">Mid handicap (10–18)</option>
+            <option value="low">Low handicap (0–10)</option>
+            <option value="scratch">Scratch / plus handicap</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; margin-bottom: 6px;">WHAT'S YOUR MAIN GOAL?</label>
+          <textarea name="goals" required rows="3" placeholder="More distance? Better consistency? Fewer injuries? Tell me about your game..." style="width: 100%; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; outline: none; resize: vertical; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+        </div>
+        <div>
+          <label style="display: block; font-size: 11px; letter-spacing: 2px; color: var(--muted); font-weight: 600; margin-bottom: 6px;">EQUIPMENT ACCESS</label>
+          <select name="equipment" required style="width: 100%; padding: 14px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 14px; outline: none; transition: border-color 0.3s;" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+            <option value="">Select</option>
+            <option value="minimal">Minimal — dumbbells, bands</option>
+            <option value="home-gym">Home gym — bench, rack, weights</option>
+            <option value="full-gym">Full commercial gym</option>
+            <option value="club-gym">Country club / golf facility gym</option>
+          </select>
+        </div>
+
+        <!-- Gift a TPI screen referral -->
+        <div style="background: rgba(197,165,90,0.04); border: 1px solid rgba(197,165,90,0.12); border-radius: 10px; padding: 16px; margin-top: 8px;">
+          <p style="font-size: 11px; letter-spacing: 2px; color: var(--gold); font-weight: 600; margin-bottom: 8px;">🎁 GIFT A FREE TPI SCREEN</p>
+          <p style="font-size: 12px; color: var(--muted); margin-bottom: 12px;">Covenant members can gift a free TPI Golf Movement Screen to a playing partner. Enter their details below (optional).</p>
+          <input type="text" name="friend-name" placeholder="Playing partner's name" style="width: 100%; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 13px; outline: none; margin-bottom: 8px;" />
+          <input type="email" name="friend-email" placeholder="Their email" style="width: 100%; padding: 12px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 13px; outline: none;" />
+        </div>
+
+        <button type="submit" onclick="track('golf_covenant_submit')" class="cta-shimmer" style="
+          width: 100%; padding: 18px; background: var(--gold); color: var(--dark);
+          border: none; border-radius: 10px; font-size: 14px; font-weight: 700; letter-spacing: 2px;
+          cursor: pointer; font-family: 'Outfit', sans-serif; transition: all 0.3s; margin-top: 8px; position: relative; overflow: hidden;
+        ">SUBMIT APPLICATION</button>
+      </form>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- COACH -->
+  <section class="coach-section">
+    <p class="section-tag">YOUR COACH</p>
+    <h2 class="section-title" style="margin-bottom: 20px;">Jordan Boyer</h2>
+    <div class="coach-card">
+      <div class="coach-creds">
+        <span class="coach-cred">TPI Golf Fitness Specialist</span>
+        <span class="coach-cred">Certified Personal Trainer — 10+ Years</span>
+        <span class="coach-cred">StrongHold Fitness, LLC</span>
+      </div>
+      <p class="coach-bio">
+        I've spent over a decade building programs that work for real people with real schedules. As a TPI-certified golf fitness specialist, I bridge the gap between what your swing coach sees and what your body can actually do. Whether you're chasing distance, consistency, or just want to play pain-free into your 70s — I build the physical foundation your game needs.
+      </p>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section style="text-align: center; padding: 60px 24px 80px;">
+    <p style="font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--cream); margin-bottom: 8px; font-weight: 300;">Ready to train for your swing?</p>
+    <p style="font-size: 14px; color: var(--muted); margin-bottom: 32px; font-weight: 300;">Let's start with a conversation.</p>
+    <a href="https://cal.com/stronghold-fitness/tpi" target="_blank" rel="noopener noreferrer" class="hero-cta cta-shimmer" onclick="track('golf_final_cta')" style="margin-bottom: 0;">BOOK YOUR FREE CONSULTATION</a>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-brand">STRONGHOLD WELLNESS</p>
+    <div class="footer-links">
+      <a href="/tailored">General Fitness</a>
+      <a href="https://wellness.strongholdfitness.co/storefront">Programs</a>
+      <a href="https://wellness.strongholdfitness.co/legal">Terms & Privacy</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveals
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.section, .pricing-card, .coach-card').forEach(function(el) {
+      el.classList.add('reveal');
+      obs.observe(el);
+    });
+
+    document.querySelectorAll('.inc-item').forEach(function(el, i) {
+      el.classList.add('reveal');
+      el.classList.add('reveal-d' + Math.min((i % 4) + 1, 4));
+      obs.observe(el);
+    });
+  </script>
+
+</body>
+</html>
