@@ -7,14 +7,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#faf6f0" />
   <title>French Quarter Inn — Wellness Experience</title>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4VNS74B2YX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-4VNS74B2YX');
-  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -35,17 +27,6 @@
     const { useState, useEffect, useRef } = React;
 
 
-const STRIPE_LINKS = {
-  premiumUnlock: "https://buy.stripe.com/14AaEZ419bLabgYdqk2cg00?client_reference_id=fqi",
-  strongholdMethod: "https://buy.stripe.com/9B6dRb69h4iIcl2fys2cg07",
-  swingReset: "https://buy.stripe.com/8x2aEZ1T13eEbgYdqk2cg06",
-  coreForge: "https://buy.stripe.com/4gM7sNdBJ8yYdp68602cg05",
-  longGame: "https://buy.stripe.com/14AaEZ9lt8yYbgY2LG2cg04",
-  ironRange: "https://buy.stripe.com/6oU14p55d02setaae82cg03",
-  completeArsenal: "https://buy.stripe.com/5kQcN77dl4iI5WEae82cg02",
-  grandSlam: "https://buy.stripe.com/aFaeVfapx9D23Owbic2cg01",
-};
-
 const HOTEL_CONFIG = {
   name: "FRENCH QUARTER INN",
   subtitle: "WELLNESS EXPERIENCE",
@@ -57,13 +38,6 @@ const HOTEL_CONFIG = {
   cardBorder: "rgba(123,45,62,0.12)",
   textPrimary: "#2c2420",
   textSecondary: "#7a706a",
-};
-
-// Analytics tracking helper
-const track = (eventName, params = {}) => {
-  if (typeof gtag === 'function') {
-    gtag('event', eventName, { hotel: 'fqi', ...params });
-  }
 };
 
 const equipment = [
@@ -79,7 +53,7 @@ const sessions = [
     id: "morning",
     free: true,
     title: "Morning Mobility",
-    duration: "15 MIN",
+    duration: "10 MIN",
     intensity: "GENTLE",
     icon: "☀️",
     color: "#f5c842",
@@ -91,8 +65,9 @@ const sessions = [
       { name: "World's Greatest Stretch", duration: "90s", reps: "5 each side", cue: "Lunge forward, rotate toward your front knee, reach to the ceiling. This one earns its name." },
       { name: "Hip 90/90 Switches", duration: "60s", reps: "8 each side", cue: "Sit tall on the floor. Rotate your hips smoothly side to side — perfect for undoing hours in a plane seat." },
       { name: "Thoracic Spine Windmills", duration: "90s", reps: "8 each side", cue: "Lie on your side, open your top arm across your body. Follow it with your eyes. Let the upper back unwind." },
-      { name: "Ankle Circles & Calf Raises", duration: "60s", reps: "10 circles + 15 raises", cue: "Wake up those ankles before a day on the cobblestones. You'll log more steps than you think on King Street." },
-      { name: "Standing Quad Stretch to Reach", duration: "60s", reps: "30s each side", cue: "Pull heel to glute, then reach overhead. Find your balance — steady as a palmetto in the breeze." },
+      { name: "Ankle Circles", duration: "60s", reps: "30s each direction", cue: "Slow, full circles. Wake up those ankles before a day on the cobblestones." },
+      { name: "Calf Raises", duration: "30s", reps: "15 reps", cue: "Full range, pause at the top. You'll log more steps than you think on King Street." },
+      { name: "Walking Hamstring Scoop", duration: "60s", reps: "5 each side", cue: "Step forward, plant your heel, and hinge at the hips as you scoop your arms under the leg. Slow and smooth — feel the hamstring lengthen with each step." },
       { name: "Deep Breathing Reset", duration: "90s", reps: "6 breath cycles", cue: "4 counts in through the nose, hold 4, out through the mouth for 6. Set the tone for your Charleston day." },
     ],
   },
@@ -100,7 +75,7 @@ const sessions = [
     id: "foundation",
     free: true,
     title: "The Foundation",
-    duration: "30 MIN",
+    duration: "20 MIN",
     intensity: "BEGINNER",
     icon: "🧱",
     color: "#5b9f5b",
@@ -113,9 +88,9 @@ const sessions = [
         rounds: 2,
         rest: "60s between rounds",
         exercises: [
-          { name: "Bodyweight Squat", reps: "12 reps", cue: "Chest up, weight in heels. Pause at the bottom like you're settling into a rocking chair on a Charleston porch." },
-          { name: "Incline Push-Up", reps: "10 reps", cue: "Hands on the desk or luggage bench — shoulder-width, elbows at 45°. Full range of motion." },
-          { name: "Glute Bridge", reps: "15 reps", cue: "Squeeze at the top for 2 seconds. Drive through your heels. Counteract all that sitting from travel." },
+          { name: "Dead Bug", reps: "8 each side", cue: "Low back stays glued to the floor. Slow and controlled — this one activates your deep core before the real work starts. Modification: legs only — keep your arms flat on the floor." },
+          { name: "Bodyweight Squat (3s Lowering)", reps: "12 reps", cue: "3 seconds on the way down, pause at the bottom, then stand. Chest up, weight in heels. The slow descent is what makes this work. Modification: sit to stand from a chair." },
+          { name: "Bent-Over YT", reps: "8 reps each position", cue: "Hinge at the hips, back flat. Lift straight arms overhead into a Y, then out to your sides for a T. Control each rep — this one wakes up the upper back and shoulders. Modification: perform seated on the edge of a chair." },
         ],
       },
       {
@@ -123,9 +98,9 @@ const sessions = [
         rounds: 2,
         rest: "60s between rounds",
         exercises: [
-          { name: "Reverse Lunge", reps: "10 each leg", cue: "Step back, drop the knee. Keep your torso tall and proud — like the steeples on Meeting Street." },
-          { name: "Plank Hold", reps: "30 seconds", cue: "Elbows under shoulders. Squeeze everything. Breathe. Solid as a seawall." },
-          { name: "Superman Hold", reps: "10 reps, 3s hold", cue: "Lift arms and legs together. Squeeze your back. Great for undoing the desk-and-flight hunch." },
+          { name: "Reverse Lunge", reps: "10 each leg", cue: "Step back, drop the knee. Keep your torso tall and proud — like the steeples on Meeting Street. Modification: hold onto a stable table or wall for balance." },
+          { name: "Push-Up", reps: "10 reps", cue: "Hands shoulder-width, elbows at 45°. Lower with control, press up strong. Full range of motion — earn every rep. Modification: drop to your knees." },
+          { name: "Glute Bridge", reps: "15 reps", cue: "Squeeze into your glutes first, then lift. Drive through your heels and push your knees apart from each other at the top. Counteract all that sitting from travel." },
         ],
       },
       {
@@ -133,9 +108,9 @@ const sessions = [
         rounds: 2,
         rest: "45s between rounds",
         exercises: [
-          { name: "Wall Sit", reps: "30 seconds", cue: "Thighs parallel to the floor. Press your back flat into the wall. Earn that she-crab soup tonight." },
-          { name: "Dead Bug", reps: "8 each side", cue: "Low back stays glued to the floor. Slow and controlled — this one builds real core stability." },
-          { name: "Standing Calf Raise", reps: "20 reps", cue: "Full range, pause at the top. Your calves will thank you on the walk to Waterfront Park." },
+          { name: "Prone Y-T-I Raise", reps: "5 each position", cue: "Lie face down. Lift arms into a Y (overhead wide), lower, then a T (out to sides), lower, then an I (arms by your sides, palms facing up). Squeeze your upper back at the top of each rep. This is your pull — own it. Modification: perform standing with a wall hinge." },
+          { name: "Bird Dog", reps: "8 each side", cue: "On all fours, extend opposite arm and leg. Hold for 2 seconds at the top. Keep your hips level — if a glass of water were on your back, don't spill it. Modification: lift arm and leg separately, not together." },
+          { name: "Plank", reps: "30 seconds", cue: "Elbows under shoulders. Squeeze everything. Breathe. Solid as a seawall. Modification: drop to your knees — same squeeze, same focus." },
         ],
       },
     ],
@@ -143,7 +118,7 @@ const sessions = [
   {
     id: "ironwork",
     title: "The Ironwork",
-    duration: "30 MIN",
+    duration: "25 MIN",
     intensity: "INTERMEDIATE",
     icon: "🔥",
     color: "#e07035",
@@ -156,7 +131,7 @@ const sessions = [
         rounds: 3,
         rest: "45s between rounds",
         exercises: [
-          { name: "Dumbbell Floor Press", reps: "12 reps", cue: "Lie on the floor, feet flat. Control the descent, press explosively. The floor limits your range — that's the point." },
+          { name: "DB Chest Press", reps: "12 reps", cue: "Bench or floor — either works. Control the descent, squeeze the chest as you press. Full range of motion, elbows at 45°." },
           { name: "Bent-Over Dumbbell Row", reps: "12 each arm", cue: "Pull to your hip. Squeeze the shoulder blade hard at the top. Think about pulling the ironwork gates open." },
         ],
       },
@@ -200,22 +175,22 @@ const sessions = [
     format: "4 Blocks — Tempo & Complex Work",
     circuits: [
       {
-        name: "Block A — Dumbbell Complex (no rest between moves)",
-        rounds: 4,
-        rest: "90s between rounds",
-        exercises: [
-          { name: "Hang Clean to Press", reps: "6 reps", cue: "Explosive hip drive straight into an overhead press. One fluid movement — power from the ground up." },
-          { name: "Front Squat", reps: "6 reps", cue: "DBs on shoulders, elbows high. Full depth. Don't rush — control earns results." },
-          { name: "Bent-Over Row", reps: "6 reps", cue: "Hinge, pull hard, lower with control. Finish the complex strong." },
-        ],
-      },
-      {
-        name: "Block B — Tempo Lower",
+        name: "Block A — Tempo Lower",
         rounds: 3,
         rest: "60s between rounds",
         exercises: [
           { name: "Tempo Goblet Squat (3-1-1-1)", reps: "8 reps", cue: "3 seconds down, 1 second pause at the bottom, 1 second up, 1 second squeeze. Time under tension is the game." },
           { name: "Single-Leg RDL", reps: "8 each leg", cue: "Slow and controlled. Own the balance. If you wobble, narrow your focus — eyes on one spot on the floor." },
+        ],
+      },
+      {
+        name: "Block B — Dumbbell Complex (no rest between moves)",
+        rounds: 4,
+        rest: "90s between rounds",
+        exercises: [
+          { name: "Front Squat", reps: "6 reps", cue: "DBs on shoulders, elbows high. Full depth. Don't rush — control earns results." },
+          { name: "Bent-Over Row", reps: "6 reps", cue: "Hinge, pull hard, lower with control. Keep your back flat and squeeze at the top." },
+          { name: "Squat Press", reps: "6 reps", cue: "Squat deep with dumbbells at your shoulders, then drive up and press overhead in one powerful movement. Legs start it, shoulders finish it." },
         ],
       },
       {
@@ -229,10 +204,11 @@ const sessions = [
       },
       {
         name: "Block D — Finisher",
-        rounds: 3,
-        rest: "30s between rounds",
+        rounds: 2,
+        rest: "No rest between sides — rest 30s between rounds",
         exercises: [
-          { name: "Burpee to DB Snatch", reps: "5 each arm", cue: "Chest to floor, explode up, snatch overhead. No pacing — this is your last stand. Finish like you mean it." },
+          { name: "DB Split Squat", reps: "6 reps each side", cue: "Dumbbells at your sides, front foot flat, back foot elevated. Drop straight down with control — every rep counts." },
+          { name: "Split Squat Pulse", reps: "30s each side", cue: "Stay at the bottom of the split squat and pulse. Don't come all the way up — keep the tension on. This is your last stand. Finish like you mean it." },
         ],
       },
     ],
@@ -246,7 +222,7 @@ const sessions = [
     color: "#d45d8e",
     description: "Named after the Lowcountry heat that hits you the second you step outside. A bodyweight cardio circuit that scales to any fitness level — every exercise has a beginner option.",
     pairWith: { id: "bedtime", reason: "Heart rate still up? Bedtime Recovery will bring you back to earth before you sleep." },
-    format: "5 Stations — 40s Work / 20s Rest — 3 Rounds",
+    format: "5 Stations — 40s Work / 20s Rest — 3 Rounds + Core Finisher",
     circuits: [
       {
         name: "Round 1-3 — The Loop",
@@ -257,7 +233,16 @@ const sessions = [
           { name: "Squat Jump (or Squat)", reps: "40s on / 20s off", cue: "Explode up, land soft as if you're on those original hardwood floors. Beginner: bodyweight squat, no jump." },
           { name: "Mountain Climbers", reps: "40s on / 20s off", cue: "Hands under shoulders, drive knees fast. Imagine you're scrambling up to the top of the Ravenel Bridge. Beginner: slow step-ins." },
           { name: "Lateral Shuffle to Touch", reps: "40s on / 20s off", cue: "Stay low, shuffle 3 steps, touch the floor. Quick feet — stay light and athletic." },
-          { name: "Burpees (or Step-Down Burpees)", reps: "40s on / 20s off", cue: "Full send. Chest hits the floor, explode up. Beginner: step back, step up, skip the jump. No shame in scaling." },
+          { name: "Single-Leg V-Up", reps: "40s on / 20s off", cue: "Lie on your back, lift one leg and the opposite arm to meet in the middle. Alternate sides each rep — controlled and deliberate. Beginner: bent-knee tuck-up." },
+        ],
+      },
+      {
+        name: "Core Circuit — 1 min rest after The Loop, then begin",
+        rounds: 3,
+        rest: "60s between rounds",
+        exercises: [
+          { name: "High Plank Shoulder Taps", reps: "40s on / 20s off", cue: "Lock in your plank — hips still, no rocking. Tap each shoulder with control. The slower you go, the harder your core works. Beginner: widen your feet for more stability." },
+          { name: "Side Plank Leg Lifts", reps: "40s on / 20s off (each side)", cue: "Stack your feet or stagger them, lift the top leg with control. Keep your hips high — don't let them sag. Beginner: drop to your bottom knee." },
         ],
       },
     ],
@@ -289,11 +274,12 @@ const sessions = [
         rest: "No rest between intervals — recovery IS the easy portion",
         exercises: [
           { name: "Moderate Push", reps: "2 min", cue: "RPE 6. Increase speed or resistance. Breathing is heavier but controlled. This is your baseline work pace." },
-          { name: "Recovery", reps: "1 min", cue: "RPE 4. Back off the pace. Active recovery — keep moving but let your heart rate settle." },
+          { name: "Easy", reps: "1 min", cue: "RPE 4. Back off the pace. Active recovery — keep moving but let your heart rate settle." },
           { name: "Hard Push", reps: "2 min", cue: "RPE 7-8. Crank the resistance or speed up. You can talk in short phrases only. Commit to it." },
-          { name: "Recovery", reps: "1 min", cue: "RPE 4. Ease off. Breathe. You earned it." },
-          { name: "Peak Effort", reps: "2 min", cue: "RPE 8-9. The summit. Go after it — high resistance, fast cadence, steep incline. Whatever your machine allows." },
-          { name: "Extended Recovery", reps: "2 min", cue: "RPE 4. Slow it down. Catch your breath fully before the descending ladder." },
+          { name: "Easy", reps: "1 min", cue: "RPE 4. Ease off. Breathe. You earned it." },
+          { name: "Moderate Push", reps: "2 min", cue: "RPE 6. Back to your work pace. Controlled and steady." },
+          { name: "Max Effort", reps: "1 min", cue: "RPE 9. Everything you've got. 60 seconds. No holding back." },
+          { name: "Recovery", reps: "1 min", cue: "RPE 4. Catch your breath fully before the descending ladder." },
         ],
       },
       {
@@ -301,12 +287,13 @@ const sessions = [
         rounds: 1,
         rest: "No rest between intervals",
         exercises: [
-          { name: "Strong Effort", reps: "90s", cue: "RPE 7-8. Right back into it. Match or beat your Phase 2 hard push. The ladder only gets easier from here." },
-          { name: "Recovery", reps: "60s", cue: "RPE 4. Easy pace. Control your breathing." },
-          { name: "Moderate Effort", reps: "90s", cue: "RPE 6-7. Still working but it should feel more sustainable. Your engine is warm and humming." },
-          { name: "Recovery", reps: "60s", cue: "RPE 4. Almost there. Let your heart rate come down." },
-          { name: "Final Push", reps: "90s", cue: "RPE 8-9. Last real effort. Empty the tank — you're cooling down after this. Make it count." },
-          { name: "Transition to Cooldown", reps: "90s", cue: "RPE 4-5. Gradually reduce speed and resistance. Let your body begin to settle." },
+          { name: "Hard Push", reps: "2 min", cue: "RPE 7-8. Right back into it. Match your earlier hard push." },
+          { name: "Easy", reps: "1 min", cue: "RPE 4. Easy pace. Control your breathing." },
+          { name: "Moderate Effort", reps: "2 min", cue: "RPE 6. Working but sustainable. Your engine is warm and humming." },
+          { name: "Easy", reps: "1 min", cue: "RPE 4. Almost there. Let your heart rate come down." },
+          { name: "Moderate Effort", reps: "2 min", cue: "RPE 6. Last moderate push. Stay disciplined." },
+          { name: "Max Effort", reps: "1 min", cue: "RPE 9. Final all-out effort. Empty the tank. Make it count." },
+          { name: "Recovery", reps: "1 min", cue: "RPE 4. Let your body begin to settle." },
         ],
       },
       {
@@ -332,12 +319,13 @@ const sessions = [
     pairWith: { id: "morning", reason: "Sleep well. When you wake up, Morning Mobility is waiting to start your day right." },
     exercises: [
       { name: "Seated Forward Fold", duration: "60s", reps: "Hold & breathe", cue: "Sit on the edge of the bed, legs extended. Reach forward gently. Let gravity pull you in — no forcing." },
+      { name: "Child's Pose", duration: "60s", reps: "Hold", cue: "Knees wide, arms extended. Sink your hips back. Let your forehead rest — nothing left to do today." },
+      { name: "Thread the Needle", duration: "60s", reps: "30s each side", cue: "From all fours, slide one arm under your body and melt into it. Let your shoulder and upper back release. Breathe into the stretch — no rushing." },
       { name: "Supine Spinal Twist", duration: "60s", reps: "30s each side", cue: "Lie back, drop both knees to one side. Arms wide like the branches of a live oak. Breathe into the stretch." },
       { name: "Figure-4 Hip Stretch", duration: "60s", reps: "30s each side", cue: "Ankle on opposite knee. Gently press the knee away. Release the tension from a day of exploring the Holy City." },
-      { name: "Child's Pose", duration: "60s", reps: "Hold", cue: "Knees wide, arms extended. Sink your hips back. Let your forehead rest — nothing left to do today." },
-      { name: "Legs Up the Headboard", duration: "90s", reps: "Hold & breathe", cue: "Scoot close to the headboard, legs vertical. This reverses circulation from a long day on your feet — pure relief." },
+      { name: "Knee-to-Chest Hug", duration: "60s", reps: "30s each side", cue: "Pull one knee in toward your chest. Hold it close and breathe. Let your lower back release into the mattress — this is where all the travel tension hides." },
+      { name: "Reclined Butterfly", duration: "90s", reps: "Hold & breathe", cue: "Soles of your feet together, let your knees fall open. Arms relaxed at your sides. Let gravity do the work — no pressing, just melting." },
       { name: "4-7-8 Breathing", duration: "120s", reps: "5 cycles", cue: "Inhale 4 counts. Hold 7 counts. Exhale 8 counts. This pattern activates your parasympathetic nervous system — your body's off switch." },
-      { name: "Body Scan Relaxation", duration: "120s", reps: "1 pass", cue: "Starting at your toes, consciously relax each muscle group moving upward. Let every part of your body melt into that French Quarter Inn bed." },
     ],
   },
 ];
@@ -859,6 +847,52 @@ function SessionScreen({ session, onBack, onNavigate }) {
         </div>
       </div>
 
+      {/* Equipment Needed Callout */}
+      {session.id !== "morning" && session.id !== "bedtime" && (
+        <div style={{ padding: "0 20px 12px" }}>
+          <div style={{
+            background: `${HOTEL_CONFIG.accent}06`, border: `1px solid ${HOTEL_CONFIG.accent}18`,
+            borderRadius: 12, padding: "14px 16px",
+            display: "flex", alignItems: "flex-start", gap: 12,
+          }}>
+            <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>🎒</span>
+            <div>
+              <p style={{ color: HOTEL_CONFIG.accent, fontSize: 12, fontWeight: 600, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
+                Equipment Needed
+              </p>
+              <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+                {session.id === "foundation" || session.id === "cardio"
+                  ? "Bodyweight only — no equipment needed."
+                  : session.id === "machine-cardio"
+                  ? "Any cardio machine: treadmill, bike, or elliptical."
+                  : "Dumbbells recommended. Request from Front Desk Concierge by dialing \"0\"."}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Trainer's Tip */}
+      <div style={{ padding: "0 20px 12px" }}>
+        <div style={{
+          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+          borderRadius: 12, padding: "14px 16px",
+          display: "flex", alignItems: "flex-start", gap: 12,
+        }}>
+          <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>💡</span>
+          <div>
+            <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 12, fontWeight: 600, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
+              Trainer's Tip
+            </p>
+            <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
+              {isStretchFormat
+                ? "Hold each stretch to your comfort level. Never push into pain — breathe into the tension and let it release naturally."
+                : "Watch each demo loop once or twice before your first rep. Focus on matching the form, not the speed. Quality reps beat fast reps every time."}
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Exercises */}
       <div style={{ padding: "20px 20px 32px" }}>
         {isStretchFormat ? (
@@ -1057,52 +1091,6 @@ function SessionScreen({ session, onBack, onNavigate }) {
             ))}
           </>
         )}
-      </div>
-
-      {/* Equipment Needed Callout */}
-      {session.id !== "morning" && session.id !== "bedtime" && (
-        <div style={{ padding: "0 20px 20px" }}>
-          <div style={{
-            background: `${HOTEL_CONFIG.accent}06`, border: `1px solid ${HOTEL_CONFIG.accent}18`,
-            borderRadius: 12, padding: "14px 16px",
-            display: "flex", alignItems: "flex-start", gap: 12,
-          }}>
-            <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>🎒</span>
-            <div>
-              <p style={{ color: HOTEL_CONFIG.accent, fontSize: 12, fontWeight: 600, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
-                Equipment Needed
-              </p>
-              <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
-                {session.id === "foundation" || session.id === "cardio"
-                  ? "Bodyweight only — no equipment needed."
-                  : session.id === "machine-cardio"
-                  ? "Any cardio machine: treadmill, bike, or elliptical."
-                  : "Dumbbells recommended. Request from Front Desk Concierge by dialing \"0\"."}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Difficulty Quick-Adjust Tip */}
-      <div style={{ padding: "0 20px 20px" }}>
-        <div style={{
-          background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-          borderRadius: 12, padding: "14px 16px",
-          display: "flex", alignItems: "flex-start", gap: 12,
-        }}>
-          <span style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>💡</span>
-          <div>
-            <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 12, fontWeight: 600, margin: "0 0 4px", fontFamily: "'Lato', sans-serif" }}>
-              Trainer's Tip
-            </p>
-            <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>
-              {isStretchFormat
-                ? "Hold each stretch to your comfort level. Never push into pain — breathe into the tension and let it release naturally."
-                : "Watch each demo loop once or twice before your first rep. Focus on matching the form, not the speed. Quality reps beat fast reps every time."}
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Pair With — What's Next */}
@@ -1355,72 +1343,11 @@ function PremiumScreen({ onBack }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => { setTimeout(() => setVisible(true), 50); }, []);
 
-  const scPrograms = [
-    { title: "StrongHold Method", desc: "The complete strength & conditioning system — 8 weeks of progressive training built for real results.", duration: "8 Weeks", price: "$197", icon: "💪", link: STRIPE_LINKS.strongholdMethod },
-    { title: "Core Forge", desc: "Targeted core strength program built for performance, stability, and injury prevention.", duration: "6 Weeks", price: "$147", icon: "🔥", link: STRIPE_LINKS.coreForge },
-    { title: "Iron Range", desc: "Complete strength program for serious athletes who want to train with purpose.", duration: "8 Weeks", price: "$197", icon: "🏋️", link: STRIPE_LINKS.ironRange },
+  const programs = [
+    { title: "The Travel Blueprint", desc: "4-week progressive program designed for hotel gyms and limited equipment.", duration: "4 Weeks", price: "$29", icon: "🗺️" },
+    { title: "Golf Mobility Series", desc: "TPI-certified mobility sequences to improve your swing on and off the course.", duration: "6 Sessions", price: "$19", icon: "⛳" },
+    { title: "Executive Recovery Protocol", desc: "Advanced recovery techniques for the frequent business traveler.", duration: "2 Weeks", price: "$14", icon: "✈️" },
   ];
-
-  const golfPrograms = [
-    { title: "Swing Reset", desc: "TPI-certified golf mobility program — 4 weeks to unlock your swing potential.", duration: "4 Weeks", price: "$97", icon: "⛳", link: STRIPE_LINKS.swingReset },
-    { title: "Long Game", desc: "Advanced golf fitness — build rotational power and consistency over 6 weeks.", duration: "6 Weeks", price: "$247", icon: "🏌️", link: STRIPE_LINKS.longGame },
-  ];
-
-  const bundleProgram = { title: "Complete Arsenal", desc: "All 6 StrongHold programs — the complete training library. Everything you need, nothing you don't.", price: "$597", icon: "⚡", link: STRIPE_LINKS.completeArsenal };
-
-  const renderCard = (prog, i, delay) => (
-    <div
-      key={i}
-      style={{
-        background: HOTEL_CONFIG.cardBg,
-        border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-        borderRadius: 14,
-        padding: "20px 18px",
-        marginBottom: 12,
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(12px)",
-        transition: `all 0.4s ease ${delay}ms`,
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <div style={{
-        position: "absolute", top: 0, right: 0,
-        background: HOTEL_CONFIG.accent, color: "#fff",
-        padding: "6px 14px", borderRadius: "0 0 0 12px",
-        fontSize: 13, fontWeight: 700, fontFamily: "'Lato', sans-serif",
-      }}>
-        {prog.price}
-      </div>
-      <div style={{ display: "flex", gap: 14 }}>
-        <span style={{ fontSize: 28, marginTop: 2 }}>{prog.icon}</span>
-        <div style={{ flex: 1, paddingRight: 40 }}>
-          <h3 style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 17, margin: "0 0 6px", fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{prog.title}</h3>
-          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 10px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>{prog.desc}</p>
-          {prog.duration && <span style={{
-            fontSize: 11, color: HOTEL_CONFIG.accent, fontWeight: 600,
-            background: `${HOTEL_CONFIG.accent}12`, padding: "4px 12px",
-            borderRadius: 12, fontFamily: "'Lato', sans-serif",
-          }}>{prog.duration}</span>}
-        </div>
-      </div>
-      <button
-        onClick={() => { track('storefront_click', { program: prog.title, price: prog.price }); window.open(prog.link, '_blank'); }}
-        style={{
-          width: "100%", marginTop: 16, padding: "12px",
-          background: "transparent", border: `1px solid ${HOTEL_CONFIG.accent}40`,
-          borderRadius: 8, color: HOTEL_CONFIG.accent,
-          fontSize: 12, fontWeight: 700, letterSpacing: 1,
-          cursor: "pointer", fontFamily: "'Lato', sans-serif",
-          transition: "all 0.2s",
-        }}
-        onMouseEnter={(e) => { e.currentTarget.style.background = `${HOTEL_CONFIG.accent}15`; }}
-        onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
-      >
-        GET PROGRAM
-      </button>
-    </div>
-  );
 
   return (
     <div style={{ opacity: visible ? 1 : 0, transition: "opacity 0.4s ease" }}>
@@ -1437,65 +1364,67 @@ function PremiumScreen({ onBack }) {
         </p>
       </div>
 
-      <div style={{ padding: "20px 20px 8px" }}>
-        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>STRENGTH & CONDITIONING</p>
-        {scPrograms.map((prog, i) => renderCard(prog, i, i * 100))}
-      </div>
-
-      <div style={{ padding: "12px 20px 8px" }}>
-        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>TPI CERTIFIED GOLF FITNESS</p>
-        {golfPrograms.map((prog, i) => renderCard(prog, i, (i + 3) * 100))}
-      </div>
-
-      <div style={{ padding: "12px 20px 32px" }}>
-        <p style={{ fontSize: 11, letterSpacing: 3, color: HOTEL_CONFIG.accent, fontWeight: 600, margin: "0 0 14px", fontFamily: "'Lato', sans-serif" }}>THE COMPLETE PACKAGE</p>
-        <div style={{
-          background: HOTEL_CONFIG.cardBg,
-          border: `2px solid ${HOTEL_CONFIG.accent}40`,
-          borderRadius: 14,
-          padding: "24px 18px",
-          marginBottom: 16,
-          position: "relative",
-          overflow: "hidden",
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(12px)",
-          transition: "all 0.4s ease 500ms",
-        }}>
-          <div style={{
-            position: "absolute", top: 0, right: 0,
-            background: HOTEL_CONFIG.accent, color: "#fff",
-            padding: "8px 16px", borderRadius: "0 0 0 12px",
-            fontSize: 15, fontWeight: 700, fontFamily: "'Lato', sans-serif",
-          }}>
-            {bundleProgram.price}
-          </div>
-          <div style={{ display: "flex", gap: 14 }}>
-            <span style={{ fontSize: 32, marginTop: 2 }}>{bundleProgram.icon}</span>
-            <div style={{ flex: 1, paddingRight: 40 }}>
-              <h3 style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 20, margin: "0 0 6px", fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{bundleProgram.title}</h3>
-              <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 10px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>{bundleProgram.desc}</p>
-              <span style={{
-                fontSize: 11, color: HOTEL_CONFIG.accent, fontWeight: 600,
-                background: `${HOTEL_CONFIG.accent}12`, padding: "4px 12px",
-                borderRadius: 12, fontFamily: "'Lato', sans-serif",
-              }}>ALL 6 PROGRAMS</span>
-            </div>
-          </div>
-          <button
-            onClick={() => { track('storefront_click', { program: 'Complete Arsenal', price: '$597' }); window.open(bundleProgram.link, '_blank'); }}
+      <div style={{ padding: "20px 20px 32px" }}>
+        {programs.map((prog, i) => (
+          <div
+            key={i}
             style={{
-              width: "100%", marginTop: 16, padding: "14px",
-              background: HOTEL_CONFIG.accent, color: "#fff",
-              border: "none", borderRadius: 8,
-              fontSize: 13, fontWeight: 700, letterSpacing: 1.5,
+              background: HOTEL_CONFIG.cardBg,
+              border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
+              borderRadius: 14,
+              padding: "20px 18px",
+              marginBottom: 12,
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(12px)",
+              transition: `all 0.4s ease ${i * 100}ms`,
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div style={{
+              position: "absolute", top: 0, right: 0,
+              background: HOTEL_CONFIG.accent, color: HOTEL_CONFIG.dark,
+              padding: "6px 14px", borderRadius: "0 0 0 12px",
+              fontSize: 13, fontWeight: 700, fontFamily: "'Lato', sans-serif",
+            }}>
+              {prog.price}
+            </div>
+            <div style={{ display: "flex", gap: 14 }}>
+              <span style={{ fontSize: 28, marginTop: 2 }}>{prog.icon}</span>
+              <div style={{ flex: 1, paddingRight: 40 }}>
+                <h3 style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 17, margin: "0 0 6px", fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{prog.title}</h3>
+                <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 10px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>{prog.desc}</p>
+                <span style={{
+                  fontSize: 11, color: HOTEL_CONFIG.accent, fontWeight: 600,
+                  background: `${HOTEL_CONFIG.accent}12`, padding: "4px 12px",
+                  borderRadius: 12, fontFamily: "'Lato', sans-serif",
+                }}>{prog.duration}</span>
+              </div>
+            </div>
+            <button style={{
+              width: "100%", marginTop: 16, padding: "12px",
+              background: "transparent", border: `1px solid ${HOTEL_CONFIG.accent}40`,
+              borderRadius: 8, color: HOTEL_CONFIG.accent,
+              fontSize: 12, fontWeight: 700, letterSpacing: 1,
               cursor: "pointer", fontFamily: "'Lato', sans-serif",
               transition: "all 0.2s",
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accentLight}
-            onMouseLeave={(e) => e.currentTarget.style.background = HOTEL_CONFIG.accent}
-          >
-            GET THE COMPLETE ARSENAL
-          </button>
+            onMouseEnter={(e) => { e.currentTarget.style.background = `${HOTEL_CONFIG.accent}15`; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+            >
+              UNLOCK PROGRAM
+            </button>
+          </div>
+        ))}
+
+        <div style={{
+          textAlign: "center", padding: "16px",
+          background: `${HOTEL_CONFIG.accent}08`, borderRadius: 12,
+          border: `1px dashed ${HOTEL_CONFIG.accent}25`,
+        }}>
+          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, fontFamily: "'Lato', sans-serif" }}>
+            Have an access code? <span style={{ color: HOTEL_CONFIG.accent, cursor: "pointer" }}>Enter it here</span>
+          </p>
         </div>
       </div>
     </div>
@@ -1511,7 +1440,6 @@ function UnlockScreen({ session, onBack, onNavigate }) {
   const lockedSessions = sessions.filter(s => !s.free);
 
   const handleSubmit = () => {
-    track('access_code_submit', { code: code });
     // In production, validate against your backend
     setError(true);
     setTimeout(() => setError(false), 2000);
@@ -1570,9 +1498,7 @@ function UnlockScreen({ session, onBack, onNavigate }) {
         </div>
 
         {/* Purchase Button */}
-        <button
-          onClick={() => { track('premium_unlock_click', { price: 29 }); window.open(STRIPE_LINKS.premiumUnlock, '_blank'); }}
-          style={{
+        <button style={{
           width: "100%", padding: "16px",
           background: HOTEL_CONFIG.accent, color: HOTEL_CONFIG.dark,
           border: "none", borderRadius: 12,
@@ -1847,14 +1773,11 @@ function HotelWellnessPortal() {
     if (target === "session") {
       setSelectedSession(data);
       setScreen("session");
-      track('screen_view', { screen: 'session', session_title: data?.title });
     } else if (target === "unlock") {
       setSelectedSession(data || null);
       setScreen("unlock");
-      track('screen_view', { screen: 'unlock' });
     } else {
       setScreen(target);
-      track('screen_view', { screen: target });
     }
     scrollToTop();
   };
@@ -1862,7 +1785,6 @@ function HotelWellnessPortal() {
   const goHome = () => {
     setScreen("home");
     setSelectedSession(null);
-    track('screen_view', { screen: 'home' });
     scrollToTop();
   };
 
@@ -1878,7 +1800,7 @@ function HotelWellnessPortal() {
     }}>
       
       {/* Top accent line */}
-      <div ref={topRef} style={{ width: "100%", height: 3, background: `linear-gradient(90deg, transparent, ${HOTEL_CONFIG.accent}, transparent)` }} />
+      <div ref={topRef} style={{ width: "100%", height: 3, background: `linear-gradient(90deg, transparent, ${HOTEL_CONFIG.accent}, transparent)`, scrollMarginTop: 0 }} />
 
       {/* Intro Video Modal */}
       {showIntro && <IntroModal onClose={() => setShowIntro(false)} />}
