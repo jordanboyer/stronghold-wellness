@@ -453,6 +453,33 @@ const sessions = [
 ];
 
 // Timer component
+
+const EXERCISE_VIDEOS = {
+  "Bodyweight Squat": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404517/squat_hkoweg.mp4",
+  "Bodyweight Squat (3s Lowering)": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404517/squat_hkoweg.mp4",
+  "Incline Push-Up": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404501/push-up_gtneq5.mp4",
+  "Push-Up": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404501/push-up_gtneq5.mp4",
+  "Glute Bridge": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404458/glute-bridge_vamxhv.mp4",
+  "Reverse Lunge": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404508/reverse-lunge_vmg114.mp4",
+  "Plank Hold": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404493/plank_nkkcdd.mp4",
+  "Dead Bug": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404434/deadbug_qaas1b.mp4",
+  "Bird Dogs": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404428/bird-dogs_defouj.mp4",
+  "Bird Dog": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404428/bird-dogs_defouj.mp4",
+  "Lying YTI": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404464/lying-yti_qsqmko.mp4",
+  "YT Raise": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404524/yt-raise_vydf9k.mp4",
+  "Bent-Over YT": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404524/yt-raise_vydf9k.mp4",
+  "Prone Y-T-I Raise": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404464/lying-yti_qsqmko.mp4",
+  "Goblet Squat": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404517/squat_hkoweg.mp4",
+  "Front Squat": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404517/squat_hkoweg.mp4",
+  "Tempo Goblet Squat (3-1-1-1)": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404517/squat_hkoweg.mp4",
+  "Push-Up w/ 3s Eccentric": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404501/push-up_gtneq5.mp4",
+  "Push-Up to Plank Shoulder Tap": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404501/push-up_gtneq5.mp4",
+  "Bulgarian Split Squat": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404508/reverse-lunge_vmg114.mp4",
+  "Plank Row to Rotation": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404493/plank_nkkcdd.mp4",
+  "Squat Jump (or Squat)": "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404517/squat_hkoweg.mp4",
+};
+const INTRO_VIDEO_URL = "https://res.cloudinary.com/di5rmfhf7/video/upload/v1774404251/intro_wtdoyf.mp4";
+
 function Timer({ duration, onComplete }) {
   const [timeLeft, setTimeLeft] = useState(duration);
   const [running, setRunning] = useState(false);
@@ -1176,14 +1203,23 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
                   }}>
                     <span style={{ fontSize: 10, color: "rgba(44,36,32,0.4)" }}>🔇</span>
                   </div>
-                  <div style={{
-                    width: 44, height: 44, borderRadius: "50%",
-                    background: "rgba(123,45,62,0.06)", border: "1px solid rgba(123,45,62,0.15)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <span style={{ fontSize: 20 }}>🏋️</span>
-                  </div>
-                  <p style={{ color: "rgba(44,36,32,0.35)", fontSize: 10, marginTop: 6, fontFamily: "'Lato', sans-serif" }}>Demo video placeholder</p>
+                  {EXERCISE_VIDEOS[ex.name] ? (
+                    <video
+                      src={EXERCISE_VIDEOS[ex.name]}
+                      style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", top: 0, left: 0, background: "#000" }}
+                      autoPlay loop muted playsInline
+                    />
+                  ) : (
+                    <>
+                      <div style={{
+                        width: 44, height: 44, borderRadius: "50%",
+                        background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>
+                        <span style={{ fontSize: 20 }}>🏋️</span>
+                      </div>
+                    </>
+                  )}
                 </div>
                 {/* Exercise info */}
                 <div style={{ padding: "14px 16px" }}>
@@ -1291,7 +1327,13 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
                           }}>
                             <span style={{ fontSize: 16 }}>🏋️</span>
                           </div>
-                          <p style={{ color: "rgba(44,36,32,0.3)", fontSize: 9, marginTop: 4, fontFamily: "'Lato', sans-serif" }}>Demo video</p>
+                          {EXERCISE_VIDEOS[ex.name] && (
+                            <video
+                              src={EXERCISE_VIDEOS[ex.name]}
+                              style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", top: 0, left: 0, borderRadius: 8, background: "#000" }}
+                              autoPlay loop muted playsInline
+                            />
+                          )}
                         </div>
                         {/* Exercise details */}
                         <div style={{
@@ -1702,17 +1744,13 @@ function AboutScreen({ onBack }) {
       <div style={{ padding: "0 24px 32px" }}>
         <div style={{
           background: HOTEL_CONFIG.cardBg, border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-          borderRadius: 12, height: 140, display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
+          borderRadius: 12, overflow: "hidden",
         }}>
-          <div style={{
-            width: 48, height: 48, borderRadius: "50%", background: `${HOTEL_CONFIG.accent}15`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            border: `1px solid ${HOTEL_CONFIG.accent}40`, marginBottom: 8,
-          }}>
-            <span style={{ fontSize: 18, marginLeft: 2 }}>▶</span>
-          </div>
-          <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0, fontFamily: "'Lato', sans-serif" }}>Intro Video</p>
+          <video
+            src={INTRO_VIDEO_URL}
+            style={{ width: "100%", height: "100%", objectFit: "contain", background: "#000", borderRadius: 12 }}
+            controls playsInline
+          />
         </div>
       </div>
     </div>
@@ -2242,30 +2280,18 @@ function IntroModal({ onClose }) {
               </span>
             </div>
 
-            {/* Play Button */}
-            <div style={{
-              width: 80, height: 80, borderRadius: "50%",
-              background: `${HOTEL_CONFIG.accent}20`,
-              border: `2px solid ${HOTEL_CONFIG.accent}50`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer",
-              marginBottom: 16,
-              transition: "all 0.3s ease",
-              animation: "pulse-glow 2s ease-in-out infinite",
-            }}>
-              <span style={{ fontSize: 30, marginLeft: 5, color: HOTEL_CONFIG.accent }}>▶</span>
-            </div>
+            <video
+              src={INTRO_VIDEO_URL}
+              style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", top: 0, left: 0, background: "#000", borderRadius: "16px 16px 0 0" }}
+              controls playsInline
+            />
             <p style={{
-              color: HOTEL_CONFIG.textPrimary, fontSize: 16, margin: "0 0 4px",
+              position: "absolute", bottom: 16, left: 0, right: 0, textAlign: "center",
+              color: HOTEL_CONFIG.textPrimary, fontSize: 14, margin: 0,
               fontWeight: 400, fontFamily: "'Playfair Display', serif",
+              textShadow: "0 1px 8px rgba(0,0,0,0.8)",
             }}>
               A Message From Your Coach
-            </p>
-            <p style={{
-              color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: 0,
-              fontFamily: "'Lato', sans-serif",
-            }}>
-              Tap to play intro
             </p>
           </div>
 
