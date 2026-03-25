@@ -1169,8 +1169,8 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
               >
                 {/* Looping video demo — autoplays muted */}
                 <div style={{
-                  width: "100%", aspectRatio: "16/9",
-                  background: `linear-gradient(135deg, ${HOTEL_CONFIG.dark}, ${session.color}06)`,
+                  width: "100%", aspectRatio: "4/5",
+                  background: HOTEL_CONFIG.dark,
                   display: "flex", flexDirection: "column",
                   alignItems: "center", justifyContent: "center",
                   position: "relative", borderBottom: `1px solid ${HOTEL_CONFIG.cardBorder}`,
@@ -1206,7 +1206,7 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
                   {EXERCISE_VIDEOS[ex.name] ? (
                     <video
                       src={EXERCISE_VIDEOS[ex.name]}
-                      style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", top: 0, left: 0, background: "#000" }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }}
                       autoPlay loop muted playsInline
                     />
                   ) : (
@@ -1295,8 +1295,8 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
                       }}>
                         {/* Looping video demo per exercise */}
                         <div style={{
-                          width: "100%", aspectRatio: "16/9",
-                          background: `linear-gradient(135deg, ${HOTEL_CONFIG.dark}, ${session.color}06)`,
+                          width: "100%", aspectRatio: "4/5",
+                          background: HOTEL_CONFIG.dark,
                           borderRadius: "10px 10px 0 0",
                           display: "flex", flexDirection: "column",
                           alignItems: "center", justifyContent: "center",
@@ -1330,7 +1330,7 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
                           {EXERCISE_VIDEOS[ex.name] && (
                             <video
                               src={EXERCISE_VIDEOS[ex.name]}
-                              style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", top: 0, left: 0, borderRadius: 8, background: "#000" }}
+                              style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0, borderRadius: 8 }}
                               autoPlay loop muted playsInline
                             />
                           )}
@@ -2282,7 +2282,7 @@ function IntroModal({ onClose }) {
 
             <video
               src={INTRO_VIDEO_URL}
-              style={{ width: "100%", height: "100%", objectFit: "contain", position: "absolute", top: 0, left: 0, background: "#000", borderRadius: "16px 16px 0 0" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0, borderRadius: "16px 16px 0 0" }}
               controls playsInline
             />
             <p style={{
