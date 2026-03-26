@@ -1167,74 +1167,55 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
                   transition: `all 0.4s ease ${i * 60}ms`,
                 }}
               >
-                {/* Looping video demo — autoplays muted */}
-                <div style={{
-                  width: "100%", aspectRatio: "4/5",
-                  background: HOTEL_CONFIG.dark,
-                  display: "flex", flexDirection: "column",
-                  alignItems: "center", justifyContent: "center",
-                  position: "relative", borderBottom: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-                }}>
-                  {/* Looping indicator */}
+                <div style={{ display: "flex" }}>
+                  {/* Video thumbnail */}
                   <div style={{
-                    position: "absolute", top: 10, right: 10,
-                    display: "flex", alignItems: "center", gap: 5,
-                    background: "rgba(44,36,32,0.55)", borderRadius: 12,
-                    padding: "4px 10px",
+                    width: 120, minHeight: 140, flexShrink: 0,
+                    background: HOTEL_CONFIG.dark,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    position: "relative",
+                    borderRight: `1px solid ${HOTEL_CONFIG.cardBorder}`,
                   }}>
-                    <span style={{ fontSize: 8, color: "#4ade80" }}>●</span>
-                    <span style={{ fontSize: 9, color: "rgba(44,36,32,0.6)", fontFamily: "'Lato', sans-serif", letterSpacing: 1 }}>LOOPING</span>
-                  </div>
-                  {/* Exercise number overlay */}
-                  <div style={{
-                    position: "absolute", top: 10, left: 10,
-                    width: 28, height: 28, borderRadius: 8,
-                    background: `${session.color}30`, display: "flex",
-                    alignItems: "center", justifyContent: "center",
-                    fontSize: 13, color: session.color, fontWeight: 700, fontFamily: "'Lato', sans-serif",
-                  }}>
-                    {i + 1}
-                  </div>
-                  {/* Muted indicator */}
-                  <div style={{
-                    position: "absolute", bottom: 10, right: 10,
-                    background: "rgba(44,36,32,0.55)", borderRadius: 6,
-                    padding: "3px 8px", display: "flex", alignItems: "center", gap: 4,
-                  }}>
-                    <span style={{ fontSize: 10, color: "rgba(44,36,32,0.4)" }}>🔇</span>
-                  </div>
-                  {EXERCISE_VIDEOS[ex.name] ? (
-                    <video
-                      src={EXERCISE_VIDEOS[ex.name]}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }}
-                      autoPlay loop muted playsInline
-                    />
-                  ) : (
-                    <>
+                    <div style={{
+                      position: "absolute", top: 8, left: 8,
+                      width: 24, height: 24, borderRadius: 6,
+                      background: `${session.color}30`, display: "flex",
+                      alignItems: "center", justifyContent: "center",
+                      fontSize: 12, color: session.color, fontWeight: 700, fontFamily: "'Lato', sans-serif",
+                      zIndex: 2,
+                    }}>
+                      {i + 1}
+                    </div>
+                    {EXERCISE_VIDEOS[ex.name] ? (
+                      <video
+                        src={EXERCISE_VIDEOS[ex.name]}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }}
+                        autoPlay loop muted playsInline
+                      />
+                    ) : (
                       <div style={{
-                        width: 44, height: 44, borderRadius: "50%",
-                        background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+                        width: 36, height: 36, borderRadius: "50%",
+                        background: "rgba(123,45,62,0.06)", border: "1px solid rgba(123,45,62,0.15)",
                         display: "flex", alignItems: "center", justifyContent: "center",
                       }}>
-                        <span style={{ fontSize: 20 }}>🏋️</span>
+                        <span style={{ fontSize: 16 }}>🏋️</span>
                       </div>
-                    </>
-                  )}
-                </div>
-                {/* Exercise info */}
-                <div style={{ padding: "14px 16px" }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 6 }}>
-                    <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 16, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{ex.name}</span>
-                    <span style={{
-                      background: `${session.color}18`, color: session.color,
-                      padding: "3px 10px", borderRadius: 20, fontSize: 11, fontWeight: 600,
-                      whiteSpace: "nowrap", marginLeft: 10, fontFamily: "'Lato', sans-serif",
-                    }}>{ex.reps}</span>
+                    )}
                   </div>
-                  <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 13, margin: "0 0 12px", lineHeight: 1.5, fontStyle: "italic", fontFamily: "'Lato', sans-serif" }}>
-                    {ex.cue}
-                  </p>
-                  <Timer duration={parseDuration(ex.duration)} />
+                  {/* Exercise info */}
+                  <div style={{ flex: 1, padding: "14px 16px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }}>
+                      <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 15, fontWeight: 500, fontFamily: "'Playfair Display', serif" }}>{ex.name}</span>
+                    </div>
+                    <span style={{
+                      color: session.color, fontSize: 12, fontWeight: 600,
+                      fontFamily: "'Lato', sans-serif", marginBottom: 6,
+                    }}>{ex.reps}</span>
+                    <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: "0 0 8px", lineHeight: 1.5, fontStyle: "italic", fontFamily: "'Lato', sans-serif" }}>
+                      {ex.cue}
+                    </p>
+                    <Timer duration={parseDuration(ex.duration)} />
+                  </div>
                 </div>
               </div>
             ))}
@@ -1293,56 +1274,39 @@ function SessionScreen({ session, onBack, onNavigate, onComplete, isCompleted })
                         padding: "0 12px",
                         marginBottom: ei < circuit.exercises.length - 1 ? 6 : 0,
                       }}>
-                        {/* Looping video demo per exercise */}
                         <div style={{
-                          width: "100%", aspectRatio: "4/5",
-                          background: HOTEL_CONFIG.dark,
-                          borderRadius: "10px 10px 0 0",
-                          display: "flex", flexDirection: "column",
-                          alignItems: "center", justifyContent: "center",
-                          position: "relative",
+                          display: "flex",
                           border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-                          borderBottom: "none",
+                          borderRadius: 10,
+                          overflow: "hidden",
+                          background: HOTEL_CONFIG.cardBg,
                         }}>
                           <div style={{
-                            position: "absolute", top: 8, right: 8,
-                            display: "flex", alignItems: "center", gap: 4,
-                            background: "rgba(44,36,32,0.6)", borderRadius: 10,
-                            padding: "3px 8px",
-                          }}>
-                            <span style={{ fontSize: 7, color: "#4ade80" }}>●</span>
-                            <span style={{ fontSize: 8, color: "rgba(44,36,32,0.55)", fontFamily: "'Lato', sans-serif", letterSpacing: 1 }}>LOOPING</span>
-                          </div>
-                          <div style={{
-                            position: "absolute", bottom: 8, right: 8,
-                            background: "rgba(44,36,32,0.55)", borderRadius: 5,
-                            padding: "2px 6px",
-                          }}>
-                            <span style={{ fontSize: 9, color: "rgba(44,36,32,0.35)" }}>🔇</span>
-                          </div>
-                          <div style={{
-                            width: 36, height: 36, borderRadius: "50%",
-                            background: "rgba(123,45,62,0.05)", border: "1px solid rgba(123,45,62,0.1)",
+                            width: 100, minHeight: 110, flexShrink: 0,
+                            background: HOTEL_CONFIG.dark,
                             display: "flex", alignItems: "center", justifyContent: "center",
+                            position: "relative",
                           }}>
-                            <span style={{ fontSize: 16 }}>🏋️</span>
+                            {EXERCISE_VIDEOS[ex.name] ? (
+                              <video
+                                src={EXERCISE_VIDEOS[ex.name]}
+                                style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }}
+                                autoPlay loop muted playsInline
+                              />
+                            ) : (
+                              <div style={{
+                                width: 32, height: 32, borderRadius: "50%",
+                                background: "rgba(123,45,62,0.06)", border: "1px solid rgba(123,45,62,0.1)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                              }}>
+                                <span style={{ fontSize: 14 }}>🏋️</span>
+                              </div>
+                            )}
                           </div>
-                          {EXERCISE_VIDEOS[ex.name] && (
-                            <video
-                              src={EXERCISE_VIDEOS[ex.name]}
-                              style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0, borderRadius: 8 }}
-                              autoPlay loop muted playsInline
-                            />
-                          )}
-                        </div>
-                        {/* Exercise details */}
-                        <div style={{
-                          padding: "12px 14px",
-                          background: `${session.color}06`,
-                          border: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-                          borderTop: `1px solid ${HOTEL_CONFIG.cardBorder}`,
-                          borderRadius: "0 0 10px 10px",
-                        }}>
+                          <div style={{
+                            flex: 1, padding: "12px 14px",
+                            display: "flex", flexDirection: "column", justifyContent: "center",
+                          }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 5 }}>
                             <span style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 14, fontWeight: 500, fontFamily: "'Lato', sans-serif" }}>{ex.name}</span>
                             <span style={{
