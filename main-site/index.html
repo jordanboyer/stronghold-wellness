@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StrongHold Fitness — Move Better. Feel Stronger.</title>
+  <meta name="description" content="Personal training by Jordan Boyer. TPI Golf Fitness Specialist. In-person in Charlotte, NC. Online and in luxury hotels nationwide." />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d1117; --card: #161b22; --border: rgba(240,236,228,0.06);
+      --cream: #f0ece4; --muted: rgba(240,236,228,0.55);
+      --purple: #9B40C2; --deep: #381045;
+      --teal: #00788C; --golf: #4e7a5b;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--cream);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ===== DIAGONAL SILK TEXTURE ===== */
+    body::after {
+      content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 9999; opacity: 0.35;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(240,236,228,0.15) 1px, rgba(240,236,228,0.15) 2px);
+      background-size: 8px 8px;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(13,17,23,0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand { font-size: 13px; letter-spacing: 4px; font-weight: 700; color: var(--cream); }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      font-size: 12px; letter-spacing: 3px; font-weight: 600;
+      color: var(--muted); transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links a { font-size: 11px; letter-spacing: 2px; }
+    }
+
+    /* ===== PHOTO SECTIONS ===== */
+    .photo-sect {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .photo-sect .bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+    }
+    .photo-sect .overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(13,17,23,0.6) 0%, rgba(13,17,23,0.75) 50%, rgba(13,17,23,0.95) 100%);
+    }
+    .photo-sect .content {
+      position: relative; z-index: 2;
+      max-width: 680px; padding: 120px 32px 80px;
+      text-align: center;
+    }
+
+    /* ===== HERO ===== */
+    .hero-logo {
+      width: 240px; max-width: 70%; height: auto;
+      margin: 0 auto 32px; border-radius: 12px; overflow: hidden;
+    }
+    .hero-logo img { width: 100%; height: auto; display: block; }
+    .hero-tag {
+      font-size: 13px; letter-spacing: 5px; color: var(--cream);
+      font-weight: 600; margin-bottom: 24px;
+      background: rgba(155,64,194,0.25); padding: 8px 20px; border-radius: 30px;
+      display: inline-block; border: 1px solid rgba(155,64,194,0.3);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 7vw, 68px); font-weight: 300;
+      line-height: 1.1; margin-bottom: 24px; color: var(--cream);
+    }
+    .hero-title em { font-style: italic; color: var(--purple); }
+    .hero-sub {
+      font-size: 17px; color: var(--muted); line-height: 1.8;
+      font-weight: 300; margin-bottom: 40px; max-width: 480px; margin-left: auto; margin-right: auto;
+    }
+    .cta-primary {
+      display: inline-block; padding: 16px 40px;
+      background: var(--purple); color: #fff;
+      font-size: 12px; letter-spacing: 3px; font-weight: 700;
+      border-radius: 6px; transition: all 0.4s;
+      position: relative; overflow: hidden;
+    }
+    .cta-primary:hover { box-shadow: 0 8px 32px rgba(155,64,194,0.3); transform: translateY(-1px); }
+    .cta-primary::after {
+      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      animation: shimmer 4s infinite;
+    }
+    @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
+
+    /* ===== TICKER ===== */
+    .ticker-wrap {
+      overflow: hidden; background: var(--deep);
+      border-top: 1px solid rgba(155,64,194,0.15);
+      border-bottom: 1px solid rgba(155,64,194,0.15);
+      padding: 14px 0;
+    }
+    .ticker {
+      display: flex; gap: 48px; white-space: nowrap;
+      animation: tickerScroll 30s linear infinite;
+      font-size: 13px; letter-spacing: 3px; font-weight: 600; color: var(--muted);
+    }
+    .ticker span::before { content: '✦  '; color: var(--purple); }
+    @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ===== DARK CONTENT SECTIONS ===== */
+    .sect { max-width: 800px; margin: 0 auto; padding: 100px 32px; }
+    .sect-tag { font-size: 12px; letter-spacing: 4px; color: var(--purple); font-weight: 700; margin-bottom: 12px; }
+    .sect-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 5vw, 42px); font-weight: 300;
+      line-height: 1.15; margin-bottom: 16px; color: var(--cream);
+    }
+    .sect-body { font-size: 17px; color: var(--muted); line-height: 1.8; font-weight: 300; max-width: 540px; }
+
+    /* ===== TWO WORLDS ===== */
+    .worlds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; max-width: 640px; }
+    @media (max-width: 600px) { .worlds-grid { grid-template-columns: 1fr; } }
+    .world-card {
+      background: rgba(13,17,23,0.8);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border); border-radius: 16px; padding: 28px 22px;
+      transition: all 0.4s;
+    }
+    .world-card:hover { border-color: rgba(155,64,194,0.2); transform: translateY(-2px); }
+    .wc-icon { font-size: 28px; margin-bottom: 12px; }
+    .wc-label { font-size: 11px; letter-spacing: 3px; font-weight: 700; margin-bottom: 6px; }
+    .wc-train .wc-label { color: var(--purple); }
+    .wc-wellness .wc-label { color: var(--teal); }
+    .wc-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; margin-bottom: 10px; color: var(--cream);
+    }
+    .wc-desc { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 16px; }
+    .wc-link {
+      font-size: 12px; letter-spacing: 2px; font-weight: 700;
+      transition: color 0.3s; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .wc-train .wc-link { color: var(--purple); }
+    .wc-wellness .wc-link { color: var(--teal); }
+
+    /* ===== DIVIDER ===== */
+    .div-line {
+      width: 1px; height: 60px; margin: 0 auto;
+      background: linear-gradient(180deg, transparent, var(--purple), transparent);
+      position: relative;
+    }
+    .div-line::after {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--purple); box-shadow: 0 0 12px rgba(155,64,194,0.4);
+    }
+
+    /* ===== GOLF ===== */
+    .golf-wrap {
+      background: rgba(13,17,23,0.8);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 48px 36px; margin-top: 20px;
+      position: relative; overflow: hidden; max-width: 640px;
+    }
+    .golf-wrap::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(78,122,91,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .golf-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; color: var(--cream);
+      margin-bottom: 14px; line-height: 1.3;
+    }
+    .golf-body { font-size: 15px; color: var(--muted); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
+    .golf-features { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 28px; }
+    @media (max-width: 500px) { .golf-features { grid-template-columns: 1fr; } }
+    .golf-feat {
+      font-size: 14px; color: var(--cream); font-weight: 300;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .golf-feat span { color: var(--golf); font-weight: 700; font-size: 16px; }
+    .cta-golf {
+      display: inline-block; padding: 14px 32px;
+      background: var(--golf); color: #fff;
+      font-size: 12px; letter-spacing: 3px; font-weight: 700;
+      border-radius: 6px; transition: all 0.3s;
+    }
+    .cta-golf:hover { box-shadow: 0 8px 24px rgba(78,122,91,0.25); }
+
+    /* ===== PROGRAMS ===== */
+    .prog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
+    @media (max-width: 600px) { .prog-grid { grid-template-columns: 1fr; } }
+    .prog-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 24px 20px; transition: all 0.35s ease; display: flex; flex-direction: column;
+    }
+    .prog-card:hover { border-color: rgba(155,64,194,0.25); box-shadow: 0 4px 24px rgba(155,64,194,0.06); transform: translateY(-2px); }
+    .prog-card.golf-prog:hover { border-color: rgba(78,122,91,0.25); box-shadow: 0 4px 24px rgba(78,122,91,0.06); }
+    .prog-tag { font-size: 11px; letter-spacing: 3px; font-weight: 700; margin-bottom: 10px; }
+    .prog-tag.purple { color: var(--purple); }
+    .prog-tag.green { color: var(--golf); }
+    .prog-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 400; color: var(--cream); margin-bottom: 8px;
+    }
+    .prog-desc { font-size: 14px; color: var(--muted); line-height: 1.6; font-weight: 300; margin-bottom: 16px; flex: 1; }
+    .prog-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .prog-price { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: var(--cream); }
+    .prog-buy {
+      padding: 12px 24px; border-radius: 6px; font-size: 12px; font-weight: 700;
+      letter-spacing: 2px; font-family: 'Outfit', sans-serif;
+      cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block;
+    }
+    .prog-buy.purple { background: var(--purple); color: #fff; border: none; }
+    .prog-buy.purple:hover { box-shadow: 0 4px 16px rgba(155,64,194,0.25); }
+    .prog-buy.green { background: var(--golf); color: #fff; border: none; }
+    .prog-buy.green:hover { box-shadow: 0 4px 16px rgba(78,122,91,0.25); }
+    .prog-bundle {
+      background: var(--card); border: 1px solid rgba(155,64,194,0.2); border-radius: 16px;
+      padding: 28px 24px; margin-top: 16px; text-align: center; transition: all 0.35s ease;
+    }
+    .prog-bundle:hover { border-color: rgba(155,64,194,0.35); box-shadow: 0 8px 32px rgba(155,64,194,0.08); }
+
+    /* ===== TESTIMONIALS ===== */
+    .reviews-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .reviews-stars { color: #f4b400; font-size: 20px; letter-spacing: 2px; }
+    .reviews-score {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; font-weight: 400; color: var(--cream);
+    }
+    .reviews-count { font-size: 14px; color: var(--muted); font-weight: 300; }
+    .reviews-google {
+      font-size: 12px; letter-spacing: 1px; color: var(--muted); font-weight: 400;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .review-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 32px;
+    }
+    @media (max-width: 700px) { .review-grid { grid-template-columns: 1fr; } }
+    .review-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+      transition: all 0.35s;
+    }
+    .review-card:hover {
+      border-color: rgba(155,64,194,0.2);
+      transform: translateY(-2px);
+    }
+    .review-text {
+      font-size: 15px; color: var(--muted); line-height: 1.7;
+      font-weight: 300; font-style: italic; margin-bottom: 16px;
+    }
+    .review-author {
+      display: flex; align-items: center; gap: 12px;
+      padding-top: 14px; border-top: 1px solid var(--border);
+    }
+    .review-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--purple); display: flex; align-items: center;
+      justify-content: center; font-size: 14px; font-weight: 700; color: #fff;
+    }
+    .review-name { font-size: 14px; font-weight: 600; color: var(--cream); }
+    .review-meta { font-size: 12px; color: var(--muted); font-weight: 300; }
+
+    /* ===== ABOUT ===== */
+    .about-grid {
+      display: grid; grid-template-columns: 280px 1fr;
+      gap: 40px; margin-top: 32px; align-items: start;
+    }
+    @media (max-width: 700px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+    .about-photo-wrap {
+      position: relative;
+    }
+    .about-photo {
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .about-photo img {
+      width: 100%; height: auto; display: block;
+    }
+    .about-photo::after {
+      content: ''; position: absolute; inset: 0;
+      border-radius: 16px;
+      box-shadow: inset 0 0 40px rgba(13,17,23,0.3);
+      pointer-events: none;
+    }
+    .about-creds { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .about-cred {
+      font-size: 12px; color: var(--teal);
+      background: rgba(0,120,140,0.08); border: 1px solid rgba(0,120,140,0.2);
+      padding: 5px 14px; border-radius: 20px; font-weight: 600; letter-spacing: 0.5px;
+    }
+    .about-bio { font-size: 16px; color: var(--muted); line-height: 1.8; font-weight: 300; }
+    .about-verse {
+      margin-top: 28px; padding: 20px 24px;
+      border-left: 2px solid rgba(155,64,194,0.2);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px; font-style: italic; color: rgba(240,236,228,0.5); line-height: 1.7;
+    }
+    .about-verse cite {
+      display: block; font-style: normal; font-family: 'Outfit', sans-serif;
+      font-size: 12px; letter-spacing: 2px; color: rgba(155,64,194,0.4);
+      margin-top: 10px; font-weight: 500;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 36px; }
+    @media (max-width: 700px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-item { margin-bottom: 24px; }
+    .contact-label { font-size: 12px; letter-spacing: 3px; color: var(--purple); font-weight: 700; margin-bottom: 6px; }
+    .contact-val { font-size: 16px; color: var(--muted); font-weight: 300; }
+    .contact-val a { color: var(--cream); border-bottom: 1px solid var(--border); transition: border-color 0.3s; }
+    .contact-val a:hover { border-color: var(--purple); }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 12px; letter-spacing: 2px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+    .form-input {
+      width: 100%; padding: 14px 16px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--cream); font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 300;
+      transition: border-color 0.3s; outline: none;
+    }
+    .form-input:focus { border-color: var(--purple); }
+    .form-input option, .form-input optgroup { background: var(--card); color: var(--cream); }
+    textarea.form-input { min-height: 100px; resize: vertical; }
+    .form-submit {
+      width: 100%; padding: 16px;
+      background: var(--purple); color: #fff; border: none; border-radius: 8px;
+      font-size: 13px; letter-spacing: 3px; font-weight: 700; font-family: 'Outfit', sans-serif;
+      cursor: pointer; transition: all 0.3s;
+    }
+    .form-submit:hover { box-shadow: 0 8px 24px rgba(155,64,194,0.25); }
+
+    /* ===== FOOTER ===== */
+    .footer { text-align: center; padding: 48px 32px; border-top: 1px solid var(--border); }
+    .footer-brand { font-size: 13px; letter-spacing: 4px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
+    .footer-copy { font-size: 13px; color: var(--muted); font-weight: 300; }
+
+    /* ===== SCROLL REVEALS ===== */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.rv1 { transition-delay: 0.1s; }
+    .reveal.rv2 { transition-delay: 0.2s; }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    .fade-up { opacity: 0; transform: translateY(20px); animation: fadeUp 0.8s ease forwards; }
+    .d1 { animation-delay: 0.1s; } .d2 { animation-delay: 0.3s; }
+    .d3 { animation-delay: 0.5s; } .d4 { animation-delay: 0.7s; }
+    .d5 { animation-delay: 0.9s; }
+    @keyframes fadeUp { to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-brand">STRONGHOLD FITNESS</span>
+    <div class="nav-links">
+      <a href="#golf">GOLF</a>
+      <a href="#programs">PROGRAMS</a>
+      <a href="#about">ABOUT</a>
+      <a href="#contact">CONTACT</a>
+    </div>
+  </nav>
+
+  <!-- HERO — kettlebell photo -->
+  <section class="photo-sect">
+    <div class="bg" style="background-image: url('hero-background.jpg');"></div>
+    <div class="overlay" style="background: linear-gradient(180deg, rgba(13,17,23,0.5) 0%, rgba(56,16,69,0.4) 40%, rgba(13,17,23,0.92) 100%);"></div>
+    <div class="content">
+      <div class="hero-logo fade-up d1">
+        <img src="logo.jpg" alt="StrongHold Fitness" />
+      </div>
+      <p class="hero-tag fade-up d2">PERSONAL TRAINING & WELLNESS</p>
+      <h1 class="hero-title fade-up d3">Move Better.<br><em>Feel Stronger.</em></h1>
+      <p class="hero-sub fade-up d4">
+        Personalized training built around how your body actually moves. In-person in Charlotte, NC. Online and in luxury hotels nationwide.
+      </p>
+      <a href="#contact" class="cta-primary fade-up d5">START YOUR JOURNEY</a>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>Now Accepting New Clients</span>
+      <span>Free Consultation</span>
+      <span>In-Person — Charlotte, NC</span>
+      <span>Online — Available Nationwide</span>
+      <span>TPI Golf Fitness Certified</span>
+      <span>Now Accepting New Clients</span>
+      <span>Free Consultation</span>
+      <span>In-Person — Charlotte, NC</span>
+      <span>Online — Available Nationwide</span>
+      <span>TPI Golf Fitness Certified</span>
+    </div>
+  </div>
+
+  <!-- TWO WORLDS — coaching photo -->
+  <section class="photo-sect" style="min-height: auto;">
+    <div class="bg" style="background-image: url('services-background.jpg');"></div>
+    <div class="overlay"></div>
+    <div class="content" style="max-width: 800px; padding-top: 80px; padding-bottom: 80px;">
+      <p class="sect-tag reveal">HOW WE WORK</p>
+      <h2 class="sect-title reveal rv1">Two ways to train with me</h2>
+      <p class="sect-body reveal rv2" style="margin: 0 auto 0;">
+        Whether you're local to Charlotte or experienced StrongHold Wellness at a hotel, there's a path designed for you.
+      </p>
+      <div class="worlds-grid" style="margin: 40px auto 0;">
+        <div class="world-card wc-train reveal rv1">
+          <img src="logo.jpg" alt="StrongHold Fitness" style="width: 48px; height: 48px; object-fit: contain; margin-bottom: 8px; border-radius: 6px;" />
+          <p class="wc-label">IN-PERSON</p>
+          <p class="wc-name">Train With Me</p>
+          <p class="wc-desc">1-on-1 personal training, partner sessions, and small group training. Charlotte, NC and surrounding areas. Programs built around your goals, your body, and your schedule.</p>
+          <a href="#contact" class="wc-link">BOOK A CONSULTATION →</a>
+        </div>
+        <div class="world-card wc-wellness reveal rv2">
+          <img src="https://wellness.strongholdfitness.co/logo.png" alt="StrongHold Wellness" style="width: 48px; height: 48px; object-fit: contain; margin-bottom: 8px; opacity: 0.9;" />
+          <p class="wc-label">ONLINE & HOTELS</p>
+          <p class="wc-name">StrongHold Wellness</p>
+          <p class="wc-desc">In-room wellness for luxury hotels across the country. Custom programs and coaching available online — anywhere. Personalized programming built around your movement screen.</p>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 4px;">
+            <a href="https://wellness.strongholdfitness.co/tailored" class="wc-link" style="margin-top: 0;">THE TAILORED APPROACH →</a>
+            <a href="https://wellness.strongholdfitness.co/golf" class="wc-link" style="margin-top: 0; color: #4E7A5B;">TPI GOLF-FITNESS →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line"></div>
+
+  <!-- GOLF FITNESS — golf swing photo -->
+  <section class="photo-sect" id="golf" style="min-height: auto;">
+    <div class="bg" style="background-image: url('golf-fitness-background.jpg');"></div>
+    <div class="overlay" style="background: linear-gradient(180deg, rgba(13,17,23,0.65) 0%, rgba(13,17,23,0.8) 50%, rgba(13,17,23,0.95) 100%);"></div>
+    <div class="content" style="max-width: 800px; padding-top: 80px; padding-bottom: 80px;">
+      <p class="sect-tag reveal" style="color: var(--golf);">SPECIALTY</p>
+      <h2 class="sect-title reveal rv1">Golf Fitness</h2>
+      <div class="golf-wrap reveal rv2">
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 24px;">
+          <div>
+            <p style="font-size: 14px; letter-spacing: 2px; color: var(--golf); font-weight: 700; margin-bottom: 2px;">TITLEIST PERFORMANCE INSTITUTE</p>
+            <p style="font-size: 13px; color: var(--muted); font-weight: 300;">Jordan Boyer — TPI Certified Fitness Professional</p>
+          </div>
+        </div>
+        <h3 class="golf-title">Unleash your power from the ground up</h3>
+        <p class="golf-body">As a Titleist Performance Institute certified trainer, I specialize in building stronger, more resilient golfers. We identify and correct the physical limitations in your swing to increase power, improve consistency, and reduce your risk of injury.</p>
+        <div class="golf-features">
+          <div class="golf-feat"><span>✓</span> TPI Movement Screen</div>
+          <div class="golf-feat"><span>✓</span> Rotational Power Training</div>
+          <div class="golf-feat"><span>✓</span> Hip & Thoracic Mobility</div>
+          <div class="golf-feat"><span>✓</span> Swing-Specific Programming</div>
+          <div class="golf-feat"><span>✓</span> Distance & Consistency Gains</div>
+          <div class="golf-feat"><span>✓</span> Injury Prevention</div>
+        </div>
+        <a href="https://wellness.strongholdfitness.co/golf" class="cta-golf">EXPLORE THE GOLF TRACK</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line"></div>
+
+  <!-- PROGRAMS -->
+  <section class="sect" id="programs">
+    <p class="sect-tag reveal">TRAINING PROGRAMS</p>
+    <h2 class="sect-title reveal rv1">Programs you can start today</h2>
+    <p class="sect-body reveal rv2">Structured training programs designed by a certified professional. Buy once, keep forever. Follow at your own pace, in your own space.</p>
+
+    <div style="margin-top: 36px;">
+      <p class="reveal" style="font-size: 12px; letter-spacing: 3px; color: var(--purple); font-weight: 700; margin-bottom: 16px;">STRENGTH & CONDITIONING</p>
+      <div class="prog-grid">
+        <div class="prog-card reveal rv1">
+          <p class="prog-tag purple">FOUNDATION</p>
+          <p class="prog-name">The StrongHold Method</p>
+          <p class="prog-desc">The complete strength & conditioning system. Build functional strength, improve mobility, and develop a body that performs — not just one that looks good.</p>
+          <div class="prog-bottom">
+            <span class="prog-price">$197</span>
+            <a href="https://buy.stripe.com/9B6dRb69h4iIcl2fys2cg07" target="_blank" class="prog-buy purple">BUY NOW</a>
+          </div>
+        </div>
+        <div class="prog-card reveal rv2">
+          <p class="prog-tag purple">CORE</p>
+          <p class="prog-name">Core Forge</p>
+          <p class="prog-desc">Targeted core training that goes beyond crunches. Build deep stability, anti-rotation strength, and a midsection that supports everything you do.</p>
+          <div class="prog-bottom">
+            <span class="prog-price">$147</span>
+            <a href="https://buy.stripe.com/4gM7sNdBJ8yYdp68602cg05" target="_blank" class="prog-buy purple">BUY NOW</a>
+          </div>
+        </div>
+        <div class="prog-card reveal rv1">
+          <p class="prog-tag purple">ENDURANCE</p>
+          <p class="prog-name">The Long Game</p>
+          <p class="prog-desc">Stamina, endurance, and sustained performance. For anyone who wants to go longer and recover faster — on the course, in the gym, or in life.</p>
+          <div class="prog-bottom">
+            <span class="prog-price">$247</span>
+            <a href="https://buy.stripe.com/14AaEZ9lt8yYbgY2LG2cg04" target="_blank" class="prog-buy purple">BUY NOW</a>
+          </div>
+        </div>
+        <div class="prog-card reveal rv2">
+          <p class="prog-tag purple">STRENGTH</p>
+          <p class="prog-name">Iron Range</p>
+          <p class="prog-desc">Pure strength development. Progressive overload, compound lifts, and structured programming for building serious, functional power.</p>
+          <div class="prog-bottom">
+            <span class="prog-price">$197</span>
+            <a href="https://buy.stripe.com/6oU14p55d02setaae82cg03" target="_blank" class="prog-buy purple">BUY NOW</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 36px;">
+      <p class="reveal" style="font-size: 12px; letter-spacing: 3px; color: var(--golf); font-weight: 700; margin-bottom: 16px;">⛳ TPI CERTIFIED GOLF FITNESS</p>
+      <div class="prog-grid">
+        <div class="prog-card golf-prog reveal rv1" style="grid-column: 1 / -1;">
+          <div style="display: flex; align-items: start; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+              <p class="prog-tag green">GOLF MOBILITY</p>
+              <p class="prog-name">Swing Reset</p>
+              <p class="prog-desc" style="margin-bottom: 0;">A golf-specific mobility program built on TPI methodology. Targets the rotation, hip mobility, and thoracic spine movement that directly translates to your swing. The perfect complement to any training program.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px; padding-top: 4px;">
+              <span class="prog-price">$97</span>
+              <a href="https://buy.stripe.com/8x2aEZ1T13eEbgYdqk2cg06" target="_blank" class="prog-buy green">BUY NOW</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prog-bundle reveal">
+      <p style="font-size: 12px; letter-spacing: 3px; color: var(--purple); font-weight: 700; margin-bottom: 8px;">BEST VALUE</p>
+      <p style="font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--cream); font-weight: 400; margin-bottom: 6px;">The Complete Arsenal</p>
+      <p style="font-size: 15px; color: var(--muted); margin-bottom: 16px; font-weight: 300;">
+        All five programs. Every session. Every coaching cue.
+        <span style="text-decoration: line-through; opacity: 0.5; margin-left: 6px;">$885</span>
+        <span style="color: var(--purple); font-weight: 700; margin-left: 6px; font-size: 20px;">$597</span>
+      </p>
+      <a href="https://buy.stripe.com/5kQcN77dl4iI5WEae82cg02" target="_blank" class="prog-buy purple" style="padding: 14px 36px; font-size: 13px;">GET THE COMPLETE ARSENAL</a>
+    </div>
+
+    <div class="reveal" style="text-align: center; margin-top: 32px;">
+      <p style="font-size: 15px; color: var(--muted); font-weight: 300; margin-bottom: 16px;">Want something built specifically for you?</p>
+      <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+        <a href="https://wellness.strongholdfitness.co/tailored" style="font-size: 13px; letter-spacing: 2px; color: var(--purple); font-weight: 700; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">THE TAILORED APPROACH →</a>
+        <span style="color: rgba(138,154,176,0.3);">|</span>
+        <a href="https://wellness.strongholdfitness.co/golf" style="font-size: 13px; letter-spacing: 2px; color: #4E7A5B; font-weight: 700; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">TPI GOLF-FITNESS →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line"></div>
+
+  <!-- TESTIMONIALS -->
+  <section class="sect">
+    <p class="sect-tag reveal">REAL RESULTS</p>
+    <h2 class="sect-title reveal rv1">What clients say</h2>
+    <div class="reviews-header reveal rv2">
+      <span class="reviews-score">5.0</span>
+      <span class="reviews-stars">★★★★★</span>
+
+
+    </div>
+
+    <div class="review-grid">
+      <div class="review-card reveal rv1">
+        <p class="review-text">"My husband and I have been training with Jordan for the past four years, and the experience has been truly life-changing. He is not only a great motivator but also a supportive friend who genuinely cares about our health and progress."</p>
+        <div class="review-author">
+          <div class="review-avatar">B</div>
+          <div>
+            <p class="review-name">Barbara G.</p>
+            <p class="review-meta">★★★★★</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal rv2">
+        <p class="review-text">"I used to weigh 240 lbs and now I'm down to 185 lbs. Jordan is passionate about what he does and he knows strength training better than anyone I've ever met. Honestly you cannot afford not to hire him — your health is the most important thing you've got."</p>
+        <div class="review-author">
+          <div class="review-avatar">T</div>
+          <div>
+            <p class="review-name">Thomas E.</p>
+            <p class="review-meta">★★★★★</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal rv1">
+        <p class="review-text">"I have been in the health and wellness field for over 32 years and he is one of the most passionate and hard working trainers out there — he sincerely cares about getting you results and what is going to work best for your situation."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background: var(--teal);">S</div>
+          <div>
+            <p class="review-name">Sue D.</p>
+            <p class="review-meta">★★★★★ · Health & Wellness Professional</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal rv2">
+        <p class="review-text">"We are 77 and 76 years old and highly respect Jordan Boyer. He understands the limits and challenges of our physical condition and uses a tough love approach to develop a sense of personal responsibility for our own health. A Physical Trainer of all ages!"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background: var(--golf);">A</div>
+          <div>
+            <p class="review-name">Andrea L.</p>
+            <p class="review-meta">★★★★★</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line"></div>
+
+  <!-- ABOUT -->
+  <section class="sect" id="about">
+    <p class="sect-tag reveal">YOUR COACH</p>
+    <h2 class="sect-title reveal rv1">Jordan Boyer</h2>
+
+    <div class="about-grid">
+      <div class="about-photo-wrap reveal rv1">
+        <div class="about-photo">
+          <img src="trainer-photo.jpg" alt="Jordan Boyer" />
+        </div>
+      </div>
+      <div class="reveal rv2">
+        <div class="about-creds">
+          <span class="about-cred">NSCA Certified — 10+ Years</span>
+          <span class="about-cred">TPI Certified</span>
+          <span class="about-cred">StrongHold Fitness, LLC</span>
+        </div>
+        <p class="about-bio">With over a decade of experience in fitness training, I've dedicated my career to helping people build practical, real-world strength. My focus is on functional training — mastering the movements essential for an active and healthy life — as well as sport-specific coaching for athletes, with a special emphasis on golf fitness.</p>
+        <p class="about-bio" style="margin-top: 16px;">My ultimate goal is to teach my clients not just how to exercise, but how to live a strong, healthy, and fruitful life. As a devoted husband and father to identical twin girls, I believe in building a life on a solid foundation. That principle is the heart of StrongHold Fitness.</p>
+        <blockquote class="about-verse">
+          "I love you, LORD, my strength. The LORD is my rock, my fortress and my deliverer; my God is my rock, in whom I take refuge, my shield and the horn of my salvation, my stronghold."
+          <cite>— Psalm 18:1-2</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <div class="div-line"></div>
+
+  <!-- CONTACT -->
+  <section class="sect" id="contact">
+    <p class="sect-tag reveal">GET STARTED</p>
+    <h2 class="sect-title reveal rv1">Let's talk</h2>
+    <div class="contact-grid">
+      <div class="contact-info reveal rv1">
+        <div class="contact-item">
+          <p class="contact-label">EMAIL</p>
+          <p class="contact-val"><a href="mailto:jordan@strongholdfitness.co">jordan@strongholdfitness.co</a></p>
+        </div>
+        <div class="contact-item">
+          <p class="contact-label">IN-PERSON TRAINING</p>
+          <p class="contact-val">Charlotte, NC & surrounding areas</p>
+        </div>
+        <div class="contact-item">
+          <p class="contact-label">ONLINE & HOTEL WELLNESS</p>
+          <p class="contact-val">Available nationwide · <a href="https://wellness.strongholdfitness.co/tailored" target="_blank">The Tailored Approach</a> · <a href="https://wellness.strongholdfitness.co/golf" target="_blank" style="color: #4E7A5B;">TPI Golf-Fitness</a></p>
+        </div>
+      </div>
+      <form class="contact-form reveal rv2" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact" />
+        <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
+        <div class="form-group">
+          <label class="form-label">FULL NAME</label>
+          <input type="text" name="name" class="form-input" placeholder="Your name" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">EMAIL</label>
+          <input type="email" name="email" class="form-input" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">I'M INTERESTED IN</label>
+          <select name="interest" class="form-input" required>
+            <option value="">Select an option</option>
+            <optgroup label="In-Person — Charlotte, NC">
+              <option>Personal Training</option>
+              <option>Partner Training</option>
+              <option>Small Group Training</option>
+              <option>TPI Golf Fitness Screening</option>
+            </optgroup>
+            <optgroup label="Online — Available Nationwide">
+              <option>The Tailored Approach ($797)</option>
+              <option>The StrongHold Covenant ($2,997)</option>
+            </optgroup>
+            <optgroup label="TPI Golf — Available Nationwide">
+              <option>The Golf Tailor ($897)</option>
+              <option>The Golf Covenant ($4,997)</option>
+            </optgroup>
+            <optgroup label="Business">
+              <option>Hotel Partnership Inquiry</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">MESSAGE (OPTIONAL)</label>
+          <textarea name="message" class="form-input" placeholder="Tell me about your goals..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">SEND INQUIRY</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p class="footer-brand">STRONGHOLD FITNESS</p>
+    <p class="footer-copy">© 2026 StrongHold Fitness, LLC. All Rights Reserved.</p>
+  </footer>
+
+  <!-- SCROLL REVEALS -->
+  <script>
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) e.target.classList.add('vis');
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+    document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+
+<!-- ═══════════════════ STRONGHOLD AI CHAT WIDGET ═══════════════════ -->
+<div id="sh-chat-widget"></div>
+<script>
+(function() {
+  var LOGO = "data:image/jpeg;base64,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";
+
+  var TEASERS = [
+    "Looking to improve your golf game? Let's find your perfect program.",
+    "Ready to train smarter? Tell me about your goals.",
+    "Curious about TPI Golf Fitness? I can help you get started."
+  ];
+
+  var SYSTEM_PROMPT = 'You ARE Jordan Boyer — the founder of StrongHold Fitness. You are talking directly to a potential client who clicked the chat button on your website. Speak in first person as Jordan. You are warm, direct, encouraging, and real. You talk like a coach, not a salesperson. You keep it conversational — short sentences, no fluff.\n\nYOUR VOICE:\n- Direct and confident but never pushy. You care about helping people, not selling.\n- Use plain language. Say "build real strength" not "optimize your physiological output."\n- Encouraging: "That is a great goal" / "I can definitely help with that."\n- Honest: If someone needs something you do not offer, tell them.\n- Brief: 2-3 short paragraphs max. No walls of text.\n- Example tone: "Hey, welcome to StrongHold! Glad you reached out. What are you looking to work on?" / "Lower back pain during your swing? That is super common — and almost always fixable. That is exactly what my TPI screening is built for."\n\nWHAT YOU OFFER:\n1. IN-PERSON TRAINING (Charlotte, NC) — 1-on-1 personal training, partner sessions, small groups. Functional training that builds real-world strength. Book a free consultation.\n2. TPI GOLF FITNESS — You are TPI certified. Full movement screen, identify the physical limitations in their swing, build a custom program to fix them. For golfers of any level.\n3. ONLINE PROGRAMS (not local?) — Direct them to your ready-to-go programs at strongholdfitness.co:\n   - The StrongHold Method ($197) — complete strength and conditioning\n   - Core Forge ($147) — deep core stability\n   - The Long Game ($247) — endurance and stamina\n   - Iron Range ($197) — pure strength development\n   - Swing Reset ($97) — golf-specific mobility (TPI methodology)\n   - The Complete Arsenal ($597, save $288) — all five programs bundled\n4. THE TAILORED APPROACH — For people who want a fully custom program built around their body, goals, and movement screen. Available online. Direct them to: wellness.strongholdfitness.co/tailored (general) or wellness.strongholdfitness.co/golf (golfers).\n5. NUTRITION — You partner with Sue DeLuca at Total Nutrition Technology. If body comp or diet comes up, mention Sue and that you can connect them.\n\nCONVERSATION FLOW:\n1. Greet them like a human. Ask what brought them here — keep it open.\n2. Based on their answer, ask 1-2 natural follow-up questions. Figure out:\n   - What is their main goal?\n   - Do they play golf?\n   - Are they in the Charlotte area or somewhere else?\n   - Any injuries or limitations?\n   - How experienced are they with training?\n3. Once you understand what they need (usually 3-4 exchanges), give them a clear recommendation with a SPECIFIC next step:\n   - Local + wants training → "Book a free consultation with me" and link to the contact form at strongholdfitness.co/#contact\n   - Golfer (local or remote) → Recommend TPI screening or The Tailored Approach Golf track at wellness.strongholdfitness.co/golf\n   - Not local + wants a program → Recommend the specific program that fits their goal, with the link and price\n   - Not local + wants custom → The Tailored Approach at wellness.strongholdfitness.co/tailored\n   - Wants everything → The Complete Arsenal at $597\n4. AFTER giving the recommendation and link, ask for their name, email, and phone so you can follow up personally within 24 hours.\n5. Once they give you their contact info, confirm it, thank them genuinely, and tell them you will reach out within 24 hours. Then output the lead summary JSON.\n\nCRITICAL RULES:\n- ALWAYS give people a specific link or next step. Never leave them hanging.\n- NEVER ask "Is there anything else?" as your final message. End with confirmation + what happens next.\n- NEVER output the lead_summary JSON until you have their name AND email at minimum.\n- The lead_summary JSON must be the absolute LAST thing in your final message — no questions after it.\n- Do NOT end the conversation until the person has clearly finished. If they ask another question after giving info, answer it.\n- Keep the conversation going as long as they want. Only output the lead JSON when the conversation is naturally wrapping up and you have their info.\n\nWHEN THE CONVERSATION IS DONE and you have their contact info, end your final message with:\n```json:lead_summary\n{"name":"...","email":"...","phone":"...","location":"...","primary_goal":"...","recommended_service":"...","plays_golf":true/false,"injuries_or_limitations":"...","experience_level":"...","nutrition_interest":true/false,"urgency":"...","notes":"..."}\n```';
+
+  var messages = [];
+  var isOpen = false;
+  var isLoading = false;
+  var initialized = false;
+  var teaserDismissed = false;
+  var leadData = null;
+
+  var css = document.createElement('style');
+  css.textContent = '\
+    @keyframes shTeaserIn{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}\
+    @keyframes shPanelUp{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}\
+    @keyframes shMsgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}\
+    @keyframes shDot{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}\
+    #sh-bubble{position:fixed;bottom:24px;right:24px;z-index:10001;display:flex;flex-direction:column;align-items:flex-end;gap:12px}\
+    #sh-bubble-btn{width:60px;height:60px;border-radius:50%;overflow:hidden;background:#1D1160;border:3px solid #fff;cursor:pointer;box-shadow:0 6px 24px rgba(29,17,96,.35);transition:transform .2s cubic-bezier(.34,1.56,.64,1);position:relative}\
+    #sh-bubble-btn:hover{transform:scale(1.08)}\
+    #sh-bubble-btn img{width:100%;height:100%;object-fit:cover}\
+    #sh-online-dot{position:absolute;bottom:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#4ade80;border:3px solid #fff;box-shadow:0 0 6px rgba(74,222,128,.5)}\
+    #sh-teaser{background:#fff;border-radius:16px 16px 4px 16px;padding:14px 18px;max-width:260px;box-shadow:0 8px 32px rgba(29,17,96,.18);animation:shTeaserIn .4s cubic-bezier(.34,1.56,.64,1) forwards;cursor:pointer;position:relative}\
+    #sh-teaser p{margin:0;font-size:14px;color:#1D1160;font-family:Outfit,sans-serif;font-weight:500;line-height:1.5;padding-right:14px}\
+    #sh-teaser-close{position:absolute;top:6px;right:10px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:#6b7280;border:none;background:none}\
+    #sh-teaser-status{margin-top:8px;display:flex;align-items:center;gap:6px}\
+    #sh-teaser-status span{font-size:11px;color:#00788C;font-family:Outfit,sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.8px}\
+    #sh-teaser-status i{width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block}\
+    #sh-panel{position:fixed;bottom:24px;right:24px;z-index:10002;width:380px;max-width:calc(100vw - 32px);height:580px;max-height:calc(100vh - 48px);border-radius:20px;overflow:hidden;display:none;flex-direction:column;box-shadow:0 16px 64px rgba(29,17,96,.25);animation:shPanelUp .35s cubic-bezier(.34,1.56,.64,1) forwards;border:1px solid rgba(255,255,255,.1)}\
+    #sh-panel.open{display:flex}\
+    #sh-header{background:linear-gradient(135deg,#1D1160,#2a1a7a);padding:18px 20px;display:flex;align-items:center;gap:14px;flex-shrink:0}\
+    #sh-header-logo{width:42px;height:42px;border-radius:50%;overflow:hidden;background:#1D1160;position:relative;flex-shrink:0}\
+    #sh-header-logo img{width:100%;height:100%;object-fit:cover}\
+    #sh-header-online{position:absolute;bottom:0;right:0;width:12px;height:12px;border-radius:50%;background:#4ade80;border:2px solid #1D1160}\
+    #sh-header-text{flex:1}\
+    #sh-header-text h4{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:18px;font-weight:700;color:#fff}\
+    #sh-header-text span{font-size:12px;color:#00788C;font-family:Outfit,sans-serif;font-weight:500}\
+    #sh-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.6);font-size:18px;border:none;transition:background .2s}\
+    #sh-close:hover{background:rgba(255,255,255,.15)}\
+    #sh-messages{flex:1;overflow-y:auto;padding:16px 16px 8px;background:#f5f4fa}\
+    .sh-msg{display:flex;margin-bottom:10px;animation:shMsgIn .25s ease}\
+    .sh-msg.user{justify-content:flex-end}\
+    .sh-msg.bot{justify-content:flex-start}\
+    .sh-avatar{width:28px;height:28px;border-radius:50%;overflow:hidden;background:#1D1160;flex-shrink:0;margin-right:8px;margin-top:2px}\
+    .sh-avatar img{width:100%;height:100%;object-fit:cover}\
+    .sh-bubble{max-width:76%;padding:11px 16px;border-radius:16px;font-family:Outfit,sans-serif;font-size:13.5px;line-height:1.6;white-space:pre-wrap}\
+    .sh-msg.bot .sh-bubble{background:#fff;color:#1f2937;box-shadow:0 1px 6px rgba(0,0,0,.05);border-bottom-left-radius:4px}\
+    .sh-msg.user .sh-bubble{background:linear-gradient(135deg,#1D1160,#2a1a7a);color:#fff;border-bottom-right-radius:4px}\
+    .sh-dots{display:flex;gap:4px;padding:11px 16px;background:#fff;border-radius:16px;border-bottom-left-radius:4px;box-shadow:0 1px 6px rgba(0,0,0,.05)}\
+    .sh-dot{width:7px;height:7px;border-radius:50%;background:#00788C}\
+    .sh-dot:nth-child(1){animation:shDot 1.2s ease-in-out 0s infinite}\
+    .sh-dot:nth-child(2){animation:shDot 1.2s ease-in-out .2s infinite}\
+    .sh-dot:nth-child(3){animation:shDot 1.2s ease-in-out .4s infinite}\
+    #sh-footer{background:#f5f4fa;padding:0 16px 4px;text-align:center}\
+    #sh-footer span{font-size:10px;color:#b0aec0;font-family:Outfit,sans-serif;letter-spacing:.5px}\
+    #sh-input-bar{padding:10px 14px 14px;background:#fff;border-top:1px solid #eee;flex-shrink:0;display:flex;gap:8px;align-items:center}\
+    #sh-input{flex:1;padding:12px 16px;border-radius:24px;border:1.5px solid #e5e4ee;background:#faf9ff;color:#1f2937;font-size:14px;font-family:Outfit,sans-serif;outline:none;transition:border-color .2s}\
+    #sh-input:focus{border-color:#00788C}\
+    #sh-send{width:42px;height:42px;border-radius:50%;border:none;background:#e5e4ee;color:#fff;font-size:16px;cursor:default;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}\
+    #sh-send.active{background:linear-gradient(135deg,#1D1160,#00788C);cursor:pointer}\
+  ';
+  document.head.appendChild(css);
+
+  var widget = document.getElementById('sh-chat-widget');
+
+  // Build bubble
+  var bubbleHtml = '<div id="sh-bubble">' +
+    '<div id="sh-teaser" style="display:none">' +
+      '<button id="sh-teaser-close">×</button>' +
+      '<p>' + TEASERS[Math.floor(Math.random() * TEASERS.length)] + '</p>' +
+      '<div id="sh-teaser-status"><i></i><span>Online now</span></div>' +
+    '</div>' +
+    '<div id="sh-bubble-btn">' +
+      '<img src="' + LOGO + '" alt="StrongHold Fitness">' +
+      '<div id="sh-online-dot"></div>' +
+    '</div>' +
+  '</div>';
+
+  // Build panel
+  var panelHtml = '<div id="sh-panel">' +
+    '<div id="sh-header">' +
+      '<div id="sh-header-logo"><img src="' + LOGO + '" alt="SH"><div id="sh-header-online"></div></div>' +
+      '<div id="sh-header-text"><h4>StrongHold Fitness</h4><span>Typically replies instantly</span></div>' +
+      '<button id="sh-close">×</button>' +
+    '</div>' +
+    '<div id="sh-messages"></div>' +
+    '<div id="sh-footer"><span>Powered by StrongHold AI</span></div>' +
+    '<div id="sh-input-bar">' +
+      '<input id="sh-input" placeholder="Type a message..." />' +
+      '<button id="sh-send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>' +
+    '</div>' +
+  '</div>';
+
+  widget.innerHTML = bubbleHtml + panelHtml;
+
+  // Show teaser after 3 seconds
+  setTimeout(function() {
+    if (!teaserDismissed && !isOpen) {
+      document.getElementById('sh-teaser').style.display = 'block';
+    }
+  }, 3000);
+
+  // Event listeners
+  document.getElementById('sh-teaser-close').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('sh-teaser').style.display = 'none';
+    teaserDismissed = true;
+  });
+
+  document.getElementById('sh-teaser').addEventListener('click', openChat);
+  document.getElementById('sh-bubble-btn').addEventListener('click', openChat);
+  document.getElementById('sh-close').addEventListener('click', function() {
+    isOpen = false;
+    document.getElementById('sh-panel').classList.remove('open');
+    document.getElementById('sh-bubble').style.display = 'flex';
+  });
+
+  document.getElementById('sh-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') sendMessage();
+  });
+  document.getElementById('sh-send').addEventListener('click', sendMessage);
+  document.getElementById('sh-input').addEventListener('input', function() {
+    var btn = document.getElementById('sh-send');
+    if (this.value.trim()) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+
+  function openChat() {
+    isOpen = true;
+    teaserDismissed = true;
+    document.getElementById('sh-bubble').style.display = 'none';
+    document.getElementById('sh-panel').classList.add('open');
+    if (!initialized) {
+      initialized = true;
+      callAPI([{ role: 'user', content: 'Hey, I just found your website and clicked the chat button.' }], true);
+    }
+    document.getElementById('sh-input').focus();
+  }
+
+  function addMessage(role, text) {
+    var el = document.getElementById('sh-messages');
+    var div = document.createElement('div');
+    div.className = 'sh-msg ' + (role === 'user' ? 'user' : 'bot');
+    var html = '';
+    if (role !== 'user') html += '<div class="sh-avatar"><img src="' + LOGO + '" alt="SH"></div>';
+    html += '<div class="sh-bubble">' + escapeHtml(text) + '</div>';
+    div.innerHTML = html;
+    el.appendChild(div);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function showLoading() {
+    var el = document.getElementById('sh-messages');
+    var div = document.createElement('div');
+    div.className = 'sh-msg bot';
+    div.id = 'sh-loading';
+    div.innerHTML = '<div class="sh-avatar"><img src="' + LOGO + '" alt="SH"></div><div class="sh-dots"><div class="sh-dot"></div><div class="sh-dot"></div><div class="sh-dot"></div></div>';
+    el.appendChild(div);
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function hideLoading() {
+    var l = document.getElementById('sh-loading');
+    if (l) l.remove();
+  }
+
+  function escapeHtml(t) {
+    var d = document.createElement('div');
+    d.textContent = t;
+    return d.innerHTML;
+  }
+
+  function sendMessage() {
+    var input = document.getElementById('sh-input');
+    var text = input.value.trim();
+    if (!text || isLoading || leadData) return;
+    messages.push({ role: 'user', content: text });
+    addMessage('user', text);
+    input.value = '';
+    document.getElementById('sh-send').classList.remove('active');
+    callAPI(messages.map(function(m) { return { role: m.role, content: m.content }; }), false);
+  }
+
+  function callAPI(apiMessages, isInit) {
+    isLoading = true;
+    showLoading();
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: SYSTEM_PROMPT,
+        messages: apiMessages
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      hideLoading();
+      var raw = (data.content || []).map(function(b) { return b.text || ''; }).join('');
+      var clean = raw.replace(/```json:lead_summary[\s\S]*?```/g, '').trim();
+      if (!clean) clean = "Hey! Glad you stopped by. I'm Jordan — what are you looking to work on?";
+
+      if (isInit) {
+        messages.push({ role: 'assistant', content: clean });
+      } else {
+        messages.push({ role: 'assistant', content: clean });
+      }
+      addMessage('assistant', clean);
+
+      // Check for lead summary
+      var match = raw.match(/```json:lead_summary\s*([\s\S]*?)```/);
+      if (match) {
+        try {
+          leadData = JSON.parse(match[1].trim());
+          // Send lead to backend
+          fetch('/api/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leadData)
+          }).then(function() {
+            console.log('Lead captured successfully');
+          }).catch(function(err) {
+            console.error('Lead capture failed:', err);
+          });
+          // Show confirmation in chat
+          var el = document.getElementById('sh-messages');
+          var confirmDiv = document.createElement('div');
+          confirmDiv.style.cssText = 'background:linear-gradient(135deg,#1D1160,#2a1a7a);border-radius:14px;padding:16px;margin:10px 0;color:#fff;font-family:Outfit,sans-serif;font-size:13px;line-height:1.5;text-align:center;';
+          confirmDiv.innerHTML = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;margin-right:8px;vertical-align:middle;"></span><strong>Lead Captured</strong><br><span style="opacity:0.8;font-size:12px;">' + leadData.name + ' • ' + leadData.email + '</span>';
+          el.appendChild(confirmDiv);
+          el.scrollTop = el.scrollHeight;
+          // Lock input after lead is captured
+          document.getElementById('sh-input').placeholder = 'Thanks for chatting! Jordan will reach out soon.';
+          document.getElementById('sh-input').disabled = true;
+        } catch(e) {}
+      }
+      isLoading = false;
+    })
+    .catch(function() {
+      hideLoading();
+      addMessage('assistant', "Hey! Glad you stopped by. I\'m Jordan, founder of StrongHold Fitness. What are you looking to work on?");
+      isLoading = false;
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
