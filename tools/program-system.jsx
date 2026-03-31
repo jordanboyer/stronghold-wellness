@@ -14,81 +14,42 @@ const C = {
    SYSTEM PROMPTS
    ══════════════════════════════════════════════════════════ */
 
-const GEN_POP_SYSTEM = `You are an elite certified personal trainer (NSCA) with PhD-level expertise in anatomy, physiology, kinesiology, biomechanics. You design programs for StrongHold Fitness (Jordan Boyer, 10+ years). Programs are scientifically rigorous yet practical.
+const GEN_POP_SYSTEM = `You are an elite certified personal trainer (NSCA) with expertise in anatomy, physiology, kinesiology, biomechanics. You design programs for StrongHold Fitness (Jordan Boyer, 10+ years).
 
-CRITICAL OUTPUT FORMAT — YOU MUST FOLLOW THIS EXACTLY:
-Return the program as a JSON array. No markdown. No explanation text. ONLY valid JSON.
+OUTPUT FORMAT — Return ONLY a valid JSON array. No markdown fences. No explanation. No text before or after the JSON.
 
-Each element is a training day:
-[
-  {
-    "name": "Day 1 — Full Body Strength",
-    "warmup": [
-      { "name": "Foam Roll Quads & Glutes", "prescription": "60s each", "cue": "Slow rolls, pause on tender spots." }
-    ],
-    "exercises": [
-      { "name": "Barbell Back Squat", "sets": 4, "reps": "6-8", "rest": "2-3 min", "rpe": "7-8", "cue": "Chest proud, drive through heels. Control the descent — 3 seconds down." },
-      { "name": "A1: Dumbbell Bench Press", "sets": 3, "reps": "8-10", "rest": "60s", "rpe": "7", "cue": "Squeeze shoulder blades together. Full range — dumbbells to chest level." },
-      { "name": "A2: Cable Row", "sets": 3, "reps": "10-12", "rest": "60s", "rpe": "7", "cue": "Pull to lower sternum. Squeeze the lats — don't yank with your arms." }
-    ],
-    "cooldown": [
-      { "name": "Hip Flexor Stretch", "prescription": "45s each side" }
-    ],
-    "progression": "Week 2: Add 5 lbs to compounds. Week 3: Add 1 rep to all sets. Week 4: Deload — drop to 60% intensity."
-  }
-]
+Generate ONE WEEK of training days (the training split). Include a "progression" field on each day explaining how to progress across 4 weeks. Keep it concise but complete.
 
-PROGRAMMING RULES:
-- Beginners: 2-3 days/week, full-body, compound focus, linear progression
-- Intermediate: 3-4 days/week, upper/lower or PPL, daily undulating periodization
-- Advanced: 4-6 days/week, specialized splits, block periodization
-- Strength: 3-6 sets × 1-6 reps, 2-5 min rest, 80-100% 1RM
-- Hypertrophy: 3-5 sets × 8-12 reps, 60-90s rest, 65-80% 1RM
-- Endurance: 2-3 sets × 12-20 reps, 30-60s rest, 50-70% 1RM
-- Always include warm-up and cooldown
-- Account for injuries — swap exercises, add correctives
-- Coaching cues in Jordan's voice: direct, confident, encouraging
+JSON structure:
+[{"name":"Day 1 — Full Body Strength","warmup":[{"name":"Foam Roll Quads","prescription":"60s each","cue":"Pause on tender spots."}],"exercises":[{"name":"Barbell Back Squat","sets":4,"reps":"6-8","rest":"2-3 min","rpe":"7-8","cue":"Chest proud, drive through heels."}],"cooldown":[{"name":"Hip Flexor Stretch","prescription":"45s each side"}],"progression":"Wk2: +5lbs compounds. Wk3: +1 rep all sets. Wk4: Deload 60%."}]
 
-RETURN ONLY THE JSON ARRAY. No other text.`;
+RULES:
+- Beginners: 2-3 days, full-body, linear progression
+- Intermediate: 3-4 days, upper/lower or PPL, undulating periodization
+- Advanced: 4-6 days, specialized splits
+- Strength: 3-6 sets x 1-6 reps, 2-5min rest. Hypertrophy: 3-5 x 8-12, 60-90s. Endurance: 2-3 x 12-20, 30-60s
+- Include warmup and cooldown each day
+- Account for injuries with safe alternatives
+- Coaching cues: direct, confident, encouraging ("Drive through your heels" not "Please try to push")
+- Keep each exercise cue to ONE sentence max
+- 5-8 exercises per day in the main block, 3-4 warmup items, 2-3 cooldown items
 
-const TPI_SYSTEM = `You are a TPI Certified Fitness Professional with PhD-level expertise in golf biomechanics, corrective exercise, and sports performance. You design programs for StrongHold Fitness (Jordan Boyer, TPI + NSCA Certified).
+RETURN ONLY THE JSON ARRAY.`;
 
-CRITICAL OUTPUT FORMAT — RETURN ONLY VALID JSON:
-[
-  {
-    "name": "Corrective Day 1 — Mobility & Activation",
-    "warmup": [
-      { "name": "Foam Roll T-Spine", "prescription": "90s", "cue": "Arms crossed, roll upper back. Pause and extend over roller at tight spots." }
-    ],
-    "exercises": [
-      { "name": "Open Books", "sets": 2, "reps": "8 each side", "rest": "30s", "rpe": "3", "cue": "Keep knees stacked. Let the rotation come from your mid-back, not your hips." }
-    ],
-    "cooldown": [
-      { "name": "Child's Pose with Reach", "prescription": "60s each side" }
-    ],
-    "progression": "Week 2: Add 5s holds. Week 3: Add band resistance to activation drills."
-  }
-]
+const TPI_SYSTEM = `You are a TPI Certified Fitness Professional with expertise in golf biomechanics and corrective exercise. You design programs for StrongHold Fitness (Jordan Boyer, TPI + NSCA Certified).
 
-TPI SCREEN-TO-FAULT MAPPING:
-- Pelvic Tilt FAIL → S-Posture, Loss of Posture, Early Extension
-- Pelvic Rotation FAIL → Sway, Slide, Early Extension
-- Torso Rotation FAIL → Loss of Posture, Flat Shoulder Plane, Reverse Spine Angle
-- Overhead Deep Squat FAIL → Loss of Posture, Early Extension
-- Toe Touch FAIL → Loss of Posture, C-Posture
-- 90/90 FAIL → Loss of Posture, Flat Shoulder Plane, Chicken Wing
-- Single Leg Balance FAIL → Sway, Slide, Hanging Back
-- Lat Length FAIL → Loss of Posture, Flat Shoulder Plane
-- Lower Quarter Rotation FAIL → Sway, Slide, Early Extension
-- Seated Trunk Rotation FAIL → Flat Shoulder Plane, Reverse Spine Angle
-- Bridge w/ Leg Extension FAIL → Early Extension, Sway, Slide
-- Reach Roll Lift FAIL → Loss of Posture, Chicken Wing
-- Cervical Rotation FAIL → Loss of Posture
-- Wrist Flexion/Extension/Forearm FAIL → Casting, Chicken Wing
+OUTPUT FORMAT — Return ONLY a valid JSON array. No markdown fences. No explanation. No text before or after.
+
+Generate a corrective week (3 days) AND a performance week (3 days) plus a pre-round warm-up. Total: 7 items in the array. Keep exercise cues to ONE sentence.
+
+JSON structure:
+[{"name":"Corrective Day 1 — Mobility","warmup":[{"name":"Foam Roll T-Spine","prescription":"90s","cue":"Pause and extend over roller at tight spots."}],"exercises":[{"name":"Open Books","sets":2,"reps":"8 each","rest":"30s","rpe":"3","cue":"Rotation from mid-back, not hips."}],"cooldown":[{"name":"Child's Pose","prescription":"60s"}],"progression":"Wk2: Add 5s holds. Wk3: Add band resistance."}]
+
+TPI SCREEN-TO-FAULT MAP:
+Pelvic Tilt FAIL → S-Posture, Early Extension | Torso Rotation FAIL → Loss of Posture, Flat Shoulder | Overhead Deep Squat FAIL → Early Extension | 90/90 FAIL → Chicken Wing, Flat Shoulder | Single Leg Balance FAIL → Sway, Slide | Lat Length FAIL → Loss of Posture | Bridge w/ Leg Extension FAIL → Early Extension, Sway | Lower Quarter Rotation FAIL → Sway, Slide
 
 CORRECTIVE HIERARCHY: Mobility → Stability → Motor Control → Strength → Power
-Address mobility FIRST. Include corrective days AND performance days.
-Include a 10-min pre-round warm-up routine as an additional day called "Pre-Round Warm-Up".
+Address failed screens. 5-7 exercises per corrective day. 6-8 per performance day.
 
 RETURN ONLY THE JSON ARRAY.`;
 
@@ -131,19 +92,64 @@ const TPI_SCREENS = [
 /* ══════════════════════════════════════════════════════════
    HELPER: Call AI
    ══════════════════════════════════════════════════════════ */
-async function callAI(system, prompt, maxTokens = 4000) {
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: maxTokens, system, messages: [{ role: "user", content: prompt }] }),
-  });
-  const data = await res.json();
-  const text = (data.content || []).map(b => b.text || "").join("");
-  // Extract JSON from response
-  const jsonMatch = text.match(/\[[\s\S]*\]/)?.[0] || text.match(/\{[\s\S]*\}/)?.[0];
-  if (jsonMatch) {
-    try { return JSON.parse(jsonMatch); } catch { return null; }
+async function callAI(system, prompt, maxTokens = 8192) {
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: maxTokens, system, messages: [{ role: "user", content: prompt }] }),
+    });
+    if (!res.ok) {
+      console.error("API HTTP error:", res.status);
+      return { error: "API returned status " + res.status };
+    }
+    const data = await res.json();
+    if (data.error) {
+      console.error("API error:", data.error);
+      return { error: data.error.message || "API error" };
+    }
+    const text = (data.content || []).map(b => b.text || "").join("");
+    if (!text) return { error: "Empty response from AI" };
+    
+    // Strip markdown code fences
+    let cleaned = text.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
+    
+    // Try parsing the full cleaned text
+    try { return JSON.parse(cleaned); } catch(e1) {
+      // Try extracting array
+      const arrMatch = cleaned.match(/\[[\s\S]*\]/);
+      if (arrMatch) {
+        try { return JSON.parse(arrMatch[0]); } catch(e2) {
+          // Try repairing truncated JSON by closing open brackets
+          let repaired = arrMatch[0];
+          const openBrackets = (repaired.match(/\[/g) || []).length;
+          const closeBrackets = (repaired.match(/\]/g) || []).length;
+          const openBraces = (repaired.match(/\{/g) || []).length;
+          const closeBraces = (repaired.match(/\}/g) || []).length;
+          // Remove trailing comma or incomplete value
+          repaired = repaired.replace(/,\s*$/, "");
+          repaired = repaired.replace(/,\s*"[^"]*$/, "");
+          repaired = repaired.replace(/:\s*"[^"]*$/, ': ""');
+          repaired = repaired.replace(/:\s*$/, ': ""');
+          // Close open structures
+          for (let i = 0; i < openBraces - closeBraces; i++) repaired += "}";
+          for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += "]";
+          try { return JSON.parse(repaired); } catch(e3) {
+            console.error("JSON repair failed:", e3.message);
+            return { error: "Failed to parse program JSON", rawText: text.substring(0, 500) };
+          }
+        }
+      }
+      // Try extracting object
+      const objMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (objMatch) {
+        try { const obj = JSON.parse(objMatch[0]); return [obj]; } catch(e3) {}
+      }
+      return { error: "No valid JSON found in response", rawText: text.substring(0, 500) };
+    }
+  } catch(err) {
+    console.error("Fetch error:", err);
+    return { error: "Network error: " + err.message };
   }
-  return null;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -253,11 +259,11 @@ function IntakeForm({ onGenerate, loading }) {
 
   const handleGenerate = () => {
     if (mode === "gen") {
-      const prompt = `Design a complete 4-week training program:\n\nName: ${name}\nAge: ${age || "N/A"}\nGender: ${gender}\nExperience: ${experience}\nGoals: ${goals.join(", ")}\nDays/Week: ${daysPerWeek}\nSession Length: ${sessionLen} min\nEquipment: ${equipment.replace(/_/g, " ")}\nInjuries: ${injuries.length ? injuries.join(", ") : "None"}\nNotes: ${notes || "None"}\n\nGenerate the COMPLETE program as JSON.`;
+      const prompt = `Design a 1-week training split for this client. Include progression notes for weeks 2-4 on each day.\n\nName: ${name}\nAge: ${age || "N/A"}\nGender: ${gender}\nExperience: ${experience}\nGoals: ${goals.join(", ")}\nDays/Week: ${daysPerWeek}\nSession Length: ${sessionLen} min\nEquipment: ${equipment.replace(/_/g, " ")}\nInjuries: ${injuries.length ? injuries.join(", ") : "None"}\nNotes: ${notes || "None"}\n\nReturn ONLY the JSON array.`;
       onGenerate(GEN_POP_SYSTEM, prompt, name);
     } else {
       const screenResults = TPI_SCREENS.map(s => `${s}: ${(screens[s] || "not tested").toUpperCase()}`).join("\n");
-      const prompt = `Design a TPI corrective + performance program:\n\nName: ${name}\nAge: ${age || "N/A"}\nHandicap: ${handicap || "N/A"}\nGoals: ${golfGoals || "Improve swing consistency"}\nEquipment: ${equipment.replace(/_/g, " ")}\nSwing Faults: ${swingFaults.length ? swingFaults.join(", ") : "To determine from screens"}\n\nTPI SCREEN RESULTS:\n${screenResults}\n\nGenerate corrective + performance program as JSON.`;
+      const prompt = `Design a TPI corrective week (3 days) + performance week (3 days) + pre-round warm-up for this golfer.\n\nName: ${name}\nAge: ${age || "N/A"}\nHandicap: ${handicap || "N/A"}\nGoals: ${golfGoals || "Improve swing consistency"}\nEquipment: ${equipment.replace(/_/g, " ")}\nSwing Faults: ${swingFaults.length ? swingFaults.join(", ") : "Determine from screens"}\n\nTPI SCREEN RESULTS:\n${screenResults}\n\nReturn ONLY the JSON array.`;
       onGenerate(TPI_SYSTEM, prompt, name);
     }
   };
@@ -372,8 +378,12 @@ function WorkoutPortal({ program, clientName, onBack }) {
     setAdapting(true);
     const exList = (day.exercises || []).map((e, i) => `${i + 1}. ${e.name} — ${e.sets}x${e.reps}, ${e.rest} rest`).join("\n");
     const prompt = `Self-Reflection: ${checkIn.reflection}/10\nSleep: ${checkIn.sleep}/10\nNutrition: ${checkIn.nutrition || "N/A"}\nIssues: ${checkIn.issues || "None"}\n\nPlanned Workout (${day.name}):\n${exList}`;
-    const result = await callAI(ADAPT_SYSTEM, prompt, 1500);
-    setAdaptations(result || { needed: false, coachNote: "Proceed with planned workout — listen to your body." });
+    const result = await callAI(ADAPT_SYSTEM, prompt, 2000);
+    if (result && !result.error) {
+      setAdaptations(result);
+    } else {
+      setAdaptations({ needed: false, coachNote: "Couldn't analyze check-in. Proceed with the planned workout and listen to your body." });
+    }
     setAdapting(false);
   }, [day, checkIn]);
 
@@ -632,22 +642,42 @@ function WorkoutPortal({ program, clientName, onBack }) {
    MAIN APP
    ══════════════════════════════════════════════════════════ */
 export default function StrongHoldProgramSystem() {
-  const [phase, setPhase] = useState("intake"); // intake | portal
+  const [phase, setPhase] = useState("intake"); // intake | portal | error
   const [program, setProgram] = useState(null);
   const [clientName, setClientName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleGenerate = useCallback(async (system, prompt, name) => {
     setLoading(true);
+    setErrorMsg("");
     setClientName(name);
-    const result = await callAI(system, prompt, 4000);
-    if (result && Array.isArray(result)) {
+    const result = await callAI(system, prompt, 8192);
+    setLoading(false);
+    
+    if (!result) {
+      setErrorMsg("No response received from AI. Please try again.");
+      return;
+    }
+    if (result.error) {
+      setErrorMsg("Error: " + result.error + (result.rawText ? "\n\nRaw response preview: " + result.rawText : ""));
+      return;
+    }
+    
+    // Handle array result
+    if (Array.isArray(result) && result.length > 0) {
       setProgram(result);
       setPhase("portal");
-    } else {
-      alert("Program generation failed — please try again.");
+      return;
     }
-    setLoading(false);
+    // Handle single object (wrap in array)
+    if (result && typeof result === "object" && result.name) {
+      setProgram([result]);
+      setPhase("portal");
+      return;
+    }
+    
+    setErrorMsg("Program generated but couldn't be parsed into training days. Please try again.");
   }, []);
 
   return (
@@ -670,7 +700,23 @@ export default function StrongHoldProgramSystem() {
         </div>
 
         {phase === "intake" ? (
-          <IntakeForm onGenerate={handleGenerate} loading={loading} />
+          <>
+            <IntakeForm onGenerate={handleGenerate} loading={loading} />
+            {errorMsg && (
+              <div style={{
+                marginTop: 16, padding: "16px 18px", borderRadius: 12,
+                background: C.red + "15", border: `1px solid ${C.red}40`,
+              }}>
+                <p style={{ fontSize: 12, color: C.red, fontWeight: 600, margin: "0 0 6px", textTransform: "uppercase", letterSpacing: 1 }}>Generation Failed</p>
+                <p style={{ fontSize: 13, color: C.cream, margin: 0, lineHeight: 1.6, whiteSpace: "pre-wrap" }}>{errorMsg}</p>
+                <button onClick={() => setErrorMsg("")} style={{
+                  marginTop: 10, padding: "8px 16px", border: `1px solid ${C.border}`,
+                  background: "transparent", color: C.muted, borderRadius: 6, fontSize: 12,
+                  cursor: "pointer", fontFamily: "'Outfit', sans-serif",
+                }}>Dismiss</button>
+              </div>
+            )}
+          </>
         ) : (
           <WorkoutPortal program={program} clientName={clientName} onBack={() => { setPhase("intake"); setProgram(null); }} />
         )}
