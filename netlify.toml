@@ -1,2 +1,5 @@
 [functions]
   directory = "netlify/functions"
+
+[functions.hotel-research]
+  timeout = 26
