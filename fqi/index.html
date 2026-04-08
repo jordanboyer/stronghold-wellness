@@ -824,6 +824,47 @@ function HomeScreen({ onNavigate, completedSessions, completedFreeCount, unlocke
           );
         })}
 
+        {/* Preview Nudge — surfaces after first free session, before mid-stay nudge */}
+        {completedFreeCount === 1 && !sessions.filter(s => !s.free).every(s => unlockedSessions.includes(s.id)) && (() => {
+          const featured = sessions.find(s => s.id === "ironwork");
+          if (!featured) return null;
+          return (
+            <div style={{
+              marginTop: 16,
+              background: `linear-gradient(135deg, ${featured.color}10, ${HOTEL_CONFIG.cardBg})`,
+              border: `1px solid ${featured.color}25`,
+              borderRadius: 14, padding: "18px 16px",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+                <span style={{ fontSize: 9, letterSpacing: 2.5, color: featured.color, fontWeight: 700, fontFamily: "'Lato', sans-serif" }}>UP NEXT IN PREMIUM</span>
+                <div style={{ flex: 1, height: 1, background: `${featured.color}20` }} />
+                <span style={{ fontSize: 13 }}>🔒</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                <div style={{
+                  width: 52, height: 52, borderRadius: 14,
+                  background: `${featured.color}15`, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 24, flexShrink: 0, border: `1px solid ${featured.color}25`,
+                }}>{featured.icon}</div>
+                <div>
+                  <p style={{ color: HOTEL_CONFIG.textPrimary, fontSize: 18, margin: 0, fontWeight: 400, fontFamily: "'Playfair Display', serif" }}>{featured.title}</p>
+                  <div style={{ display: "flex", gap: 10, marginTop: 3 }}>
+                    <span style={{ fontSize: 11, color: HOTEL_CONFIG.textSecondary, fontFamily: "'Lato', sans-serif" }}>⏱ {featured.duration}</span>
+                    <span style={{ fontSize: 11, color: featured.color, fontFamily: "'Lato', sans-serif" }}>◈ {featured.intensity}</span>
+                  </div>
+                </div>
+              </div>
+              <p style={{ color: HOTEL_CONFIG.textSecondary, fontSize: 12, margin: "0 0 12px", lineHeight: 1.5, fontFamily: "'Lato', sans-serif" }}>{featured.description}</p>
+              <button onClick={() => onNavigate("preview", featured)} style={{
+                width: "100%", padding: "11px", background: "transparent",
+                border: `1px solid ${featured.color}40`, borderRadius: 8,
+                color: featured.color, fontSize: 12, fontWeight: 700, letterSpacing: 1,
+                cursor: "pointer", fontFamily: "'Lato', sans-serif",
+              }}>PEEK INSIDE →</button>
+            </div>
+          );
+        })()}
+
         {/* Mid-Stay Nudge — shows after 2/3 free sessions if premium not unlocked */}
         {completedFreeCount >= 2 && !sessions.filter(s => !s.free).every(s => unlockedSessions.includes(s.id)) && (
           <div style={{
