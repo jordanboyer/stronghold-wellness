@@ -1,0 +1,735 @@
+import { useState, useEffect, useRef } from "react";
+
+// ─── Brand ────────────────────────────────────────────────────────────────────
+const B = {
+  bg: "#0a0b10",
+  card: "#11131a",
+  border: "#1e2230",
+  accent: "#c9a84c",
+  accentDim: "rgba(201,168,76,0.12)",
+  accentBorder: "rgba(201,168,76,0.3)",
+  text: "#e8e6f0",
+  muted: "#6b7190",
+  green: "#34d399",
+  teal: "#00788C",
+  purple: "#7c5cbf",
+  error: "#f87171",
+  premiumGold: "#c9a84c",
+};
+
+// ─── Session Library ──────────────────────────────────────────────────────────
+const SESSIONS = [
+  {
+    id: "morning",
+    title: "Morning Mobility",
+    duration: 10,
+    intensity: "GENTLE",
+    icon: "☀️",
+    color: "#f5c842",
+    free: true,
+    tags: ["wakeup", "mobility", "low-energy", "morning", "short"],
+    description: "Shake off the sleep and loosen up. Guided joint mobility and dynamic stretches built for travel-weary bodies.",
+    bestFor: "Just woke up, low energy, short on time, or need to loosen up before a busy day.",
+  },
+  {
+    id: "foundation",
+    title: "The Foundation",
+    duration: 20,
+    intensity: "BEGINNER",
+    icon: "🧱",
+    color: "#5b9f5b",
+    free: true,
+    tags: ["strength", "full-body", "beginner", "medium-energy", "no-equipment"],
+    description: "Full-body bodyweight workout — no equipment, no excuses. Three circuits designed to challenge without crushing you.",
+    bestFor: "First workout of the trip, moderate energy, 20 minutes to spare, no equipment needed.",
+  },
+  {
+    id: "ironwork",
+    title: "The Ironwork",
+    duration: 25,
+    intensity: "INTERMEDIATE",
+    icon: "🔥",
+    color: "#e07035",
+    free: false,
+    tags: ["strength", "dumbbell", "intermediate", "high-energy", "push-pull"],
+    description: "Push-pull-legs with dumbbells. Structured, balanced, and built to challenge. Use the in-room resistance bands or fitness center.",
+    bestFor: "You've done a session already, feeling strong, want a real workout with equipment.",
+  },
+  {
+    id: "forged",
+    title: "Forged",
+    duration: 30,
+    intensity: "ADVANCED",
+    icon: "⚡",
+    color: "#9b5de5",
+    free: false,
+    tags: ["strength", "advanced", "high-energy", "full-body", "intense"],
+    description: "Advanced full-body session. This one's built for guests who train hard at home and don't want to lose it on the road.",
+    bestFor: "High energy, experienced lifter, 30 minutes, ready to push hard.",
+  },
+  {
+    id: "cardio",
+    title: "The Charleston Burn",
+    duration: 30,
+    intensity: "ALL LEVELS",
+    icon: "🏙️",
+    color: "#e84393",
+    free: false,
+    tags: ["cardio", "hiit", "no-equipment", "all-levels", "high-energy"],
+    description: "Bodyweight cardio intervals — no machine needed. High intensity, scalable to your level, works anywhere in the suite.",
+    bestFor: "Cardio without the gym, all fitness levels, want to break a real sweat in the room.",
+  },
+  {
+    id: "machine-cardio",
+    title: "The Steady State",
+    duration: 30,
+    intensity: "ALL LEVELS",
+    icon: "🏃",
+    color: "#3dabc2",
+    free: false,
+    tags: ["cardio", "machine", "treadmill", "bike", "elliptical", "gym"],
+    description: "Structured pyramid intervals on any cardio machine. Treadmill, bike, or elliptical — the programming handles itself.",
+    bestFor: "Hotel fitness center access, prefer machine cardio, want structured intervals.",
+  },
+  {
+    id: "bedtime",
+    title: "Bedtime Recovery",
+    duration: 10,
+    intensity: "GENTLE",
+    icon: "🌙",
+    color: "#6272a4",
+    free: true,
+    tags: ["recovery", "evening", "wind-down", "short", "low-energy", "stretch"],
+    description: "A 10-minute floor routine to decompress. Designed to calm the nervous system and help the body recover overnight.",
+    bestFor: "End of the day, post-workout recovery, low energy, ready to wind down.",
+  },
+];
+
+// ─── Recommendation Engine ────────────────────────────────────────────────────
+function recommend({ timeOfDay, availableTime, goal, energy, hasFitnessCenter }) {
+  const scored = SESSIONS.map((s) => {
+    let score = 0;
+
+    // Time fit
+    if (availableTime === 10 && s.duration <= 10) score += 4;
+    else if (availableTime === 20 && s.duration <= 20) score += 4;
+    else if (availableTime === 30 && s.duration <= 30) score += 3;
+    else if (s.duration <= availableTime) score += 2;
+    else score -= 3;
+
+    // Goal fit
+    if (goal === "wakeup" && s.tags.includes("wakeup")) score += 5;
+    if (goal === "wakeup" && s.tags.includes("mobility")) score += 2;
+    if (goal === "strength" && s.tags.includes("strength")) score += 5;
+    if (goal === "cardio" && s.tags.includes("cardio")) score += 5;
+    if (goal === "recovery" && s.tags.includes("recovery")) score += 5;
+    if (goal === "recovery" && s.tags.includes("wind-down")) score += 2;
+
+    // Energy fit
+    if (energy === "low") {
+      if (s.tags.includes("low-energy") || s.intensity === "GENTLE") score += 3;
+      if (s.intensity === "ADVANCED") score -= 4;
+      if (s.intensity === "INTERMEDIATE") score -= 2;
+    }
+    if (energy === "medium") {
+      if (s.intensity === "BEGINNER" || s.intensity === "ALL LEVELS") score += 2;
+      if (s.intensity === "INTERMEDIATE") score += 3;
+      if (s.intensity === "ADVANCED") score -= 1;
+    }
+    if (energy === "high") {
+      if (s.intensity === "INTERMEDIATE" || s.intensity === "ADVANCED") score += 3;
+      if (s.intensity === "GENTLE") score -= 2;
+    }
+
+    // Time of day fit
+    if (timeOfDay === "morning" && s.tags.includes("morning")) score += 3;
+    if (timeOfDay === "morning" && s.tags.includes("wakeup")) score += 2;
+    if (timeOfDay === "evening" && s.tags.includes("evening")) score += 3;
+    if (timeOfDay === "evening" && s.tags.includes("wind-down")) score += 2;
+    if (timeOfDay === "evening" && s.intensity === "ADVANCED") score -= 2;
+
+    // Equipment/location fit
+    if (s.id === "machine-cardio" && !hasFitnessCenter) score -= 6;
+    if (s.id === "machine-cardio" && hasFitnessCenter && goal === "cardio") score += 3;
+
+    return { ...s, score };
+  });
+
+  return scored
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 2)
+    .filter((s) => s.score > 0);
+}
+
+// ─── Questions ────────────────────────────────────────────────────────────────
+const QUESTIONS = [
+  {
+    id: "timeOfDay",
+    text: "What time of day is it?",
+    sub: "This helps match your body's natural rhythm.",
+    options: [
+      { label: "Morning", value: "morning", icon: "☀️" },
+      { label: "Afternoon", value: "afternoon", icon: "🌤️" },
+      { label: "Evening", value: "evening", icon: "🌙" },
+    ],
+  },
+  {
+    id: "availableTime",
+    text: "How much time do you have?",
+    sub: "Be honest — a 10-minute session done beats a 30-minute session skipped.",
+    options: [
+      { label: "~10 minutes", value: 10, icon: "⚡" },
+      { label: "~20 minutes", value: 20, icon: "🕐" },
+      { label: "~30 minutes", value: 30, icon: "🕧" },
+    ],
+  },
+  {
+    id: "goal",
+    text: "What do you want to accomplish?",
+    sub: "Pick the one that feels most true right now.",
+    options: [
+      { label: "Wake up & move", value: "wakeup", icon: "🌅" },
+      { label: "Build strength", value: "strength", icon: "💪" },
+      { label: "Get some cardio", value: "cardio", icon: "🏃" },
+      { label: "Wind down & recover", value: "recovery", icon: "😮‍💨" },
+    ],
+  },
+  {
+    id: "energy",
+    text: "Honest energy check — how are you feeling?",
+    sub: "No wrong answer. The right session is the one you'll actually finish.",
+    options: [
+      { label: "Running on empty", value: "low", icon: "🪫" },
+      { label: "Decent", value: "medium", icon: "🔋" },
+      { label: "Fired up", value: "high", icon: "⚡" },
+    ],
+  },
+  {
+    id: "hasFitnessCenter",
+    text: "Do you have access to a fitness center or cardio machines?",
+    sub: "Only matters if cardio is your goal.",
+    options: [
+      { label: "Yes, on-site gym", value: true, icon: "🏋️" },
+      { label: "No, just the room", value: false, icon: "🛏️" },
+    ],
+  },
+];
+
+// ─── Components ───────────────────────────────────────────────────────────────
+
+function ProgressDots({ total, current }) {
+  return (
+    <div style={{ display: "flex", gap: 6, justifyContent: "center", marginBottom: 28 }}>
+      {Array.from({ length: total }).map((_, i) => (
+        <div
+          key={i}
+          style={{
+            width: i === current ? 20 : 6,
+            height: 6,
+            borderRadius: 3,
+            background: i < current ? B.accent : i === current ? B.accent : B.border,
+            opacity: i === current ? 1 : i < current ? 0.6 : 0.3,
+            transition: "all 0.25s ease",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function QuestionCard({ question, onAnswer, step, total }) {
+  const [selected, setSelected] = useState(null);
+
+  function handleSelect(value) {
+    setSelected(value);
+    setTimeout(() => onAnswer(value), 220);
+  }
+
+  return (
+    <div
+      style={{
+        background: B.card,
+        border: `1px solid ${B.border}`,
+        borderRadius: 16,
+        padding: "28px 24px",
+        maxWidth: 480,
+        width: "100%",
+        margin: "0 auto",
+      }}
+    >
+      <ProgressDots total={total} current={step} />
+      <p style={{ fontSize: 11, letterSpacing: 3, color: B.accent, fontWeight: 600, marginBottom: 10, textTransform: "uppercase" }}>
+        Step {step + 1} of {total}
+      </p>
+      <h2
+        style={{
+          fontSize: 20,
+          fontWeight: 600,
+          color: B.text,
+          marginBottom: 6,
+          lineHeight: 1.35,
+        }}
+      >
+        {question.text}
+      </h2>
+      {question.sub && (
+        <p style={{ fontSize: 12, color: B.muted, marginBottom: 22, lineHeight: 1.5 }}>
+          {question.sub}
+        </p>
+      )}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {question.options.map((opt) => {
+          const isSelected = selected === opt.value;
+          return (
+            <button
+              key={String(opt.value)}
+              onClick={() => handleSelect(opt.value)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                padding: "14px 18px",
+                background: isSelected ? B.accentDim : "transparent",
+                border: `1px solid ${isSelected ? B.accent : B.border}`,
+                borderRadius: 10,
+                color: isSelected ? B.accent : B.text,
+                fontSize: 14,
+                fontWeight: isSelected ? 600 : 400,
+                cursor: "pointer",
+                textAlign: "left",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <span style={{ fontSize: 20, flexShrink: 0 }}>{opt.icon}</span>
+              <span>{opt.label}</span>
+              {isSelected && (
+                <span style={{ marginLeft: "auto", color: B.accent, fontSize: 16 }}>✓</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function SessionCard({ session, rank, hasPremium }) {
+  const isLocked = !session.free && !hasPremium;
+
+  return (
+    <div
+      style={{
+        background: B.card,
+        border: `1px solid ${rank === 0 ? B.accentBorder : B.border}`,
+        borderRadius: 14,
+        padding: "20px 20px 18px",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {rank === 0 && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 3,
+            background: `linear-gradient(90deg, ${B.accent}, ${B.accentBorder})`,
+          }}
+        />
+      )}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 26 }}>{session.icon}</span>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: B.text, lineHeight: 1.2 }}>
+              {session.title}
+            </div>
+            <div style={{ fontSize: 11, color: B.muted, marginTop: 2, letterSpacing: 0.5 }}>
+              {session.duration} MIN · {session.intensity}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+          {session.free ? (
+            <span
+              style={{
+                fontSize: 9,
+                letterSpacing: 2,
+                fontWeight: 700,
+                color: B.green,
+                background: "rgba(52,211,153,0.1)",
+                border: "1px solid rgba(52,211,153,0.3)",
+                padding: "3px 8px",
+                borderRadius: 4,
+              }}
+            >
+              FREE
+            </span>
+          ) : (
+            <span
+              style={{
+                fontSize: 9,
+                letterSpacing: 2,
+                fontWeight: 700,
+                color: isLocked ? B.muted : B.premiumGold,
+                background: isLocked ? "rgba(107,113,144,0.1)" : "rgba(201,168,76,0.1)",
+                border: `1px solid ${isLocked ? "rgba(107,113,144,0.2)" : B.accentBorder}`,
+                padding: "3px 8px",
+                borderRadius: 4,
+              }}
+            >
+              {isLocked ? "🔒 PREMIUM" : "★ PREMIUM"}
+            </span>
+          )}
+          {rank === 0 && (
+            <span
+              style={{
+                fontSize: 8,
+                letterSpacing: 2,
+                color: B.accent,
+                fontWeight: 700,
+              }}
+            >
+              TOP PICK
+            </span>
+          )}
+        </div>
+      </div>
+
+      <p style={{ fontSize: 12.5, color: "#b0aec0", lineHeight: 1.6, marginBottom: 10 }}>
+        {session.description}
+      </p>
+
+      <div
+        style={{
+          background: "rgba(255,255,255,0.03)",
+          border: `1px solid ${B.border}`,
+          borderRadius: 8,
+          padding: "8px 12px",
+        }}
+      >
+        <span style={{ fontSize: 9, letterSpacing: 2, color: B.accent, fontWeight: 700 }}>
+          BEST FOR
+        </span>
+        <p style={{ fontSize: 11.5, color: B.muted, marginTop: 3, lineHeight: 1.5 }}>
+          {session.bestFor}
+        </p>
+      </div>
+
+      {isLocked && (
+        <div
+          style={{
+            marginTop: 12,
+            padding: "10px 12px",
+            background: B.accentDim,
+            border: `1px solid ${B.accentBorder}`,
+            borderRadius: 8,
+            fontSize: 11.5,
+            color: B.accent,
+            textAlign: "center",
+          }}
+        >
+          Unlock all premium sessions for $29 · Valid your full stay
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ResultScreen({ answers, results, onReset, hasPremium, setHasPremium }) {
+  const summaryLabels = {
+    morning: "Morning",
+    afternoon: "Afternoon",
+    evening: "Evening",
+    wakeup: "Wake up & move",
+    strength: "Build strength",
+    cardio: "Get cardio",
+    recovery: "Wind down",
+    low: "Low energy",
+    medium: "Decent energy",
+    high: "Fired up",
+  };
+
+  return (
+    <div style={{ maxWidth: 480, width: "100%", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", marginBottom: 24 }}>
+        <div
+          style={{
+            display: "inline-block",
+            fontSize: 9,
+            letterSpacing: 3,
+            color: B.accent,
+            fontWeight: 700,
+            background: B.accentDim,
+            border: `1px solid ${B.accentBorder}`,
+            padding: "5px 14px",
+            borderRadius: 20,
+            marginBottom: 14,
+          }}
+        >
+          YOUR RECOMMENDATION
+        </div>
+        <h2 style={{ fontSize: 22, fontWeight: 700, color: B.text, marginBottom: 6 }}>
+          {results.length === 0
+            ? "Nothing matched perfectly"
+            : results.length === 1
+            ? "Here's your session."
+            : "Here are your top picks."}
+        </h2>
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
+          {[
+            answers.timeOfDay,
+            answers.availableTime && `${answers.availableTime} min`,
+            answers.goal,
+            answers.energy,
+          ]
+            .filter(Boolean)
+            .map((tag) => (
+              <span
+                key={tag}
+                style={{
+                  fontSize: 10,
+                  color: B.muted,
+                  background: "rgba(255,255,255,0.04)",
+                  border: `1px solid ${B.border}`,
+                  padding: "3px 8px",
+                  borderRadius: 4,
+                }}
+              >
+                {summaryLabels[tag] || tag}
+              </span>
+            ))}
+        </div>
+      </div>
+
+      {results.length === 0 ? (
+        <div
+          style={{
+            background: B.card,
+            border: `1px solid ${B.border}`,
+            borderRadius: 14,
+            padding: 24,
+            textAlign: "center",
+            color: B.muted,
+          }}
+        >
+          <p style={{ fontSize: 14 }}>No strong match found. Try adjusting your time or goal.</p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {results.map((session, i) => (
+            <SessionCard key={session.id} session={session} rank={i} hasPremium={hasPremium} />
+          ))}
+        </div>
+      )}
+
+      {/* Premium toggle (for demo purposes) */}
+      <div
+        style={{
+          marginTop: 20,
+          padding: "12px 16px",
+          background: B.card,
+          border: `1px solid ${B.border}`,
+          borderRadius: 10,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <div style={{ fontSize: 11, color: B.text, fontWeight: 600 }}>Simulate Premium Access</div>
+          <div style={{ fontSize: 10, color: B.muted, marginTop: 2 }}>Toggle to test lock/unlock states</div>
+        </div>
+        <button
+          onClick={() => setHasPremium(!hasPremium)}
+          style={{
+            width: 44,
+            height: 24,
+            borderRadius: 12,
+            background: hasPremium ? B.accent : B.border,
+            border: "none",
+            cursor: "pointer",
+            position: "relative",
+            transition: "background 0.2s",
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: "50%",
+              background: "#fff",
+              position: "absolute",
+              top: 3,
+              left: hasPremium ? 23 : 3,
+              transition: "left 0.2s",
+            }}
+          />
+        </button>
+      </div>
+
+      <button
+        onClick={onReset}
+        style={{
+          width: "100%",
+          marginTop: 14,
+          padding: "13px",
+          background: "transparent",
+          border: `1px solid ${B.border}`,
+          borderRadius: 10,
+          color: B.muted,
+          fontSize: 13,
+          cursor: "pointer",
+          letterSpacing: 1,
+        }}
+      >
+        ↩ Start Over
+      </button>
+    </div>
+  );
+}
+
+// ─── Main App ─────────────────────────────────────────────────────────────────
+export default function SmartSessionConcierge() {
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [results, setResults] = useState(null);
+  const [hasPremium, setHasPremium] = useState(false);
+  const topRef = useRef(null);
+
+  // Auto-detect time of day for first question default
+  const autoTimeOfDay = (() => {
+    const h = new Date().getHours();
+    if (h < 12) return "morning";
+    if (h < 17) return "afternoon";
+    return "evening";
+  })();
+
+  function handleAnswer(value) {
+    const question = QUESTIONS[step];
+    const newAnswers = { ...answers, [question.id]: value };
+    setAnswers(newAnswers);
+
+    if (step < QUESTIONS.length - 1) {
+      setStep(step + 1);
+    } else {
+      const recs = recommend(newAnswers);
+      setResults(recs);
+    }
+
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function handleReset() {
+    setStep(0);
+    setAnswers({});
+    setResults(null);
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: B.bg,
+        padding: "32px 16px 60px",
+        fontFamily: "'Inter', 'Outfit', sans-serif",
+      }}
+    >
+      <div ref={topRef} />
+
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 32, maxWidth: 480, margin: "0 auto 32px" }}>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 12,
+          }}
+        >
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 8,
+              background: B.accentDim,
+              border: `1px solid ${B.accentBorder}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 16,
+            }}
+          >
+            🎯
+          </div>
+          <span
+            style={{
+              fontSize: 11,
+              letterSpacing: 3,
+              color: B.accent,
+              fontWeight: 700,
+              textTransform: "uppercase",
+            }}
+          >
+            StrongHold Wellness
+          </span>
+        </div>
+        <h1
+          style={{
+            fontSize: 26,
+            fontWeight: 700,
+            color: B.text,
+            marginBottom: 6,
+            lineHeight: 1.2,
+          }}
+        >
+          Smart Session Concierge
+        </h1>
+        <p style={{ fontSize: 13, color: B.muted, lineHeight: 1.6 }}>
+          Answer 5 quick questions. Get the right session for your energy, time, and goal right now.
+        </p>
+        {!results && (
+          <div
+            style={{
+              marginTop: 10,
+              fontSize: 11,
+              color: B.muted,
+              opacity: 0.7,
+            }}
+          >
+            Detected: {autoTimeOfDay === "morning" ? "☀️ Morning" : autoTimeOfDay === "afternoon" ? "🌤️ Afternoon" : "🌙 Evening"}
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: 480, margin: "0 auto" }}>
+        {results !== null ? (
+          <ResultScreen
+            answers={answers}
+            results={results}
+            onReset={handleReset}
+            hasPremium={hasPremium}
+            setHasPremium={setHasPremium}
+          />
+        ) : (
+          <QuestionCard
+            question={QUESTIONS[step]}
+            onAnswer={handleAnswer}
+            step={step}
+            total={QUESTIONS.length}
+          />
+        )}
+      </div>
+
+      {/* Footer */}
+      <div style={{ textAlign: "center", marginTop: 40, color: B.muted, fontSize: 10, letterSpacing: 1 }}>
+        AGENT 5 · SMART SESSION CONCIERGE · STRONGHOLD FITNESS LLC
+      </div>
+    </div>
+  );
+}
