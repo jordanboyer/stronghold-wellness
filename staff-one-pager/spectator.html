@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StrongHold Wellness — Spectator Staff Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: #fff;
+    color: #1a1a1a;
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto;
+    padding: 0.55in 0.6in;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 18px;
+    border-bottom: 2px solid #c9a84c;
+    margin-bottom: 22px;
+  }
+  .header-left h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #0d1117;
+    line-height: 1.1;
+  }
+  .header-left h1 span {
+    color: #c9a84c;
+  }
+  .header-left p {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: #888;
+    font-weight: 500;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+  .header-right {
+    text-align: right;
+  }
+  .header-right .badge {
+    display: inline-block;
+    background: #0d1117;
+    color: #c9a84c;
+    font-size: 8px;
+    letter-spacing: 2.5px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border: 1px solid #c9a84c;
+  }
+
+  /* ── Two-column layout ── */
+  .body {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 28px;
+  }
+
+  /* ── Section labels ── */
+  .section-label {
+    font-size: 8px;
+    letter-spacing: 3px;
+    font-weight: 600;
+    color: #c9a84c;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ── What it is ── */
+  .what-it-is {
+    margin-bottom: 20px;
+  }
+  .what-it-is p {
+    font-size: 12px;
+    line-height: 1.65;
+    color: #333;
+  }
+
+  /* ── Check-in script ── */
+  .script-box {
+    background: #0d1117;
+    border-left: 3px solid #c9a84c;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  .script-box .script-label {
+    font-size: 8px;
+    letter-spacing: 2.5px;
+    color: #c9a84c;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .script-box p {
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: #e8e2d8;
+    font-style: italic;
+  }
+  .script-box .note {
+    margin-top: 8px;
+    font-size: 9.5px;
+    color: #8a9ab0;
+    font-style: normal;
+  }
+
+  /* ── Session menu ── */
+  .sessions {
+    margin-bottom: 20px;
+  }
+  .session-group-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    padding: 4px 0;
+    border-bottom: 1px solid #e8e4de;
+    margin-bottom: 6px;
+  }
+  .session-group-label.premium-label {
+    color: #c9a84c;
+    border-bottom-color: rgba(201,168,76,0.3);
+    margin-top: 10px;
+  }
+  .session-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 4px 0;
+    font-size: 11px;
+    border-bottom: 1px solid #f0ece6;
+  }
+  .session-row .title {
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+  .session-row .meta {
+    font-size: 9.5px;
+    color: #888;
+    letter-spacing: 0.5px;
+  }
+  .session-row .duration {
+    font-size: 9.5px;
+    color: #888;
+    font-variant-numeric: tabular-nums;
+    min-width: 50px;
+    text-align: right;
+  }
+
+  /* ── FAQ ── */
+  .faq {
+    margin-bottom: 4px;
+  }
+  .faq-item {
+    margin-bottom: 10px;
+  }
+  .faq-item .q {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #0d1117;
+    margin-bottom: 2px;
+  }
+  .faq-item .a {
+    font-size: 10.5px;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  /* ── Right column ── */
+  .right-col .section-label {
+    margin-top: 0;
+  }
+
+  .qr-block {
+    text-align: center;
+    border: 1px solid #e0dbd3;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+  .qr-block img {
+    width: 120px;
+    height: 120px;
+    display: block;
+    margin: 0 auto 10px;
+  }
+  .qr-block .url {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    color: #555;
+    font-family: 'Outfit', monospace;
+    word-break: break-all;
+  }
+  .qr-block .url-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #c9a84c;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* ── Equipment ── */
+  .equipment {
+    margin-bottom: 18px;
+  }
+  .equipment-item {
+    font-size: 10.5px;
+    color: #333;
+    padding: 3px 0;
+    border-bottom: 1px solid #f0ece6;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .equipment-item:last-child {
+    border-bottom: none;
+  }
+  .equip-dot {
+    width: 4px;
+    height: 4px;
+    background: #c9a84c;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── Pricing callout ── */
+  .pricing-box {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 12px;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .pricing-box .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: #0d1117;
+    line-height: 1;
+  }
+  .pricing-box .price-label {
+    font-size: 8.5px;
+    letter-spacing: 2px;
+    color: #888;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .pricing-box .price-note {
+    font-size: 9px;
+    color: #555;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid #e0dbd3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer p {
+    font-size: 8.5px;
+    color: #999;
+    letter-spacing: 0.5px;
+  }
+  .footer .contact {
+    font-size: 8.5px;
+    color: #555;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { margin: 0; padding: 0.5in 0.55in; }
+    @page { size: letter portrait; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>STRONGHOLD WELLNESS <span>×</span> THE SPECTATOR</h1>
+    <p>Staff Reference · Wellness Portal · Charleston, SC</p>
+  </div>
+  <div class="header-right">
+    <div class="badge">CONFIDENTIAL — STAFF USE ONLY</div>
+  </div>
+</div>
+
+<!-- BODY: two columns -->
+<div class="body">
+
+  <!-- LEFT COLUMN -->
+  <div class="left-col">
+
+    <!-- What it is -->
+    <div class="what-it-is">
+      <div class="section-label">What It Is</div>
+      <p>The StrongHold Wellness Portal is a mobile-optimized fitness experience accessible to every Spectator guest via QR code in their room. Guests get three complimentary guided sessions — morning mobility, full-body strength, and bedtime recovery — and can unlock four premium workouts for the duration of their stay with a single $29 purchase.</p>
+    </div>
+
+    <!-- Check-in Script -->
+    <div class="script-box">
+      <div class="script-label">Check-In Talking Point</div>
+      <p>"We've partnered with StrongHold Wellness to bring expert-guided fitness sessions right to your room. You've got three complimentary workouts — just scan the QR code on your welcome card or visit the link in your key packet. If you'd like the full library, it's $29 to unlock everything for your stay."</p>
+      <p class="note">Keep it brief. If the guest looks interested, add: "It works great in the suite — no equipment needed for the free sessions, and the recovery session is a nice wind-down after a full day in Charleston."</p>
+    </div>
+
+    <!-- Sessions -->
+    <div class="sessions">
+      <div class="section-label">Session Menu</div>
+
+      <div class="session-group-label">Complimentary — Included With Every Stay</div>
+      <div class="session-row">
+        <span class="title">Morning Mobility</span>
+        <span class="meta">Gentle</span>
+        <span class="duration">10 min</span>
+      </div>
+      <div class="session-row">
+        <span class="title">The Foundation</span>
+        <span class="meta">Beginner · Full-Body</span>
+        <span class="duration">20 min</span>
+      </div>
+      <div class="session-row">
+        <span class="title">Bedtime Recovery</span>
+        <span class="meta">Gentle · Stretch</span>
+        <span class="duration">10 min</span>
+      </div>
+
+      <div class="session-group-label premium-label">Premium — $29 Unlocks All for Full Stay</div>
+      <div class="session-row">
+        <span class="title">The Ironwork</span>
+        <span class="meta">Intermediate · Dumbbell</span>
+        <span class="duration">25 min</span>
+      </div>
+      <div class="session-row">
+        <span class="title">Forged</span>
+        <span class="meta">Advanced · Full-Body</span>
+        <span class="duration">30 min</span>
+      </div>
+      <div class="session-row">
+        <span class="title">The Charleston Burn</span>
+        <span class="meta">All Levels · Cardio</span>
+        <span class="duration">30 min</span>
+      </div>
+      <div class="session-row">
+        <span class="title">The Steady State</span>
+        <span class="meta">All Levels · Cardio</span>
+        <span class="duration">30 min</span>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq">
+      <div class="section-label">Common Guest Questions</div>
+
+      <div class="faq-item">
+        <div class="q">Do guests need to create an account?</div>
+        <div class="a">No. Just scan the QR code and go. Entering an email is optional — it lets them save progress across devices.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">What's the $29 charge for?</div>
+        <div class="a">It unlocks all four premium sessions for the full stay. One-time charge, processed securely through Stripe.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">Does access expire at checkout?</div>
+        <div class="a">Yes. Guests receive a follow-up email with post-stay program options from strongholdfitness.co.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">Something isn't loading or working?</div>
+        <div class="a">Direct the guest to the URL below or contact Jordan directly. Most issues resolve with a browser refresh.</div>
+      </div>
+      <div class="faq-item">
+        <div class="q">Is the Butler Concierge available for assistance?</div>
+        <div class="a">Yes. Any Butler can walk a guest through the QR scan. It works on any smartphone browser — no app download needed.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="right-col">
+
+    <!-- QR Code -->
+    <div class="qr-block">
+      <div class="url-label">Guest Portal URL</div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://wellness.strongholdfitness.co/spectator&color=0d1117&bgcolor=ffffff" alt="QR Code — wellness.strongholdfitness.co/spectator">
+      <div class="url">wellness.strongholdfitness.co/spectator</div>
+    </div>
+
+    <!-- Pricing -->
+    <div class="pricing-box">
+      <div class="price">$29</div>
+      <div class="price-label">Premium Unlock</div>
+      <div class="price-note">All 4 premium sessions.<br>Full stay access. One charge.</div>
+    </div>
+
+    <!-- Equipment in Room -->
+    <div class="equipment">
+      <div class="section-label">In-Room Equipment</div>
+      <div class="equipment-item"><div class="equip-dot"></div>Manduka™ Pro Yoga Mat</div>
+      <div class="equipment-item"><div class="equip-dot"></div>Theragun™ Elite Massage Gun</div>
+      <div class="equipment-item"><div class="equip-dot"></div>Hypersphere™ Vibrating Roller</div>
+      <div class="equipment-item"><div class="equip-dot"></div>Resistance Bands (set)</div>
+      <div class="equipment-item"><div class="equip-dot"></div>Meditation Bolster</div>
+    </div>
+
+    <!-- Contact -->
+    <div class="section-label">Questions or Issues</div>
+    <div style="font-size:10.5px; color:#333; line-height:1.7;">
+      <strong>Jordan Boyer</strong><br>
+      StrongHold Fitness LLC<br>
+      jordan@strongholdfitness.co<br>
+      <span style="color:#888; font-size:9.5px;">NSCA-CPT · TPI Golf Fitness</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>StrongHold Fitness LLC · Charlotte, NC · strongholdfitness.co</p>
+  <p class="contact">For guest-facing materials, see the welcome card in each suite.</p>
+</div>
+
+</body>
+</html>
