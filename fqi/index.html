@@ -593,6 +593,9 @@ function HomeScreen({ onNavigate, completedSessions, completedFreeCount, unlocke
       </div>
 
       <div style={{ textAlign: "center", padding: "40px 24px 20px" }}>
+        <p style={{ fontSize: 10, letterSpacing: 4, color: HOTEL_CONFIG.textSecondary, margin: "0 0 20px", fontWeight: 400, fontFamily: "'Lato', sans-serif" }}>
+          {(function(){ const h = new Date().getHours(); return h >= 18 || h < 5 ? "GOOD EVENING" : h < 12 ? "GOOD MORNING" : "GOOD AFTERNOON"; })()}
+        </p>
         <div style={{ width: 40, height: 1, background: HOTEL_CONFIG.accent, margin: "0 auto 28px", opacity: 0.6 }} />
         <h2 style={{ fontSize: 32, color: HOTEL_CONFIG.textPrimary, margin: 0, fontWeight: 300, lineHeight: 1.2, fontFamily: "'Playfair Display', serif" }}>
           Your Recovery
@@ -617,9 +620,9 @@ function HomeScreen({ onNavigate, completedSessions, completedFreeCount, unlocke
           : isMorning
           ? freeSessions.find(s => s.id === "morning")
           : freeSessions.find(s => s.id === "foundation");
-        const quickLabel = isEvening ? "Wind Down" : isMorning ? "Start Your Morning" : "Afternoon Burn";
-        const quickSub = isEvening ? "10 min bedtime recovery" : isMorning ? "15 min mobility flow" : "30 min bodyweight workout";
-        const quickEmoji = isEvening ? "🌙" : isMorning ? "☀️" : "🧱";
+        const quickLabel = isEvening ? "Wind Down" : isMorning ? "Start Your Morning" : "Afternoon Workout";
+        const quickSub = isEvening ? "10 min · Bedtime Recovery" : isMorning ? "10 min · Morning Mobility" : "20 min · Full-Body Strength";
+        const quickEmoji = isEvening ? "🌙" : isMorning ? "☀️" : "💪";
         return (
           <div style={{ padding: "0 20px 8px" }}>
             <button
